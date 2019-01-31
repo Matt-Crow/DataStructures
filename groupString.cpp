@@ -3,10 +3,8 @@
 
 using namespace std;
 
-//nd
-void stringCopy(char* a, char* b){
-
-}
+int length(char cStr[]);
+void stringCopy(char* &a, char* b);
 
 //nd
 bool stringCompare(char* a, char* b){
@@ -17,6 +15,54 @@ bool stringCompare(char* a, char* b){
 //nd
 void stringConcatenation(char* a, char* b){
 
+}
+
+int stringPosition(char* a, char b);
+int stringLength(char* &a);
+char* cStrToPtr(char cStr[]);
+
+ifstream in = ifstream("input.txt");
+
+int main(){
+    char str[] = "Testing";
+    char* ptr = cStrToPtr(str);
+    cout << "Character 'i' is located at index " << stringPosition(ptr, 'i') << " in " << ptr << endl;
+    cout << "Length: " << stringLength(ptr) << endl;
+    cout << ptr << endl;
+
+    char input[10][100];
+    char* ptrs[10];
+
+    int ipIdx = 0;
+    while(in.good()){
+        in >> input[ipIdx];
+        ptrs[ipIdx] = cStrToPtr(input[ipIdx]);
+        cout << "Read in " << input[ipIdx] << endl;
+        ipIdx++;
+    }
+    in.close();
+
+    if(ipIdx >= 2){
+        //make sure at least two strings read
+        cout << "stringCopy(" << ptrs[0] << ", " << ptrs[1] << ");" << endl;
+        cout << ptrs[0] << " becomes ";
+        stringCopy(ptrs[0], ptrs[1]);
+        cout << ptrs[0] << endl;
+    }
+
+    return 0;
+}
+
+void stringCopy(char* &a, char* b){
+    if(length(a) < length(b)){
+        //need to reallocate
+        char* newPtr = (char*)malloc(sizeof(char) * (length(b) + 1));
+        //delete[] a;
+        a = newPtr;
+    }
+    for(int i = 0; i < length(b) + 1; i++){
+        *(a + i) = *(b + i);
+    }
 }
 
 int stringPosition(char* a, char b){
@@ -74,13 +120,4 @@ char* cStrToPtr(char cStr[]){
     *(ret + length(cStr)) = '\0';
 
     return ret;
-}
-
-int main(){
-    char str[] = "Testing";
-    char* ptr = cStrToPtr(str);
-    cout << "Character 'i' is located at index " << stringPosition(ptr, 'i') << " in " << ptr << endl;
-    cout << "Length: " << stringLength(ptr) << endl;
-    cout << ptr << endl;
-    return 0;
 }
