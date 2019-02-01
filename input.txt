@@ -2,4 +2,4 @@ apple red
 candy candy
 rolling sea
 shrouded hills
-gold status
+goldenStatue status

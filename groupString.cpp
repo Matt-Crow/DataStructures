@@ -3,28 +3,19 @@
 
 using namespace std;
 
+
+char* cStrToPtr(char cStr[]);
 int length(char cStr[]);
+
 void stringCopy(char* &a, char* b);
 bool stringCompare(char* a, char* b);
-
-//nd
-void stringConcatenation(char* a, char* b){
-
-}
-
+void stringConcatenation(char* &a, char* b);
 int stringPosition(char* a, char b);
 int stringLength(char* &a);
-char* cStrToPtr(char cStr[]);
 
 ifstream in = ifstream("input.txt");
 
 int main(){
-    char str[] = "Testing for an absurdly long string for 2 digits";
-    char* ptr = cStrToPtr(str);
-    cout << "Character 'i' is located at index " << stringPosition(ptr, 'i') << " in " << ptr << endl;
-    cout << "Length: " << stringLength(ptr) << endl;
-    cout << ptr << endl;
-
     char input[10][100];
     char* ptrs[10];
 
@@ -46,6 +37,19 @@ int main(){
     if(ipIdx >= 4){
         cout << "stringCompare(" << ptrs[2] << ", " << ptrs[3] << ");" << endl;
         cout << ptrs[2] << ((stringCompare(ptrs[2], ptrs[3])) ? " is " : " is not ") << ptrs[3] << endl;
+    }
+    if(ipIdx >= 6){
+        cout << "stringConcatenation(" << ptrs[4] << ", " << ptrs[5] << ");" << endl;
+        stringConcatenation(ptrs[4], ptrs[5]);
+        cout << ptrs[4] << endl;
+    }
+    if(ipIdx >= 8){
+        cout << *ptrs[6] << " is located at index " << stringPosition(ptrs[7], *ptrs[6]) << " in " << ptrs[7] << endl;
+    }
+    if(ipIdx >= 9){
+        cout << "stringLength(" << ptrs[8] << ");" << endl;
+        stringLength(ptrs[8]);
+        cout << ptrs[8] << endl;
     }
 
     return 0;
@@ -73,6 +77,25 @@ bool stringCompare(char* a, char* b){
     }
 
     return ret;
+}
+
+void stringConcatenation(char* &a, char* b){
+    int aLen = length(a);
+    int bLen = length(b);
+    char* newPtr = (char*)malloc(sizeof(char)*(aLen + bLen + 1));
+
+    int idx = 0;
+    while(idx < aLen){
+        *(newPtr + idx) = *(a + idx);
+        idx++;
+    }
+    while(idx < aLen + bLen){
+        *(newPtr + idx) = *(b + idx - aLen);
+        idx++;
+    }
+    *(newPtr + idx) = '\0';
+
+    a = newPtr;
 }
 
 int stringPosition(char* a, char b){
@@ -104,7 +127,6 @@ int stringLength(char* &a){
         digits++;
     }
 
-
     newStr = (char*)malloc(sizeof(char) * (length + digits + 1));
 
     int idx = 0;
@@ -119,7 +141,8 @@ int stringLength(char* &a){
         *(newStr + idx) = *(a + idx - digits);
         idx++;
     }
-    *(newStr + length + digits + 1) = '\0';
+    *(newStr + length + digits) = '\0';
+
     a = newStr;
 
     return length;
