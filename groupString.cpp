@@ -5,12 +5,7 @@ using namespace std;
 
 int length(char cStr[]);
 void stringCopy(char* &a, char* b);
-
-//nd
-bool stringCompare(char* a, char* b){
-    bool ret = false;
-    return ret;
-}
+bool stringCompare(char* a, char* b);
 
 //nd
 void stringConcatenation(char* a, char* b){
@@ -24,7 +19,7 @@ char* cStrToPtr(char cStr[]);
 ifstream in = ifstream("input.txt");
 
 int main(){
-    char str[] = "Testing";
+    char str[] = "Testing for an absurdly long string for 2 digits";
     char* ptr = cStrToPtr(str);
     cout << "Character 'i' is located at index " << stringPosition(ptr, 'i') << " in " << ptr << endl;
     cout << "Length: " << stringLength(ptr) << endl;
@@ -37,7 +32,6 @@ int main(){
     while(in.good()){
         in >> input[ipIdx];
         ptrs[ipIdx] = cStrToPtr(input[ipIdx]);
-        cout << "Read in " << input[ipIdx] << endl;
         ipIdx++;
     }
     in.close();
@@ -48,6 +42,10 @@ int main(){
         cout << ptrs[0] << " becomes ";
         stringCopy(ptrs[0], ptrs[1]);
         cout << ptrs[0] << endl;
+    }
+    if(ipIdx >= 4){
+        cout << "stringCompare(" << ptrs[2] << ", " << ptrs[3] << ");" << endl;
+        cout << ptrs[2] << ((stringCompare(ptrs[2], ptrs[3])) ? " is " : " is not ") << ptrs[3] << endl;
     }
 
     return 0;
@@ -63,6 +61,18 @@ void stringCopy(char* &a, char* b){
     for(int i = 0; i < length(b) + 1; i++){
         *(a + i) = *(b + i);
     }
+}
+
+bool stringCompare(char* a, char* b){
+    bool ret = true;
+
+    int idx = 0;
+    while(*(a + idx) != '\0' && *(b + idx) != '\0' && ret){
+        ret = *(a + idx) == *(b + idx);
+        idx++;
+    }
+
+    return ret;
 }
 
 int stringPosition(char* a, char b){
@@ -85,18 +95,31 @@ int stringLength(char* &a){
         length++;
     }
 
-    newStr = (char*)malloc(sizeof(char) * (length + 2));
+    int digits = 0; //the number of digits in the length of the string
+    int remainder = length;
+    int tenPow = 1;
+    while(remainder > 0){
+        remainder /= 10;
+        tenPow *= 10;
+        digits++;
+    }
 
-    char lenChar = (char) (48 + length); //ASCII character index. Note that this breaks for lengths > 9
 
-    *(newStr) = lenChar;
+    newStr = (char*)malloc(sizeof(char) * (length + digits + 1));
 
     int idx = 0;
-    while(*(a + idx) != '\0'){
-        *(newStr + idx + 1) = *(a + idx);
+    while(idx < digits){
+        tenPow /= 10;
+        *(newStr + idx) = (char)(length / tenPow % 10 + 48);
         idx++;
     }
-    *(newStr + length + 1) = '\0';
+
+
+    while(*(a + idx - digits) != '\0'){
+        *(newStr + idx) = *(a + idx - digits);
+        idx++;
+    }
+    *(newStr + length + digits + 1) = '\0';
     a = newStr;
 
     return length;
