@@ -52,6 +52,8 @@ int main(){
         cout << ptrs[8] << endl;
     }
 
+    free(ptrs);
+
     return 0;
 }
 
