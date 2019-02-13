@@ -8,6 +8,11 @@ struct node{
     node* next;
 };
 
+node* last(node* head);
+node* addNode(node* head, char* value);
+node* insertAfter(node* head, char* value);
+bool deleteNode(node* head, char value[]);
+
 node* readFile();
 void traverse(node* head);
 void splitAndMerge(node* head);
@@ -22,7 +27,72 @@ int main(){
     traverse(head);
 
     splitAndMerge(head);
+
+    cout << "Before: " << endl;
+    traverse(head);
+
+    char msg[] = {"Example"};
+    addNode(head, cStrToPtr(msg));
+
+    cout << "After: " << endl;
+    traverse(head);
+
+    deleteNode(head, msg);
+    traverse(head);
+
     return 0;
+}
+
+node* last(node* head){
+    node* current = head;
+    while(current->next){
+        current = current->next;
+    }
+    return current;
+}
+
+node* addNode(node* head, char* value){
+    node* newNode = new node;
+    newNode->data = value;
+    newNode->next = 0;
+    last(head)->next = newNode;
+}
+
+node* insertAfter(node* head, char* value){
+    node* oldNext = head->next;
+    node* newNext = new node;
+    newNext->data = value;
+    newNext->next = oldNext;
+    head->next = newNext;
+}
+
+bool deleteNode(node* head, char value[]){
+    bool found = false;
+    node* current = head->next;
+    int idx;
+    bool sameVal;
+
+    while(current->next && !found){
+        idx = 0;
+        sameVal = true;
+        while(value[idx] != '\0' && sameVal){
+            sameVal = value[idx] == current->next->data[idx];
+            idx++;
+        }
+        if(sameVal){
+            found = true;
+            cout<<"here";
+            node* temp = current->next->next;
+            cout<<current->next;
+            current->next = temp;
+        }
+        current = current->next;
+
+    }
+
+    delete current;
+
+    return found;
 }
 
 node* readFile(){
