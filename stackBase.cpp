@@ -2,55 +2,83 @@
 
 using namespace std;
 
-struct baseStack{
-    baseStack* belowThis;
+struct frame{
+    frame* next;
     int value;
 };
 
-void toBase(int i, int b);
-void printFrame(baseStack* top);
+void push(frame* &top, int val);
+frame* pop(frame* &top);
+void printFrame(frame* top);
+
+string toBase(int i, int b);
 char toChar(int i);
 
 int main(){
-    for(int i = 0; i <= 20; i++){
-        cout << endl << i;
-        for(int j = 2; j <= 16; j+=2){
-            cout << endl << "In base " << j << ": ";
-            toBase(i, j);
+    int ip = 0;
+    int base = 2;
+
+    while(ip >= 0 && base > 0){
+        cout << "Enter a number: (negative to quit) ";
+        cin >> ip;
+
+        if(ip >= 0){
+            cout << "Enter the base to convert it to: (negative or zero to quit) ";
+            cin >> base;
+
+            if(base > 0){
+                cout << ip << " in base " << base << " is " << toBase(ip, base) << endl;
+            }
         }
     }
+
     return 0;
 }
 
-void toBase(int i, int b){
-    baseStack* myStack = new baseStack;
-    myStack->belowThis = 0;
-    myStack->value = 0;
-
-    int remainder = i;
-    baseStack* current = myStack;
-
-    baseStack* temp;
-
-    while(remainder > 0){
-        current->value = remainder % b;
-        remainder = remainder / b;
-        if(remainder > 0){
-            temp = new baseStack;
-            temp->belowThis = current;
-            current = temp;
-        }
-    }
-    printFrame(current);
+void push(frame* &top, int val){
+    frame* newFrame = new frame;
+    newFrame->next = top;
+    newFrame->value = val;
+    top = newFrame;
 }
 
-void printFrame(baseStack* top){
-    baseStack* current = top;
+frame* pop(frame* &top){
+    frame* ret = top;
+    if(top->next){
+        top = top->next;
+        ret->next = 0;
+    } else {
+        top = 0;
+    }
+    return ret;
+}
+
+void printFrame(frame* top){
+    frame* current = top;
 
     while(current){
-        cout << toChar(current->value);
-        current = current->belowThis;
+        cout << current->value << endl;
+        current = current->next;
     }
+}
+
+string toBase(int i, int b){
+    frame* myStack = 0;
+    string ret = "";
+
+    int remainder = i;
+    frame* current = myStack;
+
+    while(remainder > 0){
+        push(current, remainder % b);
+        remainder = remainder / b;
+    }
+
+    while(current){
+        ret+= toChar(pop(current)->value);
+    }
+
+    return ret;
 }
 
 char toChar(int i){
