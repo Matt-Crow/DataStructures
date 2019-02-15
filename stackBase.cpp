@@ -9,17 +9,23 @@ struct baseStack{
 
 void toBase(int i, int b);
 void printFrame(baseStack* top);
-
-//how convert from 2digit to letter?
+char toChar(int i);
 
 int main(){
-    toBase(10, 2);
+    for(int i = 0; i <= 20; i++){
+        cout << endl << i;
+        for(int j = 2; j <= 16; j+=2){
+            cout << endl << "In base " << j << ": ";
+            toBase(i, j);
+        }
+    }
     return 0;
 }
 
 void toBase(int i, int b){
     baseStack* myStack = new baseStack;
     myStack->belowThis = 0;
+    myStack->value = 0;
 
     int remainder = i;
     baseStack* current = myStack;
@@ -42,7 +48,15 @@ void printFrame(baseStack* top){
     baseStack* current = top;
 
     while(current){
-        cout << current->value << endl;
+        cout << toChar(current->value);
         current = current->belowThis;
     }
+}
+
+char toChar(int i){
+    char ret = (char)(48 + i);
+    if(i >= 10){
+        ret = (char)(65 + i - 10);
+    }
+    return ret;
 }
