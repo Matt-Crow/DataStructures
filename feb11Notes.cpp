@@ -107,15 +107,7 @@ q* dequeue(q* &rear){
     return ret;
 }
 void printQueue(q* rear){
-    /*
-    q* current = rear;
-    cout << "LAST" << endl;
-    while(current){
-        cout << current->value << endl;
-        current = current->prev;
-    }
-    cout << "FIRST" << endl;
-    */
+    //awesome recursive printQueue
     if(rear){
         if(rear->prev){
             printQueue(rear->prev);
