@@ -8,14 +8,14 @@ struct q{
     int value;
 }; //queue is reserved
 
+q* getHead(q* rear);
 void enqueue(q* &rear, int val);
 q* dequeue(q* &rear);
 void printQueue(q* rear);
 
 ifstream file = ifstream("integers.txt");
 int main(){
-    q* myQ = new q;
-    myQ->prev = 0;
+    q* myQ = 0; //need to remember this DON'T DO new q!!!
 
     int i;
     while(file.good()){
@@ -24,10 +24,41 @@ int main(){
         enqueue(myQ, i);
     }
     printQueue(myQ);
+    cout << endl;
+
+    q** last = &myQ;
+    int check;
+
+    int j = 0;
+    while(getHead(myQ) != *last){
+        check = dequeue(myQ)->value;
+        cout << last << ":" << myQ->prev << endl;
+
+        cout << "removing " << check << endl;
+        if(check >= 0){
+            enqueue(myQ, check);
+            cout << "shoving it back in" << endl;
+        }
+        printQueue(myQ);
+        cout << endl;
+        j++;
+        if(j == 15){
+            break;
+        }
+    }
 
     return 0;
 }
 
+q* getHead(q* rear){
+    q* ret = rear;
+
+    while(ret && ret->prev){
+        ret = ret->prev;
+    }
+
+    return ret;
+}
 void enqueue(q* &rear, int val){
     q* newRear = new q;
     newRear->value = val;
@@ -61,6 +92,6 @@ void printQueue(q* rear){
         if(rear->prev){
             printQueue(rear->prev);
         }
-        cout << rear->value << " <- ";
+        cout << " (" << rear->value << ") <- ";
     }
 }
