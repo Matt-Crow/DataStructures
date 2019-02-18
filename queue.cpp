@@ -20,32 +20,35 @@ int main(){
     int i;
     while(file.good()){
         file >> i;
-        cout << "read " << i << endl;
         enqueue(myQ, i);
     }
+    cout << "Before filtering: " << endl;
     printQueue(myQ);
     cout << endl;
 
-    q** last = &myQ;
+    q* newHead = 0;
+    //the address of the first element reinserted into myQ.
+    //note that I am not using it as a queue, but just as an address.
+
     int check;
-
-    int j = 0;
-    while(getHead(myQ) != *last){
+    while(getHead(myQ) != newHead){
         check = dequeue(myQ)->value;
-        cout << last << ":" << myQ->prev << endl;
 
-        cout << "removing " << check << endl;
         if(check >= 0){
             enqueue(myQ, check);
-            cout << "shoving it back in" << endl;
-        }
-        printQueue(myQ);
-        cout << endl;
-        j++;
-        if(j == 15){
-            break;
+
+            if(!newHead){
+                //if this is the first thing reinserted into the queue,
+                //set the newHead equal to the end of the queue,
+                //as that is where we want to stop
+                newHead = myQ;
+            }
         }
     }
+
+    cout << "After: " << endl;
+    printQueue(myQ);
+    cout << endl;
 
     return 0;
 }
