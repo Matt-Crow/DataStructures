@@ -47,6 +47,30 @@ int main(){
                 }
                 push(operators, token);
                 break;
+            case '*':
+                while(
+                    operators &&
+                    operators->value != '(' &&
+                    operators->value != '+' &&
+                    operators->value != '-'
+                ){
+                    result += pop(operators)->value;
+                }
+                push(operators, token);
+                break;
+            case '/':
+                while(
+                    operators &&
+                    operators->value != '(' &&
+                    operators->value != '+' &&
+                    operators->value != '-'
+                ){
+                    result += pop(operators)->value;
+                }
+                push(operators, token);
+                break;
+            default:
+                cout << "Not supported token: " << token << endl;
             }
         }
     }
