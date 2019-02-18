@@ -18,6 +18,7 @@ int main(){
     frame* operators = 0;
     string result = "";
 
+    cout << "Before: ";
     while(file >> token){
         cout << token;
         if(isdigit(token)){
@@ -78,7 +79,7 @@ int main(){
     while(operators){
         result += pop(operators)->value;
     }
-    cout << endl << result << endl;
+    cout << endl << "After: " << result << endl;
 
     return 0;
 }
