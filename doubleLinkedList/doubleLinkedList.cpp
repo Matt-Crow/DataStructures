@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -22,14 +23,44 @@ void print(linkedList* dll);
 
 int main(){
     linkedList* dll = newLinkedList();
+    ifstream in = ifstream("input.txt");
+    int ip;
+    bool success;
 
-    for(int i = 0; i < 10; i++){
-        push(dll, i);
+    while(in.good()){
+        in >> ip;
+        push(dll, ip);
     }
+    in.close();
+
     print(dll);
 
-    deleteNode(dll, 1, true);
-    print(dll);
+    cout << "which number node do you want to delete? ";
+    cin >> ip;
+    success = deleteNode(dll, ip);
+    if(!success){
+        cout << "There aren't that many nodes in the linked list..." << endl;
+    } else {
+        print(dll);
+    }
+
+    cout << "which number node do you want to delete from the end? ";
+    cin >> ip;
+    success = deleteNode(dll, ip, false);
+    if(!success){
+        cout << "There aren't that many nodes in the linked list..." << endl;
+    } else {
+        print(dll);
+    }
+
+    cout << "Writing to output.txt...";
+    ofstream out = ofstream("output.txt");
+    node* current = dll->head;
+    while(current){
+        out << current->data << endl;
+        current = current->next;
+    }
+    out.close();
 
     return 0;
 }
@@ -90,9 +121,10 @@ bool deleteNode(linkedList* dll, int index, bool fromHead){
 
 void print(linkedList* dll){
     node* current = dll->head;
+    int i = 1;
     while(current){
-        cout << current->data << endl;
+        cout << i << ": " << current->data << endl;
         current = current->next;
+        i++;
     }
 }
-
