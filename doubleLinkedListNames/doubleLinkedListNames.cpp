@@ -16,20 +16,41 @@ struct linkedList {
 
 linkedList* newLinkedList();
 void push(linkedList* dll, string val);
-bool deleteNode(linkedList* dll, int index);
-bool deleteNode(linkedList* dll, int index, bool fromHead);
-void print(linkedList* dll);
+bool deleteNode(linkedList* dll, string value);
 
 int main(){
     linkedList* dll = newLinkedList();
     ifstream in = ifstream("input.txt");
     string ip;
+    bool deleteNext = false;
     while(in >> ip){
-        push(dll, ip);
+        if(ip == "delete"){
+            deleteNext = true;
+        } else {
+            if(deleteNext){
+                deleteNode(dll, ip);
+                deleteNext = false;
+            } else {
+                push(dll, ip);
+            }
+        }
     }
     in.close();
 
-    print(dll);
+    cout << "Writing to output.txt...";
+    ofstream out = ofstream("output.txt");
+    node* current = dll->head;
+    while(current){
+        out << current->data << endl;
+        current = current->next;
+    }
+    out << "=============" << endl;
+    current = dll->tail;
+    while(current){
+        out << current->data << endl;
+        current = current->prev;
+    }
+    out.close();
 
     return 0;
 }
@@ -75,17 +96,11 @@ void push(linkedList* dll, string val){
     }
 }
 
-bool deleteNode(linkedList* dll, int index){
-    return deleteNode(dll, index, true);
-}
-
-bool deleteNode(linkedList* dll, int index, bool fromHead){
-    // index starts at 1 ... OK
+bool deleteNode(linkedList* dll, string value){
     bool found = false;
-    int i = 1;
-    node* current = (fromHead) ? dll->head : dll->tail;
-    while(current && !found){
-        if(i == index){
+    node* current = dll->head;
+    while(current && !found && current->data <= value){
+        if(current->data == value){
             found = true;
             if(current->prev){
                 current->prev->next = current->next;
@@ -98,19 +113,8 @@ bool deleteNode(linkedList* dll, int index, bool fromHead){
                 dll->tail = current->prev;
             }
         }
-        current = (fromHead) ? current->next : current->prev;
-        i++;
+        current = current->next;
     }
 
     return found;
-}
-
-void print(linkedList* dll){
-    node* current = dll->head;
-    int i = 1;
-    while(current){
-        cout << i << ": " << current->data << endl;
-        current = current->next;
-        i++;
-    }
 }
