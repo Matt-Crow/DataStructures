@@ -23,14 +23,19 @@ int main(){
     linkedList* dll = newLinkedList();
     ifstream in = ifstream("input.txt");
     string ip;
+    int numDel = 0;
+
     while(in >> ip){
         push(dll, ip);
     }
     in.close();
 
+    cout << "Before: " << endl;
     print(dll);
-    cout << "=====" << endl;
-    deleteNode(dll, 1);
+    cout << "How many nodes should I delete? ";
+    cin >> numDel;
+    deleteNode(dll, numDel);
+    cout << "After: " << endl;
     print(dll);
 
     return 0;
@@ -87,7 +92,7 @@ void print(linkedList* dll){
     node* current = dll->head;
     int i = 1;
     bool printedHead = false;
-    //how print last one?
+
     while(current && !(current == dll->head && printedHead)){
         printedHead = true;
         cout << i << ": " << current->data << endl;
