@@ -16,8 +16,7 @@ struct linkedList {
 
 linkedList* newLinkedList();
 void push(linkedList* dll, int val);
-bool deleteNode(linkedList* dll, int index);
-bool deleteNode(linkedList* dll, int index, bool fromHead);
+bool deleteNode(linkedList* dll, int value);
 void print(linkedList* dll);
 
 
@@ -33,25 +32,11 @@ int main(){
     }
     in.close();
 
-    print(dll);
-
-    cout << "which number node do you want to delete? ";
-    cin >> ip;
-    success = deleteNode(dll, ip);
-    if(!success){
-        cout << "There aren't that many nodes in the linked list..." << endl;
-    } else {
+    do{
         print(dll);
-    }
-
-    cout << "which number node do you want to delete from the end? ";
-    cin >> ip;
-    success = deleteNode(dll, ip, false);
-    if(!success){
-        cout << "There aren't that many nodes in the linked list..." << endl;
-    } else {
-        print(dll);
-    }
+        cout << "Enter a number to delete: ";
+        cin >> ip;
+    } while(deleteNode(dll, ip));
 
     cout << "Writing to output.txt...";
     ofstream out = ofstream("output.txt");
@@ -89,17 +74,11 @@ void push(linkedList* dll, int val){
     }
 }
 
-bool deleteNode(linkedList* dll, int index){
-    return deleteNode(dll, index, true);
-}
-
-bool deleteNode(linkedList* dll, int index, bool fromHead){
-    // index starts at 1 ... OK
+bool deleteNode(linkedList* dll, int value){
     bool found = false;
-    int i = 1;
-    node* current = (fromHead) ? dll->head : dll->tail;
-    while(current && !found){
-        if(i == index){
+    node* current = dll->head;
+    while(current && !found && current->data <= value){
+        if(current->data == value){
             found = true;
             if(current->prev){
                 current->prev->next = current->next;
@@ -112,8 +91,7 @@ bool deleteNode(linkedList* dll, int index, bool fromHead){
                 dll->tail = current->prev;
             }
         }
-        current = (fromHead) ? current->next : current->prev;
-        i++;
+        current = current->next;
     }
 
     return found;
