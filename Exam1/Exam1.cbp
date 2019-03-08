@@ -23,7 +23,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="linkedList.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="searchSort.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -3,9 +3,11 @@
 //using namespace std;
 
 int useLinkedList(); //this'll get old really fast...
+int useSearchSort();
 
 int main()
 {
-    useLinkedList();
+    //useLinkedList();
+    useSearchSort();
     return 0;
 }
