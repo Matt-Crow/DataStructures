@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1552437272 source:c:\users\matt\documents\c++\exam2\exam2\main.cpp
+	<iostream>
+
+1552437490 source:c:\users\matt\documents\c++\exam2\exam2\commarecur.cpp
+	<iostream>
+
+1552437730 source:c:\users\matt\documents\c++\exam2\commarecur.cpp
+	<iostream>
+
+1552514213 source:c:\users\matt\documents\c++\exam2\sumrecur.cpp
+
+1552514400 source:c:\users\matt\documents\c++\exam2\main.cpp
+	<iostream>
+
