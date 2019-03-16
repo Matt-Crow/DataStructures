@@ -1,0 +1,3 @@
+non-tail: do something as the stack frames terminates
+use recursion to find linked list length: return LLL(head->next) + 1
+
