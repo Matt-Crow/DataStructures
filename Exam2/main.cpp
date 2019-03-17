@@ -4,8 +4,7 @@ using namespace std;
 
 void commaRecur(long long num);
 int sumRecur(int num);
-void radixSort(int a[], int length, bool ascending);
-void print(int a[], int length);
+int useRadixSort();
 
 int main()
 {
@@ -30,10 +29,7 @@ int main()
     }while(ip > 0);
     */
 
-    int a[] = {150, 1653, 2412, 111, 994, 8, 19, 23};
-
-    radixSort(a, 8, false);
-    print(a, 8);
+    useRadixSort();
 
     return 0;
 }
