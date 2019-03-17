@@ -30,10 +30,10 @@ int main()
     }while(ip > 0);
     */
 
-    int a[] = {150, 1653, 2412, 111, 994};
+    int a[] = {150, 1653, 2412, 111, 994, 8, 19, 23};
 
-    radixSort(a, 5, false);
-    print(a, 5);
+    radixSort(a, 8, false);
+    print(a, 8);
 
     return 0;
 }
