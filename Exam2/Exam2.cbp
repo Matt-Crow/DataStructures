@@ -25,6 +25,7 @@
 		</Compiler>
 		<Unit filename="commaRecur.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="mergeSort.cpp" />
 		<Unit filename="radixSort.cpp" />
 		<Unit filename="sumRecur.cpp" />
 		<Extensions>

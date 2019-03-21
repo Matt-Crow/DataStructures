@@ -5,6 +5,8 @@ using namespace std;
 void commaRecur(long long num);
 int sumRecur(int num);
 int useRadixSort();
+void print(int a[], int length);
+void mergeSort(int a[], int start, int end, int origLength);
 
 int main()
 {
@@ -29,7 +31,11 @@ int main()
     }while(ip > 0);
     */
 
-    useRadixSort();
+    //useRadixSort();
+
+    int a[] = {8, 5, 3, 1, 9, 0, 2, 3};
+    mergeSort(a, 0, 8, 8);
+    print(a, 8);
 
     return 0;
 }
