@@ -6,7 +6,7 @@ void commaRecur(long long num);
 int sumRecur(int num);
 int useRadixSort();
 void print(int a[], int length);
-void mergeSort(int a[], int start, int end, int origLength);
+void mergeSort(int a[], int length);
 
 int main()
 {
@@ -34,7 +34,7 @@ int main()
     //useRadixSort();
 
     int a[] = {8, 5, 3, 1, 9, 0, 2, 3};
-    mergeSort(a, 0, 8, 8);
+    mergeSort(a, 8);
     print(a, 8);
 
     return 0;
