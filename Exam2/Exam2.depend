@@ -10,13 +10,16 @@
 
 1552515141 source:c:\users\matt\documents\c++\exam2\sumrecur.cpp
 
-1553810936 source:c:\users\matt\documents\c++\exam2\main.cpp
+1553816703 source:c:\users\matt\documents\c++\exam2\main.cpp
 	<iostream>
 
 1552848538 source:c:\users\matt\documents\c++\exam2\radixsort.cpp
 	<iostream>
 	<cstdlib>
 
-1553129664 source:c:\users\matt\documents\c++\exam2\mergesort.cpp
+1553815975 source:c:\users\matt\documents\c++\exam2\mergesort.cpp
+	<iostream>
+
+1553816682 source:c:\users\matt\documents\c++\exam2\quicksort.cpp
 	<iostream>
 

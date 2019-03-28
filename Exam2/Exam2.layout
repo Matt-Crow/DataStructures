@@ -2,9 +2,24 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
+	<File name="commaRecur.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="76" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="157" topLine="3" />
+			<Cursor1 position="123" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="mergeSort.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="515" topLine="60" />
+		</Cursor>
+	</File>
+	<File name="quickSort.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2082" topLine="91" />
 		</Cursor>
 	</File>
 	<File name="sumRecur.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -12,26 +27,9 @@
 			<Cursor1 position="300" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="commaRecur.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="radixSort.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="76" topLine="0" />
+			<Cursor1 position="1336" topLine="35" />
 		</Cursor>
-	</File>
-	<File name="mergeSort.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="682" topLine="12" />
-		</Cursor>
-		<Folding>
-			<Collapse line="45" />
-		</Folding>
-	</File>
-	<File name="radixSort.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1113" topLine="58" />
-		</Cursor>
-		<Folding>
-			<Collapse line="64" />
-			<Collapse line="71" />
-		</Folding>
 	</File>
 </CodeBlocks_layout_file>

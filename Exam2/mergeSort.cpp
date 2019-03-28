@@ -25,6 +25,8 @@ LinkedList** split(Node* head);
 LinkedList* merge(LinkedList* a, LinkedList* b);
 void mergeSort(LinkedList*&ll);
 
+
+
 int useMergeSort(){
     LinkedList* ll = newLinkedList();
     for(int i = 0; i < 10; i++){
@@ -34,6 +36,9 @@ int useMergeSort(){
     print(ll);
 
     mergeSort(ll);
+    cout << "After merge: " << endl;
+    print(ll);
+
     return 0;
 }
 
@@ -43,8 +48,6 @@ void mergeSort(LinkedList*&ll){
         mergeSort(parts[0]);
         mergeSort(parts[1]);
         ll = merge(parts[0], parts[1]);
-        cout << "After merge: " << endl;
-        print(ll);
     }
 }
 
@@ -65,12 +68,12 @@ LinkedList** split(Node* head){
         push(ret[1], current->data);
         current = current->next;
     }
-
+    /*
     cout << "List 1: " << endl;
     print(ret[0]);
     cout << "List 2: " << endl;
     print(ret[1]);
-
+    */
     return ret;
 }
 
@@ -79,7 +82,7 @@ LinkedList* merge(LinkedList* a, LinkedList* b){
     Node* h1 = a->head;
     Node* h2 = b->head;
     while(h1 || h2){
-        cout << "Merging..." << endl;
+        //cout << "Merging..." << endl;
         if(h1 && h2){
             if(h1->data > h2->data){
                 push(ret, h2->data);
@@ -97,8 +100,8 @@ LinkedList* merge(LinkedList* a, LinkedList* b){
                 h2 = h2->next;
             }
         }
-        print(h1);
-        print(h2);
+        //print(h1);
+        //print(h2);
     }
     return ret;
 }
