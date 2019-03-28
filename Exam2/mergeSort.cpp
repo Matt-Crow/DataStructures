@@ -15,20 +15,20 @@ struct LinkedList {
 
 Node* newNode(int data);
 LinkedList* newLinkedList();
-
 void push(LinkedList* ll, int data);
 void print(LinkedList* ll);
 void print(Node* n);
 int length(LinkedList* ll);
 int length(Node* n);
+
 LinkedList** split(Node* head);
-void mergeSort(LinkedList* ll);
-void print(int a[], int length);
+LinkedList* merge(LinkedList* a, LinkedList* b);
+void mergeSort(LinkedList*&ll);
 
 int useMergeSort(){
     LinkedList* ll = newLinkedList();
     for(int i = 0; i < 10; i++){
-        push(ll, i);
+        push(ll, (i - 3) * (i -5));
     }
     cout << "Before: " << endl;
     print(ll);
@@ -37,16 +37,14 @@ int useMergeSort(){
     return 0;
 }
 
-void mergeSort(LinkedList* ll){
+void mergeSort(LinkedList*&ll){
     if(ll && ll->head && length(ll) > 1){
-        cout << "Outside, ret is " << split(ll->head) << endl;
         LinkedList** parts = split(ll->head);
-        cout << "Parts[0]:" << endl;
-        cout << parts;
-        print(parts[0]);
         mergeSort(parts[0]);
-
         mergeSort(parts[1]);
+        ll = merge(parts[0], parts[1]);
+        cout << "After merge: " << endl;
+        print(ll);
     }
 }
 
@@ -73,65 +71,36 @@ LinkedList** split(Node* head){
     cout << "List 2: " << endl;
     print(ret[1]);
 
-    cout << "In function, ret is " << ret << endl;
     return ret;
 }
 
-void merge(int a[], int start, int end, int origLength){
-    int middle = (end - start) / 2 + start;
-    // if I did (start + end) / 2, this could excede max int size
-
-    int b[origLength];
-    for(int i = 0; i < origLength; i++){
-        b[i] = a[i];
-    }
-    int i = start; //start of "first array"
-    int j = middle + 1; //start of "second array"
-    int k = start; //current index of "merged array"
-
-    cout << "Merging " << i << " " << j << " " << k << endl;
-    print(a, origLength);
-    while(i <= middle && j <= end){
-
-        if(a[i] <= a[j]){
-            b[k] = a[i];
-            i++;
+LinkedList* merge(LinkedList* a, LinkedList* b){
+    LinkedList* ret = newLinkedList();
+    Node* h1 = a->head;
+    Node* h2 = b->head;
+    while(h1 || h2){
+        cout << "Merging..." << endl;
+        if(h1 && h2){
+            if(h1->data > h2->data){
+                push(ret, h2->data);
+                h2 = h2->next;
+            } else {
+                push(ret, h1->data);
+                h1 = h1->next;
+            }
         } else {
-            b[k] = a[j];
-            j++;
+            if(h1){
+                push(ret, h1->data);
+                h1 = h1->next;
+            } else {
+                push(ret, h2->data);
+                h2 = h2->next;
+            }
         }
-        k++;
-        print(b, origLength);
+        print(h1);
+        print(h2);
     }
-    while(i <= middle){
-        b[k] = a[i];
-        i++;
-        k++;
-    }
-    while(j <= end){
-        b[k] = a[j];
-        j++;
-        k++;
-    }
-
-
-    for(int i = start; i < end; i++){
-        a[i] = b[i];
-    }
-}
-
-void mergeSort(int a[], int start, int end, int origLength){
-    if(start < end){
-        int mid = (end - start) / 2 + start;
-        cout << start << " " << end << endl;
-        mergeSort(a, start, mid, origLength);
-        mergeSort(a, mid + 1, end, origLength);
-        merge(a, start, end, origLength);
-    }
-}
-
-void mergeSort(int a[], int length){
-    mergeSort(a, 0, length - 1, length);
+    return ret;
 }
 
 Node* newNode(int data){
