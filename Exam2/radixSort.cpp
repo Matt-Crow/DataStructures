@@ -194,9 +194,11 @@ void posNegSort(int a[], int length){
     delete pos;
 }
 
+/*
 void print(int a[], int length){
     for(int i = 0; i < length; i++){
         cout << a[i] << " ";
     }
     cout << endl;
 }
+*/

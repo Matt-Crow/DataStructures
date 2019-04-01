@@ -28,6 +28,7 @@
 		<Unit filename="mergeSort.cpp" />
 		<Unit filename="quickSort.cpp" />
 		<Unit filename="radixSort.cpp" />
+		<Unit filename="searchingSorting.cpp" />
 		<Unit filename="sumRecur.cpp" />
 		<Extensions>
 			<code_completion />

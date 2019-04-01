@@ -7,6 +7,7 @@ int sumRecur(int num);
 int useRadixSort();
 int useMergeSort();
 int useQuickSort();
+int useSearchSort();
 
 int main()
 {
@@ -35,6 +36,7 @@ int main()
 
     //useMergeSort();
     useQuickSort();
+    //useSearchSort();
 
     return 0;
 }

@@ -30,11 +30,6 @@ int useQuickSort(){
     cout << "After: " << endl;
     print(a, length);
 
-    ofstream out = ofstream("quickSortIp.txt");
-    for(int i = 0; i < length; i++){
-        out << a[i] << " ";
-    }
-
     return 0;
 }
 
@@ -47,26 +42,37 @@ void quickSort(int a[], int start, int end){
         quickSort(a, mid + 1, end);
     }
 }
+
+/*
+Moves a[end], the PIVOT, to its proper place
+in the array, and sorts it so everything to
+its left is smaller than it, and everything
+to its right is larger.
+*/
 int partition(int a[], int start, int end){
     int pivotValue = a[end];
-    int i = start - 1;
+    int i = start;
     int temp;
-    for(int j = start; j <= end - 1; j++){
-        if(a[j] >= pivotValue){
-            i++;
+    cout << "Pivot is " << pivotValue << endl;
+    for(int j = start; j < end; j++){
+        cout << "Checking index " << j << endl;
+        if(a[j] <= pivotValue){
             temp = a[j];
             a[j] = a[i];
             a[i] = temp;
+            i++;
         }
+        cout << "Pivot should be moved to " << i << endl;
+        print(a, 5);
     }
-    temp = a[i + 1];
-    a[i + 1] = a[end];
+    temp = a[i];
+    a[i] = a[end];
     a[end] = temp;
-    return i + 1;
+    return i;
 }
-
+/*
 void print(int a[], int length){
     for(int i = 0; i < length; i++){
         cout << "#" << i + 1 << ": " << a[i] << endl;
     }
-}
+}*/
