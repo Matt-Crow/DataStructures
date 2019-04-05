@@ -2,8 +2,10 @@
 
 using namespace std;
 
+int useTreeNode();
+
 int main()
 {
-    cout << "Hello world!" << endl;
+    useTreeNode();
     return 0;
 }
