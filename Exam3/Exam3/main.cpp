@@ -3,9 +3,11 @@
 using namespace std;
 
 int useTreeNode();
+int useInsertSearch();
 
 int main()
 {
-    useTreeNode();
+    //useTreeNode();
+    useInsertSearch();
     return 0;
 }
