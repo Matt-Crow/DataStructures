@@ -23,6 +23,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="insertSearch.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="tree.cpp" />
 		<Extensions>
