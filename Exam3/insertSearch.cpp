@@ -27,6 +27,7 @@ struct NameTreeNode{
 void insertChild(NameTreeNode* parent, NameTreeNode* child);
 NameTreeNode* spawnNode(NameTreeNode* &parent, string data);
 void printTree(NameTreeNode* root);
+NameTreeNode* findTreeNode(NameTreeNode* root, string name, bool showPath);
 NameTreeNode* findTreeNode(NameTreeNode* root, string name);
 int numFound(NameTreeNode* root, string name);
 
@@ -41,15 +42,24 @@ int length(LinkedList* ll);
 //           END PROTOTYPES
 //###########################################################
 
-
 int useInsertSearch(){
     NameTreeNode* root = 0;
+    NameTreeNode* found = 0;
     string name;
+    int count;
     ifstream in = ifstream("insertSearchIp.txt");
+
     while(in >> name){
         spawnNode(root, name);
     }
-    printTree(root);
+    //printTree(root);
+    cout << "Enter a name to search for: ";
+    cin >> name;
+    cout << "Searching..." << endl;
+
+    found = findTreeNode(root, name, true);
+    count = (found) ? length(found->data) : 0;
+    cout << count << " instances of the name " << name << " were found." << endl;
 
     return 0;
 }
@@ -83,11 +93,6 @@ void insertChild(NameTreeNode* parent, NameTreeNode* child){
 
 NameTreeNode* spawnNode(NameTreeNode* &parent, string data){
     NameTreeNode* ret = 0;
-
-    cout << "given " << endl;
-    printTree(parent);
-    cout << numFound(parent, data) << " copies of " << data << " are found" << endl;
-
     if(numFound(parent, data) > 0){
         ret = findTreeNode(parent, data);
         push(ret->data, data);
@@ -134,25 +139,54 @@ void printTree(NameTreeNode* root){
     }
 }
 
-NameTreeNode* findTreeNode(NameTreeNode* root, string name){
+NameTreeNode* findTreeNode(NameTreeNode* root, string name, bool showPath){
     NameTreeNode* ret = 0; //not found
     if(root){
-        cout << "Searching " << root->data->head->data << " for " << name << endl;
         //every linked list in this program has at least one element
         //so this is safe
+        if(showPath){
+            cout << root->data->head->data;
+        }
         if(root->data->head->data == name){
+            if(showPath){
+                cout << endl;
+            }
             ret = root;
         } else if(root->data->head->data < name){
             if(root->leftChild){
-                ret = findTreeNode(root->leftChild, name);
+                if(showPath){
+                    cout << " -> ";
+                }
+                ret = findTreeNode(root->leftChild, name, showPath);
+            } else {
+                //no left child, not found
+                if(showPath){
+                    cout << endl;
+                }
             }
         } else {
             if(root->rightChild){
-                ret = findTreeNode(root->rightChild, name);
+                if(showPath){
+                    cout << " -> ";
+                }
+                ret = findTreeNode(root->rightChild, name, showPath);
+            } else {
+                //no right child, not found
+                if(showPath){
+                    cout << endl;
+                }
             }
+        }
+    } else {
+        //no more nodes, not found
+        if(showPath){
+            cout << endl;
         }
     }
     return ret;
+}
+NameTreeNode* findTreeNode(NameTreeNode* root, string name){
+    return findTreeNode(root, name, false);
 }
 
 int numFound(NameTreeNode* root, string name){
