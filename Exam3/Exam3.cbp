@@ -26,6 +26,7 @@
 		<Unit filename="insertSearch.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="tree.cpp" />
+		<Unit filename="treeDelete.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
