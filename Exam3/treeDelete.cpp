@@ -13,9 +13,13 @@ struct NumTreeNode{
     NumTreeNode* rightChild;
 };
 
+bool containsDelete(string s);
+bool containsNum(string s);
+int extractNum(string s);
+
 void insertChild(NumTreeNode* parent, NumTreeNode* child);
 void spawnNode(NumTreeNode* &parent, int data);
-//void printTree(NumTreeNode* root);
+void printTree(NumTreeNode* root);
 NumTreeNode* findTreeNode(NumTreeNode* root, int num, bool showPath);
 NumTreeNode* findTreeNode(NumTreeNode* root, int num);
 //###########################################################
@@ -27,24 +31,17 @@ int useTreeDelete(){
     string ip;
     ifstream in = ifstream("input.txt");
 
-    while(in >> ip){
-        //if is just number, insert
-        if(true){
-            spawnNode(root, num);
+    while(getline(in, ip)){
+        if(containsDelete(ip)){
+            cout << "Delete " << extractNum(ip) << endl;
+        }else if(containsNum(ip)){
+            spawnNode(root, extractNum(ip));
+        }else{
+            cout << "Invalid input: " << ip << endl;
         }
-        //if contains "delete", delete
-        //else nothing
     }
-    //printTree(root);
-    /*
-    cout << "Enter a name to search for: ";
-    cin >> name;
-    cout << "Searching..." << endl;
+    printTree(root);
 
-    found = findTreeNode(root, name, true);
-    count = (found) ? length(found->data) : 0;
-    cout << count << " instances of the name " << name << " were found." << endl;
-    */
     return 0;
 }
 
@@ -53,17 +50,58 @@ int useTreeDelete(){
 //###########################################################
 //           BEGIN DEFINITIONS
 //###########################################################
+bool containsDelete(string s){
+    bool ret = false;
+    string checking = "delete";
+    int onChar = 0;
+
+    if(s.length() < checking.length()){
+        return false;
+    }
+
+    //                 something is going wrong with this part
+    for(int i = 0; i < s.length() - checking.length() && !ret; i++){
+        if(s[i] == checking[0]){
+            ret = true;
+            for(int j = i; j < s.length() && onChar < checking.length() && ret; j++){
+                ret = s[j] == checking[onChar];
+                onChar++;
+            }
+        }
+    }
+
+    return ret;
+}
+
+bool containsNum(string s){
+    bool ret = false;
+    for(int i = 0; i < s.length() && !ret; i++){
+        ret = isdigit(s[i]);
+    }
+    return ret;
+}
+
+int extractNum(string s){
+    int ret = 0;
+    for(int i = 0; i < s.length(); i++){
+        if(isdigit(s[i])){
+            ret *= 10;
+            ret += s[i] - 48; //account for ASCII conversion
+        }
+    }
+    return ret;
+}
 
 //called by spawnNode
 void insertChild(NumTreeNode* parent, NumTreeNode* child){
-    if(parent->data > child->data){
+    if(parent->data < child->data){
         if(parent->rightChild){
             insertChild(parent->rightChild, child);
         } else {
             parent->rightChild = child;
             child->parent = parent;
         }
-    } else if(parent->data < child->data){
+    } else if(parent->data > child->data){
         if(parent->leftChild){
             insertChild(parent->leftChild, child);
         } else {
@@ -71,33 +109,30 @@ void insertChild(NumTreeNode* parent, NumTreeNode* child){
             child->parent = parent;
         }
     } else {
-        cout << "Something went wrong" << endl;
+        cout << "Something went wrong: I'm supposed to catch duplicates before this" << endl;
     }
 }
 
 void spawnNode(NumTreeNode* &parent, int data){
     if(!findTreeNode(parent, data)){
         cout << "insert " << data << endl;
-        return;
-        /*
-        ret = new NameTreeNode;
-        ret->parent = parent;
-        ret->data = newLinkedList();
-        push(ret->data, data);
-        ret->leftChild = 0;
-        ret->rightChild = 0;
+
+        NumTreeNode* nn = new NumTreeNode;
+        nn->data = data;
+        nn->leftChild = 0;
+        nn->rightChild = 0;
+
         if(parent){
-            insertChild(parent, ret);
+            insertChild(parent, nn);
         } else {
-            parent = ret;
+            parent = nn;
         }
-        */
     } else {
         cout << "don't insert " << data << endl;
     }
 }
-/*
-void printTree(NameTreeNode* root){
+
+void printTree(NumTreeNode* root){
     cout << "Node " << root << endl;
 
     if(root == 0){
@@ -106,15 +141,15 @@ void printTree(NameTreeNode* root){
 
     cout << "Left child: " << root->leftChild;
     if(root->leftChild){
-        cout << " (" << root->leftChild->data->head->data << ")";
+        cout << " (" << root->leftChild->data << ")";
     }
     cout << endl;
     cout << "Right child: " << root->rightChild;
     if(root->rightChild){
-        cout << " (" << root->rightChild->data->head->data << ")";
+        cout << " (" << root->rightChild->data << ")";
     }
     cout << endl;
-    cout << "Data: " << root->data->head->data << " x" << length(root->data) << endl;
+    cout << "Data: " << root->data << endl;
     cout << endl;
     if(root->leftChild){
         printTree(root->leftChild);
@@ -123,7 +158,7 @@ void printTree(NameTreeNode* root){
         printTree(root->rightChild);
     }
 }
-*/
+
 NumTreeNode* findTreeNode(NumTreeNode* root, int val, bool showPath){
     NumTreeNode* ret = 0; //not found
     if(root){
@@ -137,7 +172,7 @@ NumTreeNode* findTreeNode(NumTreeNode* root, int val, bool showPath){
                 cout << endl;
             }
             ret = root;
-        } else if(root->data < val){
+        } else if(root->data > val){
             if(root->leftChild){
                 if(showPath){
                     cout << " -> ";
