@@ -1,7 +1,9 @@
-1
-2
 3
-delete 3
+2
+1
 5
+4
 6
-delete 9
+7
+delete 6
+

@@ -19,6 +19,7 @@ int extractNum(string s);
 
 void insertChild(NumTreeNode* parent, NumTreeNode* child);
 void spawnNode(NumTreeNode* &parent, int data);
+void deleteNode(NumTreeNode* &root, int data);
 void printTree(NumTreeNode* root);
 NumTreeNode* findTreeNode(NumTreeNode* root, int num, bool showPath);
 NumTreeNode* findTreeNode(NumTreeNode* root, int num);
@@ -29,11 +30,18 @@ NumTreeNode* findTreeNode(NumTreeNode* root, int num);
 int useTreeDelete(){
     NumTreeNode* root = 0;
     string ip;
+    int num;
     ifstream in = ifstream("input.txt");
 
     while(getline(in, ip)){
         if(containsDelete(ip)){
-            cout << "Delete " << extractNum(ip) << endl;
+            num = extractNum(ip);
+            cout << "Delete " << num << endl;
+            if(findTreeNode(root, num)){
+                deleteNode(root, num);
+            } else {
+                spawnNode(root, num);
+            }
         }else if(containsNum(ip)){
             spawnNode(root, extractNum(ip));
         }else{
@@ -115,7 +123,6 @@ void insertChild(NumTreeNode* parent, NumTreeNode* child){
 
 void spawnNode(NumTreeNode* &parent, int data){
     if(!findTreeNode(parent, data)){
-        cout << "insert " << data << endl;
 
         NumTreeNode* nn = new NumTreeNode;
         nn->data = data;
@@ -127,9 +134,52 @@ void spawnNode(NumTreeNode* &parent, int data){
         } else {
             parent = nn;
         }
-    } else {
-        cout << "don't insert " << data << endl;
     }
+}
+
+void deleteNode(NumTreeNode* &root, int data){
+    NumTreeNode* deleteMe = findTreeNode(root, data);
+    NumTreeNode* parent;
+    if(deleteMe){
+        parent = deleteMe->parent;
+        if(!deleteMe->leftChild && !deleteMe->rightChild){
+            //no children
+            if(!parent){
+                //is root
+                root = 0;
+            }else if(parent->leftChild == deleteMe){
+                parent->leftChild = 0;
+            } else {
+                parent->rightChild = 0;
+            }
+        } else if(!deleteMe->leftChild || !deleteMe->rightChild){
+            //one child
+            if(!parent){
+                //is root
+                if(deleteMe->leftChild){
+                    root = deleteMe->leftChild;
+                } else {
+                    root = deleteMe->rightChild;
+                }
+            } else if(deleteMe->leftChild){
+                if(parent->leftChild == deleteMe){
+                    parent->leftChild = deleteMe->leftChild;
+                } else {
+                    parent->rightChild = deleteMe->leftChild;
+                }
+            } else {
+                if(parent->leftChild == deleteMe){
+                    parent->leftChild = deleteMe->rightChild;
+                } else {
+                    parent->rightChild = deleteMe->rightChild;
+                }
+            }
+        }
+    }
+    deleteMe = 0;
+    delete deleteMe;
+    parent = 0;
+    delete parent;
 }
 
 void printTree(NumTreeNode* root){
