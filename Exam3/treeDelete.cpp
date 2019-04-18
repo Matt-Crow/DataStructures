@@ -36,7 +36,6 @@ int useTreeDelete(){
     while(getline(in, ip)){
         if(containsDelete(ip)){
             num = extractNum(ip);
-            cout << "Delete " << num << endl;
             if(findTreeNode(root, num)){
                 deleteNode(root, num);
             } else {
@@ -161,19 +160,31 @@ void deleteNode(NumTreeNode* &root, int data){
                 } else {
                     root = deleteMe->rightChild;
                 }
-            } else if(deleteMe->leftChild){
-                if(parent->leftChild == deleteMe){
+            } else if(parent->leftChild == deleteMe){
+                if(deleteMe->leftChild){
                     parent->leftChild = deleteMe->leftChild;
                 } else {
-                    parent->rightChild = deleteMe->leftChild;
+                    parent->leftChild = deleteMe->rightChild;
                 }
             } else {
-                if(parent->leftChild == deleteMe){
-                    parent->leftChild = deleteMe->rightChild;
+                if(deleteMe->leftChild){
+                    parent->rightChild = deleteMe->leftChild;
                 } else {
                     parent->rightChild = deleteMe->rightChild;
                 }
             }
+        } else {
+            //2 children
+            NumTreeNode* curr = deleteMe->rightChild;
+            while(curr->leftChild){
+                curr = curr->leftChild;
+            }
+            deleteNode(curr, curr->data); //recursive
+
+            deleteMe->data = curr->data;
+
+            curr = 0;
+            delete curr;
         }
     }
     deleteMe = 0;
