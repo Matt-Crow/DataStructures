@@ -13,6 +13,17 @@ struct NumTreeNode{
     NumTreeNode* rightChild;
 };
 
+struct Node {
+    Node* prev;
+    Node* next;
+    NumTreeNode* data;
+};
+
+struct LinkedList {
+    Node* head;
+    Node* tail;
+};
+
 bool containsDelete(string s);
 bool containsNum(string s);
 int extractNum(string s);
@@ -26,6 +37,13 @@ NumTreeNode* findTreeNode(NumTreeNode* root, int num);
 void preOrder(NumTreeNode* root);
 void inOrder(NumTreeNode* root);
 void postOrder(NumTreeNode* root);
+void breadthPrint(NumTreeNode* root);
+
+Node* newNode(NumTreeNode* data);
+LinkedList* newLinkedList();
+
+void enq(LinkedList* ll, NumTreeNode* data);
+NumTreeNode* deq(LinkedList* ll);
 //###########################################################
 //           END PROTOTYPES
 //###########################################################
@@ -61,6 +79,10 @@ int main(){
 
     cout << "Post-order: ";
     postOrder(root);
+    cout << endl;
+
+    cout << "Breadth-order: " << endl;
+    breadthPrint(root);
     cout << endl;
 
     return 0;
@@ -251,4 +273,67 @@ void postOrder(NumTreeNode* root){
         postOrder(root->rightChild);
         cout << root->data << " ";
     }
+}
+void breadthPrint(NumTreeNode* root){
+    if(!root){
+        return;
+    }
+    LinkedList* currLv = newLinkedList();
+    NumTreeNode* curr = root;
+    enq(currLv, curr);
+    while(currLv->head){
+        LinkedList* nextLv = newLinkedList();
+        while(currLv->head){
+            curr = deq(currLv);
+            cout << curr->data << " ";
+            if(curr->leftChild){
+                enq(nextLv, curr->leftChild);
+            }
+            if(curr->rightChild){
+                enq(nextLv, curr->rightChild);
+            }
+        }
+
+        currLv = nextLv;
+        cout << endl;
+    }
+}
+
+Node* newNode(NumTreeNode* data){
+    Node* nn = new Node;
+    nn->prev = 0;
+    nn->next = 0;
+    nn->data = data;
+    return nn;
+}
+
+LinkedList* newLinkedList(){
+    LinkedList* ll = new LinkedList;
+    ll->head = 0;
+    ll->tail = 0;
+    return ll;
+}
+
+void enq(LinkedList* ll, NumTreeNode* data){
+    Node* nn = newNode(data);
+    nn->prev = ll->tail;
+    if(ll->head){
+        ll->tail->next = nn;
+    } else {
+        ll->head = nn;
+    }
+    ll->tail = nn;
+    nn = 0;
+    delete nn;
+}
+NumTreeNode* deq(LinkedList* ll){
+    NumTreeNode* ret = 0;
+    if(ll->head){
+        ret = ll->head->data;
+        ll->head = ll->head->next;
+        if(ll->head){
+            ll->head->prev = 0;
+        }
+    }
+    return ret;
 }
