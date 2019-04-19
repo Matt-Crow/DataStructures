@@ -20,14 +20,18 @@ int extractNum(string s);
 void insertChild(NumTreeNode* parent, NumTreeNode* child);
 void spawnNode(NumTreeNode* &parent, int data);
 void deleteNode(NumTreeNode* &root, int data);
-void printTree(NumTreeNode* root);
-NumTreeNode* findTreeNode(NumTreeNode* root, int num, bool showPath);
+
 NumTreeNode* findTreeNode(NumTreeNode* root, int num);
+
+void preOrder(NumTreeNode* root);
+void inOrder(NumTreeNode* root);
+void postOrder(NumTreeNode* root);
 //###########################################################
 //           END PROTOTYPES
 //###########################################################
 
-int useTreeDelete(){
+//useTreeDelete
+int main(){
     NumTreeNode* root = 0;
     string ip;
     int num;
@@ -47,7 +51,17 @@ int useTreeDelete(){
             cout << "Invalid input: " << ip << endl;
         }
     }
-    printTree(root);
+    cout << "Pre-order: ";
+    preOrder(root);
+    cout << endl;
+
+    cout << "In-order: ";
+    inOrder(root);
+    cout << endl;
+
+    cout << "Post-order: ";
+    postOrder(root);
+    cout << endl;
 
     return 0;
 }
@@ -193,80 +207,48 @@ void deleteNode(NumTreeNode* &root, int data){
     delete parent;
 }
 
-void printTree(NumTreeNode* root){
-    cout << "Node " << root << endl;
-
-    if(root == 0){
-        return;
-    }
-
-    cout << "Left child: " << root->leftChild;
-    if(root->leftChild){
-        cout << " (" << root->leftChild->data << ")";
-    }
-    cout << endl;
-    cout << "Right child: " << root->rightChild;
-    if(root->rightChild){
-        cout << " (" << root->rightChild->data << ")";
-    }
-    cout << endl;
-    cout << "Data: " << root->data << endl;
-    cout << endl;
-    if(root->leftChild){
-        printTree(root->leftChild);
-    }
-    if(root->rightChild){
-        printTree(root->rightChild);
-    }
-}
-
-NumTreeNode* findTreeNode(NumTreeNode* root, int val, bool showPath){
+NumTreeNode* findTreeNode(NumTreeNode* root, int val){
     NumTreeNode* ret = 0; //not found
     if(root){
-        //every linked list in this program has at least one element
-        //so this is safe
-        if(showPath){
-            cout << root->data;
-        }
         if(root->data == val){
-            if(showPath){
-                cout << endl;
-            }
             ret = root;
         } else if(root->data > val){
             if(root->leftChild){
-                if(showPath){
-                    cout << " -> ";
-                }
-                ret = findTreeNode(root->leftChild, val, showPath);
+                ret = findTreeNode(root->leftChild, val);
             } else {
                 //no left child, not found
-                if(showPath){
-                    cout << endl;
-                }
             }
         } else {
             if(root->rightChild){
-                if(showPath){
-                    cout << " -> ";
-                }
-                ret = findTreeNode(root->rightChild, val, showPath);
+                ret = findTreeNode(root->rightChild, val);
             } else {
                 //no right child, not found
-                if(showPath){
-                    cout << endl;
-                }
             }
         }
     } else {
         //no more nodes, not found
-        if(showPath){
-            cout << endl;
-        }
     }
     return ret;
 }
 
-NumTreeNode* findTreeNode(NumTreeNode* root, int val){
-    return findTreeNode(root, val, false);
+void preOrder(NumTreeNode* root){
+    if(root){
+        cout << root->data << " ";
+        preOrder(root->leftChild);
+        preOrder(root->rightChild);
+    }
+}
+void inOrder(NumTreeNode* root){
+    if(root){
+        inOrder(root->leftChild);
+        cout << root->data << " ";
+        inOrder(root->rightChild);
+    }
+}
+void postOrder(NumTreeNode* root){
+    if(root){
+        postOrder(root->leftChild);
+        postOrder(root->rightChild);
+        cout << root->data << " ";
+    }
 }
