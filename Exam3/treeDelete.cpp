@@ -34,10 +34,10 @@ void deleteNode(NumTreeNode* &root, int data);
 
 NumTreeNode* findTreeNode(NumTreeNode* root, int num);
 
-void preOrder(NumTreeNode* root);
-void inOrder(NumTreeNode* root);
-void postOrder(NumTreeNode* root);
-void breadthPrint(NumTreeNode* root);
+void preOrder(NumTreeNode* root, ostream &output);
+void inOrder(NumTreeNode* root, ostream &output);
+void postOrder(NumTreeNode* root, ostream &output);
+void breadthPrint(NumTreeNode* root, ostream &output);
 
 Node* newNode(NumTreeNode* data);
 LinkedList* newLinkedList();
@@ -48,12 +48,12 @@ NumTreeNode* deq(LinkedList* ll);
 //           END PROTOTYPES
 //###########################################################
 
-//useTreeDelete
-int main(){
+int useTreeDelete(){
     NumTreeNode* root = 0;
     string ip;
     int num;
-    ifstream in = ifstream("input.txt");
+    ifstream in = ifstream("treeDeleteInput.txt");
+    ofstream out = ofstream("treeDeleteOutput.txt");
 
     while(getline(in, ip)){
         if(containsDelete(ip)){
@@ -70,20 +70,40 @@ int main(){
         }
     }
     cout << "Pre-order: ";
-    preOrder(root);
+    preOrder(root, cout);
     cout << endl;
 
     cout << "In-order: ";
-    inOrder(root);
+    inOrder(root, cout);
     cout << endl;
 
     cout << "Post-order: ";
-    postOrder(root);
+    postOrder(root, cout);
     cout << endl;
 
     cout << "Breadth-order: " << endl;
-    breadthPrint(root);
+    breadthPrint(root, cout);
     cout << endl;
+
+
+
+    out << "Pre-order: ";
+    preOrder(root, out);
+    out << endl;
+
+    out << "In-order: ";
+    inOrder(root, out);
+    out << endl;
+
+    out << "Post-order: ";
+    postOrder(root, out);
+    out << endl;
+
+    out << "Breadth-order: " << endl;
+    breadthPrint(root, out);
+    out << endl;
+
+    out.close();
 
     return 0;
 }
@@ -253,28 +273,28 @@ NumTreeNode* findTreeNode(NumTreeNode* root, int val){
     return ret;
 }
 
-void preOrder(NumTreeNode* root){
+void preOrder(NumTreeNode* root, ostream &output){
     if(root){
-        cout << root->data << " ";
-        preOrder(root->leftChild);
-        preOrder(root->rightChild);
+        output << root->data << " ";
+        preOrder(root->leftChild, output);
+        preOrder(root->rightChild, output);
     }
 }
-void inOrder(NumTreeNode* root){
+void inOrder(NumTreeNode* root, ostream &output){
     if(root){
-        inOrder(root->leftChild);
-        cout << root->data << " ";
-        inOrder(root->rightChild);
+        inOrder(root->leftChild, output);
+        output << root->data << " ";
+        inOrder(root->rightChild, output);
     }
 }
-void postOrder(NumTreeNode* root){
+void postOrder(NumTreeNode* root, ostream &output){
     if(root){
-        postOrder(root->leftChild);
-        postOrder(root->rightChild);
-        cout << root->data << " ";
+        postOrder(root->leftChild, output);
+        postOrder(root->rightChild, output);
+        output << root->data << " ";
     }
 }
-void breadthPrint(NumTreeNode* root){
+void breadthPrint(NumTreeNode* root, ostream &output){
     if(!root){
         return;
     }
@@ -285,7 +305,7 @@ void breadthPrint(NumTreeNode* root){
         LinkedList* nextLv = newLinkedList();
         while(currLv->head){
             curr = deq(currLv);
-            cout << curr->data << " ";
+            output << curr->data << " ";
             if(curr->leftChild){
                 enq(nextLv, curr->leftChild);
             }
@@ -295,7 +315,7 @@ void breadthPrint(NumTreeNode* root){
         }
 
         currLv = nextLv;
-        cout << endl;
+        output << endl;
     }
 }
 
