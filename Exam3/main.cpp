@@ -5,11 +5,13 @@ using namespace std;
 int useTreeNode();
 int useInsertSearch();
 int useTreeDelete();
+int useInfixPostfixTree();
 
 int main()
 {
     //useTreeNode();
     //useInsertSearch();
-    useTreeDelete();
+    //useTreeDelete();
+    useInfixPostfixTree();
     return 0;
 }
