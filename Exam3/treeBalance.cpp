@@ -28,11 +28,13 @@ int getBalance(TreeNode* root);
 
 TreeNode* rebalance(TreeNode* root);
 
-TreeNode* insert(TreeNode* &root, int data);
+void setHeights(TreeNode* root);
+
+TreeNode* insert(TreeNode* root, int data);
 
 TreeNode* leftRotate(TreeNode* root);
 
-TreeNode* rightRotate(TreeNode root);
+TreeNode* rightRotate(TreeNode* root);
 
 void breadthPrint(TreeNode* root, ostream &output);
 Node* newNode(TreeNode* data);
@@ -44,7 +46,7 @@ TreeNode* deq(LinkedList* ll);
 int main(){
     TreeNode* root = 0;
     for(int i = 1; i < 10; i++){
-        insert(root, i);
+        root = insert(root, i);
         cout << "After inserting " << i << ": " << endl;
         breadthPrint(root, cout);
         cout << endl;
@@ -64,28 +66,52 @@ TreeNode* newTreeNode(int data){
 }
 
 int getBalance(TreeNode* root){
-    int left = (root->leftChild) ? root->leftChild->height : 0;
-    int right = (root->rightChild) ? root->rightChild->height : 0;
+    int left = 0;
+    int right = 0;
+    if(root){
+        left = (root->leftChild) ? root->leftChild->height : 0;
+        right = (root->rightChild) ? root->rightChild->height : 0;
+    }
     return left - right;
 }
 
 TreeNode* rebalance(TreeNode* root){
     TreeNode* ret = root;
     if(root){
+        setHeights(root);
+        int balance = getBalance(root);
+        //rotations
+        //https://stackoverflow.com/questions/19278236/avl-tree-balance
+        if(balance > 1){
+            //left heavy
+            if(getBalance(root->leftChild) < 0){
+                //left heavy inner
+                leftRotate(root->leftChild);
+            }
+            ret = rightRotate(root);
+        } else if(balance < -1){
+            //right heavy
+            if(getBalance(root->rightChild) > 0){
+                //right heavy inner
+                rightRotate(root->rightChild);
+            }
+            ret = leftRotate(root);
+        }
+    }
+    return ret;
+}
+
+void setHeights(TreeNode* root){
+    if(root){
+        setHeights(root->leftChild);
+        setHeights(root->rightChild);
         int left = (root->leftChild) ? root->leftChild->height : 0;
         int right = (root->rightChild) ? root->rightChild->height : 0;
         root->height = max(left, right) + 1;
-        int balance = getBalance(root);
-        //rotations
-        //if left heavy outside, ret = rightRotate<T>(root);
-        //else if right heavy outside, ret = leftRotate<T>(root);
-        //else if left heavy inside, leftRotate<T>(root->leftChild), ret = rightRotate<T>(root)
-        //else if right heavy inside, rightRotate<T>(root->rightChild), ret = leftRotate<T>(root)
     }
-    return root;
 }
 
-TreeNode* insert(TreeNode* &root, int data){
+TreeNode* insert(TreeNode* root, int data){
     if(!root){
         root = newTreeNode(data);
     } else if(data < root->data){
@@ -98,15 +124,30 @@ TreeNode* insert(TreeNode* &root, int data){
 }
 
 TreeNode* leftRotate(TreeNode* root){
-    TreeNode* x = root->rightChild;
-    //rotate to the left, update root and x's heights
-    return x;
+    TreeNode* newRoot = root;
+    if(root){
+        newRoot = root->rightChild;
+        if(root->rightChild){
+            newRoot->leftChild = root;
+            root->rightChild = 0;
+            setHeights(newRoot);
+        }
+    }
+    return newRoot;
 }
 
 TreeNode* rightRotate(TreeNode* root){
-    TreeNode* x = root->leftChild;
-    //rotate to the right, update root and x's heights
-    return x;
+    TreeNode* newRoot = root;
+    if(root){
+        newRoot = root->leftChild;
+        if(root->leftChild){
+            newRoot->rightChild = root;
+            root->leftChild = 0;
+            setHeights(newRoot);
+        }
+    }
+
+    return newRoot;
 }
 
 void breadthPrint(TreeNode* root, ostream &output){
@@ -120,7 +161,7 @@ void breadthPrint(TreeNode* root, ostream &output){
         LinkedList* nextLv = newLinkedList();
         while(currLv->head){
             curr = deq(currLv);
-            output << curr->data << " ";
+            output << "Data: " << curr->data << " Height: " << curr->height << " Balance: " << getBalance(curr) << " | ";
             if(curr->leftChild){
                 enq(nextLv, curr->leftChild);
             }
