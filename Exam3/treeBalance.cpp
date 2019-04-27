@@ -43,14 +43,20 @@ LinkedList* newLinkedList();
 void enq(LinkedList* ll, TreeNode* data);
 TreeNode* deq(LinkedList* ll);
 
+
+
 int main(){
     TreeNode* root = 0;
-    for(int i = 1; i < 10; i++){
-        root = insert(root, i);
-        cout << "After inserting " << i << ": " << endl;
+    ifstream in = ifstream("input.txt");
+    ofstream out = ofstream("output.txt");
+    int num;
+    while(in >> num){
+        root = insert(root, num);
+        cout << "After inserting " << num << ": " << endl;
         breadthPrint(root, cout);
         cout << endl;
     }
+    breadthPrint(root, out);
     return 0;
 }
 
@@ -69,8 +75,8 @@ int getBalance(TreeNode* root){
     int left = 0;
     int right = 0;
     if(root){
-        left = (root->leftChild) ? root->leftChild->height : 0;
-        right = (root->rightChild) ? root->rightChild->height : 0;
+        left = (root->leftChild) ? root->leftChild->height : -1;
+        right = (root->rightChild) ? root->rightChild->height : -1;
     }
     return left - right;
 }
@@ -105,8 +111,8 @@ void setHeights(TreeNode* root){
     if(root){
         setHeights(root->leftChild);
         setHeights(root->rightChild);
-        int left = (root->leftChild) ? root->leftChild->height : 0;
-        int right = (root->rightChild) ? root->rightChild->height : 0;
+        int left = (root->leftChild) ? root->leftChild->height : -1;
+        int right = (root->rightChild) ? root->rightChild->height : -1;
         root->height = max(left, right) + 1;
     }
 }
@@ -128,8 +134,8 @@ TreeNode* leftRotate(TreeNode* root){
     if(root){
         newRoot = root->rightChild;
         if(root->rightChild){
+            root->rightChild = newRoot->leftChild;
             newRoot->leftChild = root;
-            root->rightChild = 0;
             setHeights(newRoot);
         }
     }
@@ -141,8 +147,8 @@ TreeNode* rightRotate(TreeNode* root){
     if(root){
         newRoot = root->leftChild;
         if(root->leftChild){
+            root->leftChild = newRoot->rightChild;
             newRoot->rightChild = root;
-            root->leftChild = 0;
             setHeights(newRoot);
         }
     }
@@ -161,13 +167,17 @@ void breadthPrint(TreeNode* root, ostream &output){
         LinkedList* nextLv = newLinkedList();
         while(currLv->head){
             curr = deq(currLv);
-            output << "Data: " << curr->data << " Height: " << curr->height << " Balance: " << getBalance(curr) << " | ";
+            output << "Data: " << curr->data << " Height: " << curr->height << " Balance: " << getBalance(curr);
+
             if(curr->leftChild){
                 enq(nextLv, curr->leftChild);
+                output << " Left child is " << curr->leftChild->data << " ";
             }
             if(curr->rightChild){
                 enq(nextLv, curr->rightChild);
+                output << " Right child is " << curr->rightChild->data << " ";
             }
+            output << " | ";
         }
 
         currLv = nextLv;
