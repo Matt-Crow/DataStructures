@@ -18,16 +18,30 @@ void setHeights(TreeNode* root);
 void rebalance(TreeNode* &root);
 void insert(TreeNode* &root, int data);
 
+int getArraySize(TreeNode* root);
+void populateArray(TreeNode* root, int a[], int idx, int arrSize);
+
+void print(int a[], int len);
+
 //temp
 void printTree(TreeNode* root);
 
+const int NULL_VALUE = 0;
+
 int main(){
     TreeNode* root = 0;
-    for(int i = 1; i < 7; i++){
+    for(int i = 1; i < 10; i++){
         insert(root, i);
         cout << "After inserting " << i << ": " << endl;
         printTree(root);
     }
+    //convert tree to array
+    setHeights(root);
+    int arraySize = getArraySize(root);
+    int a[arraySize];
+    populateArray(root, a, 0, arraySize);
+    print(a, arraySize);
+
     return 0;
 }
 
@@ -50,6 +64,7 @@ void printTree(TreeNode* root){
 
 
 
+//done with balancing tree
 TreeNode* newTreeNode(int data){
     TreeNode* ret = new TreeNode;
     ret->data = data;
@@ -138,4 +153,36 @@ void insert(TreeNode* &root, int data){
     }
     setHeights(root);
     rebalance(root);
+}
+
+int getArraySize(TreeNode* root){
+    int s = 1;
+    if(root){
+        // 2^(root->height + 1) - 1
+        for(int i = 0; i < root->height + 1; i++){
+            s *= 2;
+        }
+        s--;
+    }
+    return s;
+}
+
+void populateArray(TreeNode* root, int a[], int idx, int arrSize){
+    if(root){
+        a[idx] = root->data;
+        print(a, arrSize);
+        if(2 * idx + 1 < arrSize){
+            populateArray(root->leftChild, a, 2 * idx + 1, arrSize);
+        }
+        if(2 * idx + 2 < arrSize){
+            populateArray(root->rightChild, a, 2 * idx + 2, arrSize);
+        }
+    }
+}
+
+void print(int a[], int len){
+    for(int i = 0; i < len; i++){
+        cout << a[i] << " ";
+    }
+    cout << endl;
 }
