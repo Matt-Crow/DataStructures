@@ -18,6 +18,8 @@ void setHeights(TreeNode* root);
 void rebalance(TreeNode* &root);
 void insert(TreeNode* &root, int data);
 
+TreeNode* sortedArrayToTree(int a[], int start, int end);
+
 int getArraySize(TreeNode* root);
 void populateArray(TreeNode* root, int a[], int idx, int arrSize);
 
@@ -41,6 +43,10 @@ int main(){
     int a[arraySize];
     populateArray(root, a, 0, arraySize);
     print(a, arraySize);
+
+    cout << "Sorted array to tree:" << endl;
+    int a2[] = {1, 2, 3, 4, 5, 6, 7};
+    printTree(sortedArrayToTree(a2, 0, 6));
 
     return 0;
 }
@@ -154,6 +160,19 @@ void insert(TreeNode* &root, int data){
     setHeights(root);
     rebalance(root);
 }
+
+
+TreeNode* sortedArrayToTree(int a[], int start, int end){
+    TreeNode* ret = 0;
+    if(start <= end){
+        int mid = (start + end) / 2;
+        ret = newTreeNode(a[mid]);
+        ret->leftChild = sortedArrayToTree(a, start, mid - 1);
+        ret->rightChild = sortedArrayToTree(a, mid + 1, end);
+    }
+    return ret;
+}
+
 
 int getArraySize(TreeNode* root){
     int s = 1;
