@@ -16,6 +16,7 @@ struct LinkedList {
 
 
 void siftUp(int heap[], int length, int firstEmptyIdx, int i);
+int heapDelete(int heap[], int firstEmptyIdx);
 
 Node* newNode(int data);
 LinkedList* newLinkedList();
@@ -27,17 +28,31 @@ void print(int a[], int len);
 
 
 int main(){
-    int heap[10] = {0};
-    for(int i = 1; i < 13; i++){
-        siftUp(heap, 10, i - 1, 11 - i);
+    int maxHeapSize = 10;
+    int heapSize = 0;
+    int heap[maxHeapSize] = {0};
+    for(int i = 0; i < 10; i++){
+        siftUp(heap, maxHeapSize, heapSize, i + 1);
+        heapSize++;
         //print(heap, 10);
-        cout << "After inserting " << i << ":" << endl;
-        breadthPrint(heap, 10, cout);
+        cout << "After inserting " << i + 1 << ":" << endl;
+        breadthPrint(heap, maxHeapSize, cout);
     }
     //Insert 10 values into a min-heap from a file.
     //Display the data, level by level.
+    cout << "Heap is: " << endl;
+    breadthPrint(heap, maxHeapSize, cout);
+
     //Then delete 5 items.
     //After each delete, display the heap, level by level.
+    int d;
+    for(int i = 0; i < 5; i++){
+        d = heapDelete(heap, heapSize);
+        cout << "Deleting " << d << endl;
+        heapSize--;
+        breadthPrint(heap, heapSize, cout);
+    }
+
     return 0;
 }
 
@@ -61,6 +76,40 @@ void siftUp(int heap[], int length, int firstEmptyIdx, int i){
     } else {
         cout << "Invalid index: " << firstEmptyIdx << endl;
     }
+}
+
+int heapDelete(int heap[], int firstEmptyIdx){
+    int ret = 0;
+    if(firstEmptyIdx > 0){
+        int heapSize = firstEmptyIdx;
+        ret = heap[0];
+        heap[0] = heap[heapSize - 1]; //last element becomes first
+        heapSize--; //technically just deleted last element
+        //next, re-sort
+        int currIdx = 0;
+        int leftIdx = 1;
+        int rightIdx = 2;
+        int temp;
+
+        //make sure indexes are not too large
+        while(heap[currIdx] > heap[leftIdx] || heap[currIdx] > heap[rightIdx]){
+            if(heap[leftIdx] > heap[rightIdx]){
+                temp = heap[rightIdx];
+                heap[rightIdx] = heap[currIdx];
+                heap[currIdx] = temp;
+                currIdx = rightIdx;
+            } else {
+                temp = heap[leftIdx];
+                heap[leftIdx] = heap[currIdx];
+                heap[currIdx] = temp;
+                currIdx = leftIdx;
+            }
+            breadthPrint(heap, heapSize, cout);
+            leftIdx = currIdx * 2 + 1;
+            rightIdx = currIdx * 2 + 2;
+        }
+    }
+    return ret;
 }
 
 Node* newNode(int data){
@@ -124,10 +173,3 @@ void breadthPrint(int heap[], int length, ostream &output){
     }
 }
 
-//temp
-void print(int a[], int len){
-    for(int i = 0; i < len; i++){
-        cout << a[i] << " ";
-    }
-    cout << endl;
-}
