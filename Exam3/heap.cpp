@@ -3,8 +3,25 @@
 
 using namespace std;
 
+struct Node {
+    Node* prev;
+    Node* next;
+    int data;
+};
+
+struct LinkedList {
+    Node* head;
+    Node* tail;
+};
+
+
 void siftUp(int heap[], int length, int firstEmptyIdx, int i);
-void breadthPrint(int heap[], int length, int idx, ostream &output);
+
+Node* newNode(int data);
+LinkedList* newLinkedList();
+void enq(LinkedList* ll, int);
+int deq(LinkedList* ll);
+void breadthPrint(int heap[], int length, ostream &output);
 //temp
 void print(int a[], int len);
 
@@ -13,7 +30,9 @@ int main(){
     int heap[10] = {0};
     for(int i = 1; i < 13; i++){
         siftUp(heap, 10, i - 1, 11 - i);
-        print(heap, 10);
+        //print(heap, 10);
+        cout << "After inserting " << i << ":" << endl;
+        breadthPrint(heap, 10, cout);
     }
     //Insert 10 values into a min-heap from a file.
     //Display the data, level by level.
@@ -44,8 +63,65 @@ void siftUp(int heap[], int length, int firstEmptyIdx, int i){
     }
 }
 
-void breadthPrint(int heap[], int length, int idx, ostream &output){
+Node* newNode(int data){
+    Node* nn = new Node;
+    nn->prev = 0;
+    nn->next = 0;
+    nn->data = data;
+    return nn;
+}
 
+LinkedList* newLinkedList(){
+    LinkedList* ll = new LinkedList;
+    ll->head = 0;
+    ll->tail = 0;
+    return ll;
+}
+
+void enq(LinkedList* ll, int data){
+    Node* nn = newNode(data);
+    nn->prev = ll->tail;
+    if(ll->head){
+        ll->tail->next = nn;
+    } else {
+        ll->head = nn;
+    }
+    ll->tail = nn;
+    nn = 0;
+    delete nn;
+}
+int deq(LinkedList* ll){
+    int ret = 0;
+    if(ll->head){
+        ret = ll->head->data;
+        ll->head = ll->head->next;
+        if(ll->head){
+            ll->head->prev = 0;
+        }
+    }
+    return ret;
+}
+
+void breadthPrint(int heap[], int length, ostream &output){
+    LinkedList* currLv = newLinkedList();
+    int curr = 0;
+    enq(currLv, curr);
+    while(currLv->head){
+        LinkedList* nextLv = newLinkedList();
+        while(currLv->head){
+            curr = deq(currLv);
+            output << heap[curr] << " ";
+            if(curr * 2 + 1 < length){
+                enq(nextLv, curr * 2 + 1);
+            }
+            if(curr * 2 + 2 < length){
+                enq(nextLv, curr * 2 + 2);
+            }
+        }
+
+        currLv = nextLv;
+        output << endl;
+    }
 }
 
 //temp
