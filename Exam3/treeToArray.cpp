@@ -11,12 +11,7 @@ struct TreeNode{
 };
 
 TreeNode* newTreeNode(int data);
-int getBalance(TreeNode* root);
-void leftRotate(TreeNode* &root);
-void rightRotate(TreeNode* &root);
-void setHeights(TreeNode* root);
-void rebalance(TreeNode* &root);
-void insert(TreeNode* &root, int data);
+int getHeight(TreeNode* root);
 
 TreeNode* sortedArrayToTree(int a[], int start, int end);
 TreeNode* unsortedArrayToTree(int a[], int idx, int length);
@@ -33,39 +28,27 @@ void printTree(TreeNode* root);
 const int NULL_VALUE = 0;
 
 int main(){
-    int temp[] = {1, 2, 3, 4, 5, 6, 7}; //todo read from file
+    int temp[] = {1, 2, 3, 4, 5, 6, 7, 8, 9}; //todo read from file
     TreeNode* root = 0;
 
     cout << "Original array: " << endl;
-    print(temp, 7);
+    print(temp, 9);
 
     cout << "Converted to binary tree: " << endl;
-    root = sortedArrayToTree(temp, 0, 6);
+    root = sortedArrayToTree(temp, 0, 8);
     inOrder(root, cout);
+    cout << endl;
 
     cout << "Unsorted: " << endl;
     int arraySize = getArraySize(root);
-    int unsorted[arraySize];
+    int unsorted[arraySize] = {NULL_VALUE};
     populateArray(root, unsorted, 0, arraySize);
-    cout << "A" << arraySize << endl;
     print(unsorted, arraySize);
 
     cout << "Unsorted to tree: " << endl;
     root = unsortedArrayToTree(unsorted, 0, arraySize);
     inOrder(root, cout);
-    return 0;
-
-    for(int i = 1; i < 10; i++){
-        insert(root, i);
-        cout << "After inserting " << i << ": " << endl;
-        printTree(root);
-    }
-    //convert tree to array
-    setHeights(root);
-    arraySize = getArraySize(root);
-    int a[arraySize];
-    populateArray(root, a, 0, arraySize);
-    print(a, arraySize);
+    cout << endl;
     return 0;
 }
 
@@ -75,8 +58,6 @@ void printTree(TreeNode* root){
     cout << "Left child: " << root->leftChild << endl;
     cout << "Right child: " << root->rightChild << endl;
     cout << "Data: " << root->data << endl;
-    cout << "Height: " << root->height << endl;
-    cout << "Balance: " << getBalance(root) << endl;
     cout << endl;
     if(root->leftChild){
         printTree(root->leftChild);
@@ -88,97 +69,23 @@ void printTree(TreeNode* root){
 
 
 
-//done with balancing tree
 TreeNode* newTreeNode(int data){
     TreeNode* ret = new TreeNode;
     ret->data = data;
     ret->leftChild = 0;
     ret->rightChild = 0;
-    ret->height = 0;
     return ret;
 }
 
-int getBalance(TreeNode* root){
-    int left = 0;
-    int right = 0;
+int getHeight(TreeNode* root){
+    int ret = -1;
     if(root){
-        left = (root->leftChild) ? root->leftChild->height : -1;
-        right = (root->rightChild) ? root->rightChild->height : -1;
+        int left = getHeight(root->leftChild);
+        int right = getHeight(root->rightChild);
+        ret = max(left, right) + 1;
     }
-    return left - right;
+    return ret;
 }
-
-void setHeights(TreeNode* root){
-    if(root){
-        setHeights(root->leftChild);
-        setHeights(root->rightChild);
-        int left = (root->leftChild) ? root->leftChild->height : -1;
-        int right = (root->rightChild) ? root->rightChild->height : -1;
-        root->height = max(left, right) + 1;
-    }
-}
-
-void leftRotate(TreeNode* &root){
-    if(root){
-        if(root->rightChild){
-            TreeNode* temp = root;
-            root = root->rightChild;
-            temp->rightChild = root->leftChild;
-            root->leftChild = temp;
-            setHeights(root);
-            temp = 0;
-            delete temp;
-        }
-    }
-}
-
-void rightRotate(TreeNode* &root){
-    if(root){
-        if(root->leftChild){
-            TreeNode* temp = root;
-            root = root->leftChild;
-            temp->leftChild = root->rightChild;
-            root->rightChild = temp;
-            setHeights(root);
-            temp = 0;
-            delete temp;
-        }
-    }
-}
-
-void rebalance(TreeNode* &root){
-    if(root){
-        int balance = getBalance(root);
-        if(balance > 1){
-            //left heavy
-            if(getBalance(root->leftChild) < 0){
-                //left heavy inner
-                leftRotate(root->leftChild);
-            }
-            rightRotate(root);
-        } else if(balance < -1){
-            //right heavy
-            if(getBalance(root->rightChild) > 0){
-                //right heavy inner
-                rightRotate(root->rightChild);
-            }
-            leftRotate(root);
-        }
-    }
-}
-
-void insert(TreeNode* &root, int data){
-    if(!root){
-        root = newTreeNode(data);
-    } else if(data < root->data){
-        insert(root->leftChild, data);
-    } else {
-        insert(root->rightChild, data);
-    }
-    setHeights(root);
-    rebalance(root);
-}
-
 
 TreeNode* sortedArrayToTree(int a[], int start, int end){
     TreeNode* ret = 0;
@@ -206,10 +113,11 @@ TreeNode* unsortedArrayToTree(int a[], int idx, int length){
 
 int getArraySize(TreeNode* root){
     int s = 1;
-    setHeights(root);
+    int height = getHeight(root);
+
     if(root){
         // 2^(root->height + 1) - 1
-        for(int i = 0; i < root->height + 1; i++){
+        for(int i = 0; i < height + 1; i++){
             s *= 2;
         }
         s--;
@@ -220,7 +128,6 @@ int getArraySize(TreeNode* root){
 void populateArray(TreeNode* root, int a[], int idx, int arrSize){
     if(root){
         a[idx] = root->data;
-        print(a, arrSize);
         if(2 * idx + 1 < arrSize){
             populateArray(root->leftChild, a, 2 * idx + 1, arrSize);
         }
@@ -233,7 +140,15 @@ void populateArray(TreeNode* root, int a[], int idx, int arrSize){
 void inOrder(TreeNode* root, ostream &output){
     if(root){
         inOrder(root->leftChild, output);
-        output << root->data << " ";
+        output << "==========" << endl;
+        output << "Data is: " << root->data << endl;
+        if(root->leftChild){
+            output << "Left child is " << root->leftChild->data << endl;
+        }
+        if(root->rightChild){
+            output << "Right child is " << root->rightChild->data << endl;
+        }
+        output << "==========" << endl;
         inOrder(root->rightChild, output);
     }
 }
