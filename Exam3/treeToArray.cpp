@@ -19,10 +19,12 @@ void rebalance(TreeNode* &root);
 void insert(TreeNode* &root, int data);
 
 TreeNode* sortedArrayToTree(int a[], int start, int end);
+TreeNode* unsortedArrayToTree(int a[], int idx, int length);
 
 int getArraySize(TreeNode* root);
 void populateArray(TreeNode* root, int a[], int idx, int arrSize);
 
+void inOrder(TreeNode* root, ostream &output);
 void print(int a[], int len);
 
 //temp
@@ -31,7 +33,28 @@ void printTree(TreeNode* root);
 const int NULL_VALUE = 0;
 
 int main(){
+    int temp[] = {1, 2, 3, 4, 5, 6, 7}; //todo read from file
     TreeNode* root = 0;
+
+    cout << "Original array: " << endl;
+    print(temp, 7);
+
+    cout << "Converted to binary tree: " << endl;
+    root = sortedArrayToTree(temp, 0, 6);
+    inOrder(root, cout);
+
+    cout << "Unsorted: " << endl;
+    int arraySize = getArraySize(root);
+    int unsorted[arraySize];
+    populateArray(root, unsorted, 0, arraySize);
+    cout << "A" << arraySize << endl;
+    print(unsorted, arraySize);
+
+    cout << "Unsorted to tree: " << endl;
+    root = unsortedArrayToTree(unsorted, 0, arraySize);
+    inOrder(root, cout);
+    return 0;
+
     for(int i = 1; i < 10; i++){
         insert(root, i);
         cout << "After inserting " << i << ": " << endl;
@@ -39,15 +62,10 @@ int main(){
     }
     //convert tree to array
     setHeights(root);
-    int arraySize = getArraySize(root);
+    arraySize = getArraySize(root);
     int a[arraySize];
     populateArray(root, a, 0, arraySize);
     print(a, arraySize);
-
-    cout << "Sorted array to tree:" << endl;
-    int a2[] = {1, 2, 3, 4, 5, 6, 7};
-    printTree(sortedArrayToTree(a2, 0, 6));
-
     return 0;
 }
 
@@ -173,9 +191,22 @@ TreeNode* sortedArrayToTree(int a[], int start, int end){
     return ret;
 }
 
+TreeNode* unsortedArrayToTree(int a[], int idx, int length){
+    TreeNode* ret = 0;
+    if(a[idx] != NULL_VALUE){
+        ret = newTreeNode(a[idx]);
+        if(idx * 2 + 2 < length){
+            ret->leftChild = unsortedArrayToTree(a, idx * 2 + 1, length);
+            ret->rightChild = unsortedArrayToTree(a, idx * 2 + 2, length);
+        }
+    }
+    return ret;
+}
+
 
 int getArraySize(TreeNode* root){
     int s = 1;
+    setHeights(root);
     if(root){
         // 2^(root->height + 1) - 1
         for(int i = 0; i < root->height + 1; i++){
@@ -199,6 +230,13 @@ void populateArray(TreeNode* root, int a[], int idx, int arrSize){
     }
 }
 
+void inOrder(TreeNode* root, ostream &output){
+    if(root){
+        inOrder(root->leftChild, output);
+        output << root->data << " ";
+        inOrder(root->rightChild, output);
+    }
+}
 void print(int a[], int len){
     for(int i = 0; i < len; i++){
         cout << a[i] << " ";
