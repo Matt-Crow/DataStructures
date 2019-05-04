@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//used for breadthPrint
 struct Node {
     Node* prev;
     Node* next;
@@ -16,26 +17,37 @@ struct LinkedList {
 
 
 void siftUp(int heap[], int length, int firstEmptyIdx, int i);
-int heapDelete(int heap[], int firstEmptyIdx);
+int siftDown(int heap[], int firstEmptyIdx);
 
+//used for breadthPrint
 Node* newNode(int data);
 LinkedList* newLinkedList();
 void enq(LinkedList* ll, int);
 int deq(LinkedList* ll);
+
 void breadthPrint(int heap[], int length, ostream &output);
-//temp
-void print(int a[], int len);
 
 
 int main(){
-    int maxHeapSize = 10;
+ifstream in = ifstream("input.txt");
+    int ip;
+    int fileSize = 0;
+
+    //calculates how many ints are in the file
+    while(in >> ip){
+        fileSize++;
+    }
+    in.clear();
+    in.seekg(0, ios::beg);
+
+    int maxHeapSize = fileSize;
     int heapSize = 0;
     int heap[maxHeapSize] = {0};
-    for(int i = 0; i < 10; i++){
-        siftUp(heap, maxHeapSize, heapSize, i + 1);
+
+    while(in >> ip){
+        siftUp(heap, maxHeapSize, heapSize, ip);
         heapSize++;
-        //print(heap, 10);
-        cout << "After inserting " << i + 1 << ":" << endl;
+        cout << "After inserting " << ip << ":" << endl;
         breadthPrint(heap, maxHeapSize, cout);
     }
     //Insert 10 values into a min-heap from a file.
@@ -47,8 +59,8 @@ int main(){
     //After each delete, display the heap, level by level.
     int d;
     for(int i = 0; i < 5; i++){
-        d = heapDelete(heap, heapSize);
-        cout << "Deleting " << d << endl;
+        d = siftDown(heap, heapSize);
+        cout << "After deleting " << d << ":" << endl;
         heapSize--;
         breadthPrint(heap, heapSize, cout);
     }
@@ -57,7 +69,7 @@ int main(){
 }
 
 void siftUp(int heap[], int length, int firstEmptyIdx, int i){
-    //insert into the heap, keep moving up so that the new element is in its proper place
+    //insert into the heap, keep moving up until the new element's parent is less than it
     if(firstEmptyIdx < length){
         heap[firstEmptyIdx] = i;
         int idx = firstEmptyIdx;
@@ -78,7 +90,8 @@ void siftUp(int heap[], int length, int firstEmptyIdx, int i){
     }
 }
 
-int heapDelete(int heap[], int firstEmptyIdx){
+int siftDown(int heap[], int firstEmptyIdx){
+    //delete topmost element, move smalest element to top
     int ret = 0;
     if(firstEmptyIdx > 0){
         int heapSize = firstEmptyIdx;
@@ -91,8 +104,8 @@ int heapDelete(int heap[], int firstEmptyIdx){
         int rightIdx = 2;
         int temp;
 
-        //make sure indexes are not too large
-        while(heap[currIdx] > heap[leftIdx] || heap[currIdx] > heap[rightIdx]){
+        while((leftIdx < heapSize && heap[currIdx] > heap[leftIdx]) || (rightIdx < heapSize && heap[currIdx] > heap[rightIdx])){
+            //breadthPrint(heap, heapSize, cout);
             if(heap[leftIdx] > heap[rightIdx]){
                 temp = heap[rightIdx];
                 heap[rightIdx] = heap[currIdx];
@@ -104,7 +117,6 @@ int heapDelete(int heap[], int firstEmptyIdx){
                 heap[currIdx] = temp;
                 currIdx = leftIdx;
             }
-            breadthPrint(heap, heapSize, cout);
             leftIdx = currIdx * 2 + 1;
             rightIdx = currIdx * 2 + 2;
         }
@@ -119,14 +131,12 @@ Node* newNode(int data){
     nn->data = data;
     return nn;
 }
-
 LinkedList* newLinkedList(){
     LinkedList* ll = new LinkedList;
     ll->head = 0;
     ll->tail = 0;
     return ll;
 }
-
 void enq(LinkedList* ll, int data){
     Node* nn = newNode(data);
     nn->prev = ll->tail;
@@ -172,4 +182,3 @@ void breadthPrint(int heap[], int length, ostream &output){
         output << endl;
     }
 }
-
