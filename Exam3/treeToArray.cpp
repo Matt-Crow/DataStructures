@@ -22,20 +22,36 @@ void populateArray(TreeNode* root, int a[], int idx, int arrSize);
 void inOrder(TreeNode* root, ostream &output);
 void print(int a[], int len);
 
-//temp
-void printTree(TreeNode* root);
+
 
 const int NULL_VALUE = 0;
 
+
+
 int main(){
-    int temp[] = {1, 2, 3, 4, 5, 6, 7, 8, 9}; //todo read from file
+    ifstream in = ifstream("input.txt");
+    int ip;
+    int fileSize = 0;
+
+    //calculates how many ints are in the file
+    while(in >> ip){
+        fileSize++;
+    }
+    in.clear();
+    in.seekg(0, ios::beg);
+
+    int a[fileSize];
+    for(int i = 0; i < fileSize; i++){
+        in >> a[i];
+    }
+
     TreeNode* root = 0;
 
     cout << "Original array: " << endl;
-    print(temp, 9);
+    print(a, fileSize);
 
     cout << "Converted to binary tree: " << endl;
-    root = sortedArrayToTree(temp, 0, 8);
+    root = sortedArrayToTree(a, 0, fileSize - 1);
     inOrder(root, cout);
     cout << endl;
 
@@ -50,21 +66,6 @@ int main(){
     inOrder(root, cout);
     cout << endl;
     return 0;
-}
-
-//temp
-void printTree(TreeNode* root){
-    cout << "Node " << root << endl;
-    cout << "Left child: " << root->leftChild << endl;
-    cout << "Right child: " << root->rightChild << endl;
-    cout << "Data: " << root->data << endl;
-    cout << endl;
-    if(root->leftChild){
-        printTree(root->leftChild);
-    }
-    if(root->rightChild){
-        printTree(root->rightChild);
-    }
 }
 
 
@@ -140,6 +141,7 @@ void populateArray(TreeNode* root, int a[], int idx, int arrSize){
 void inOrder(TreeNode* root, ostream &output){
     if(root){
         inOrder(root->leftChild, output);
+
         output << "==========" << endl;
         output << "Data is: " << root->data << endl;
         if(root->leftChild){
@@ -149,6 +151,9 @@ void inOrder(TreeNode* root, ostream &output){
             output << "Right child is " << root->rightChild->data << endl;
         }
         output << "==========" << endl;
+
+        //output << root->data << " ";
+
         inOrder(root->rightChild, output);
     }
 }
