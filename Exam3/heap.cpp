@@ -15,7 +15,6 @@ struct LinkedList {
     Node* tail;
 };
 
-
 void siftUp(int heap[], int length, int firstEmptyIdx, int i);
 int siftDown(int heap[], int firstEmptyIdx);
 
@@ -33,7 +32,6 @@ ifstream in = ifstream("input.txt");
     int ip;
     int fileSize = 0;
 
-    //calculates how many ints are in the file
     while(in >> ip){
         fileSize++;
     }
@@ -50,13 +48,9 @@ ifstream in = ifstream("input.txt");
         cout << "After inserting " << ip << ":" << endl;
         breadthPrint(heap, maxHeapSize, cout);
     }
-    //Insert 10 values into a min-heap from a file.
-    //Display the data, level by level.
     cout << "Heap is: " << endl;
     breadthPrint(heap, maxHeapSize, cout);
 
-    //Then delete 5 items.
-    //After each delete, display the heap, level by level.
     int d;
     for(int i = 0; i < 5; i++){
         d = siftDown(heap, heapSize);
@@ -67,6 +61,7 @@ ifstream in = ifstream("input.txt");
 
     return 0;
 }
+
 
 void siftUp(int heap[], int length, int firstEmptyIdx, int i){
     //insert into the heap, keep moving up until the new element's parent is less than it
@@ -89,7 +84,6 @@ void siftUp(int heap[], int length, int firstEmptyIdx, int i){
         cout << "Invalid index: " << firstEmptyIdx << endl;
     }
 }
-
 int siftDown(int heap[], int firstEmptyIdx){
     //delete topmost element, move smalest element to top
     int ret = 0;
