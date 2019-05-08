@@ -28,7 +28,7 @@ void breadthPrint(int heap[], int length, ostream &output);
 
 
 int main(){
-ifstream in = ifstream("input.txt");
+    ifstream in = ifstream("input.txt");
     int ip;
     int fileSize = 0;
 
