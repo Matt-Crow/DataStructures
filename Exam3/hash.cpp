@@ -10,13 +10,6 @@ struct SearchResult{
     int collisions;
 };
 
-//temp
-void print(int a[], int length){
-    for(int i = 0; i < length; i++){
-        cout << i << ": " << a[i] << endl;
-    }
-}
-
 SearchResult* quadraticProbe(int a[], int length, int searchFor, int startAddress);
 SearchResult* linearProbe(int a[], int length, int searchFor);
 
@@ -54,9 +47,21 @@ int main(){
     in.close();
     sr = 0;
 
-    delete sr;
+    do {
+        cout << "Enter a number to search for, or enter -1 to quit: ";
+        cin >> ip;
+        if(ip != -1){
+            sr = get(a, size, ip);
+            if(sr->found){
+                cout << ip << " is in the array, at index " << sr->atIndex << endl;
+                cout << sr->collisions << " collisions occurred during the search." << endl;
+            } else {
+                cout << ip << " is not in the array. " << endl;
+            }
+        }
+    } while(ip != -1);
 
-    print(a, size);
+    delete sr;
 
     return 0;
 }
