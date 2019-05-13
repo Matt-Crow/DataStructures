@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1557792969 source:c:\users\matt\documents\c++\datastructures\main.cpp
+	<iostream>
+	"Stack.h"
+
+1557793663 source:c:\users\matt\documents\c++\datastructures\src\stack.cpp
+	"Stack.h"
+
+1557793554 c:\users\matt\documents\c++\datastructures\include\stack.h
+
+1557793821 source:c:\users\matt\documents\c++\datastructures\src\stackframe.cpp
+	"StackFrame.h"
+
+1557793840 c:\users\matt\documents\c++\datastructures\include\stackframe.h
+
