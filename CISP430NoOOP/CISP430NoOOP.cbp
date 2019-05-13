@@ -2,28 +2,26 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="DataStructures" />
+		<Option title="CISP430NoOOP" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/DataStructures" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/CISP430NoOOP" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/DataStructures" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/CISP430NoOOP" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -34,11 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/Stack.h" />
-		<Unit filename="include/StackFrame.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/Stack.cpp" />
-		<Unit filename="src/StackFrame.cpp" />
+		<Unit filename="stack.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
