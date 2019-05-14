@@ -2,6 +2,7 @@
 
 int useStack();
 int useQueue();
+int useLinkedList();
 
 using namespace std;
 
@@ -9,6 +10,7 @@ using namespace std;
 int main()
 {
     //useStack();
-    useQueue();
+    //useQueue();
+    useLinkedList();
     return 0;
 }
