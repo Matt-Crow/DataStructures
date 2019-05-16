@@ -34,6 +34,8 @@
 		</Compiler>
 		<Unit filename="linkedList.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="misc.cpp" />
+		<Unit filename="misc.h" />
 		<Unit filename="queue.cpp" />
 		<Unit filename="stack.cpp" />
 		<Extensions>

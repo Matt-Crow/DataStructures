@@ -23,35 +23,102 @@ void siftUp(TravelInfo* heap[], int length, int firstEmptyIdx, TravelInfo* i);
 
 TravelInfo* siftDown(TravelInfo* heap[], int firstEmptyIdx);
 
+void print(TravelInfo* heap[], int len);
+void print(TravelInfo* t);
+void print(bool a[], int len);
+
+const int MATRIX_SIZE = 5;
 
 int main(){
-    //forget it, he doesn't give us the algorithm
-    int adjMatrix[3][3] = {
+    /*
+    Djdkstra's algorithm:
+
+    Create an adjacency matrix, a 2-d array which records the distance between nodes
+    ex. the distance between nodes A and B is adjMatrix[A][B] or adjMatrix[B][A] it doesn't matter which
+
+    create a boolean array that keeps track of which nodes we have visited
+
+    create a stack that keeps track of our path thus far
+    create a min heap that keeps track of points adjacent to all point's we've visited thus far
+
+    repeat until we are at the end point:
+        push each path from our current point to the heap, adding the distance of the topmost path on the stack to the new paths' distance
+        sift down from the heap until we find a path that starts at a place we haven't visited
+        push that path to the stack
+    */
+    int adjMatrix[MATRIX_SIZE][MATRIX_SIZE] = {
         {
-            0, 1, 2
+            0, 2, 0, 6, 0
         },
         {
-            1, 0, 1
+            2, 0, 3, 5, 5
         },
         {
-            2, 1, 0
+            0, 3, 0, 0, 7
+        },
+        {
+            6, 5, 0, 0, 9
+        },
+        {
+            0, 5, 7, 9, 0
         }
     };
-    bool visited[3] = {false};
+    bool visited[MATRIX_SIZE] = {false};
     frame* travelLog = 0;
-    int heap[9] = {0};
+    TravelInfo* heap[MATRIX_SIZE * MATRIX_SIZE] = {0};
     int start = 0;
-    int end = 2;
+    int end = 4;
+    int idx = 0;// heap idx
 
+    int currentlyAt = start;
     TravelInfo* t = new TravelInfo;
     t->from = start;
     t->to = start;
     t->dist = 0;
     push(travelLog, t);
-    //add TravelInfo for each path from 0 to something onto the heap,
-    //set visited for 0 to true
-    //sift down the heap, put that in travel log
-    //something about adding the accumulated distance to each info in heap?
+    visited[start] = true;
+
+    cout << "At " << currentlyAt << endl;
+    while(currentlyAt != end){//better loop condition?
+        cout << "Visited thus far: " << endl;
+        print(visited, MATRIX_SIZE);
+
+        for(int i = 0; i < MATRIX_SIZE; i++){
+            //push everything connection from currentlyAt to the heap
+            if(adjMatrix[currentlyAt][i] != 0){
+                //assuming we haven't visited the destination yet
+                t = new TravelInfo;
+                t->from = currentlyAt;
+                t->to = i;
+                t->dist = adjMatrix[currentlyAt][i] + travelLog->value->dist;
+                siftUp(heap, MATRIX_SIZE * MATRIX_SIZE, idx, t);
+                idx++;
+            }
+        }
+        cout << "Heap after sifting up is " << endl;
+        print(heap, idx);
+        do{
+            t = siftDown(heap, idx);
+            idx--;
+        } while(visited[t->to] == true); //do until we find one we haven't visited
+        push(travelLog, t); //since this is a min heap, the shortest distance will be the one sifted down
+        currentlyAt = travelLog->value->to;
+        cout << "Visiting " << currentlyAt << endl;
+        visited[currentlyAt] = true;
+        cout << "At " << currentlyAt << endl;
+        cout << "Travel log is " << endl;
+        printFrame(travelLog);
+    }
+    cout << "Done" << endl;
+    while(travelLog){
+        t = pop(travelLog)->value;
+        if(t->to = currentlyAt){
+            t->dist -= adjMatrix[t->from][t->to];
+            print(t);
+            currentlyAt = t->from;
+        }
+    }
+
     return 0;
 }
 
@@ -86,6 +153,7 @@ void printFrame(frame* top){
     delete current;
 }
 
+//min heap, so smallest is on top
 void siftUp(TravelInfo* heap[], int length, int firstEmptyIdx, TravelInfo* i){
     //insert into the heap, keep moving up until the new element's parent is less than it
     if(firstEmptyIdx < length){
@@ -145,4 +213,19 @@ TravelInfo* siftDown(TravelInfo* heap[], int firstEmptyIdx){
         delete temp;
     }
     return ret;
+}
+
+void print(TravelInfo* heap[], int len){
+    for(int i = 0; i < len; i++){
+        cout << i << ": " << endl;
+        print(heap[i]);
+    }
+}
+void print(TravelInfo* t){
+    cout << "From " << t->from << " to " << t->to << " is " << t->dist << endl;
+}
+void print(bool a[], int len){
+    for(int i = 0; i < len; i++){
+        cout << i << ": " << a[i] << endl;
+    }
 }
