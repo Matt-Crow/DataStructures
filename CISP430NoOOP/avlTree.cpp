@@ -1,5 +1,6 @@
 #include <iostream>
 #include "misc.h"
+#include "avlTree.h"
 
 using namespace std;
 
@@ -116,7 +117,7 @@ void postOrder(treeNode* root, ostream &output){
 }
 
 void breadthPrint(treeNode* root, ostream &output){
-    linkedList<treeNode*>* currLv = newLinkedList<treeNode*>();
+    linkedList<treeNode>* currLv = newLinkedList<treeNode>();
     treeNode* curr = root;
     enqueue(currLv, root);
 
