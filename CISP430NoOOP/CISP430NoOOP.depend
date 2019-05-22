@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1558043842 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
+1558543048 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
 
 1557964357 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
@@ -17,6 +17,7 @@
 1558044213 c:\users\matt\documents\c++\cisp430nooop\misc.h
 	<iostream>
 
-1558044085 source:c:\users\matt\documents\c++\cisp430nooop\avltree.cpp
+1558542923 source:c:\users\matt\documents\c++\cisp430nooop\avltree.cpp
 	<iostream>
+	"misc.h"
 
