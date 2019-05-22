@@ -4,8 +4,6 @@
 #include <iostream>
 #include "misc.h"
 
-using namespace std;
-
 template <typename T>
 struct stack{
     stack<T>* next;

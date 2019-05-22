@@ -22,14 +22,16 @@
 	<iostream>
 	"misc.h"
 
-1558546140 c:\users\matt\documents\c++\cisp430nooop\stack.h
+1558568661 c:\users\matt\documents\c++\cisp430nooop\stack.h
 	<iostream>
 	"misc.h"
 
-1558546212 source:c:\users\matt\documents\c++\cisp430nooop\findpath.cpp
+1558570307 source:c:\users\matt\documents\c++\cisp430nooop\findpath.cpp
 	<iostream>
 	<cstring>
-	"stack.cpp"
+	"findPath.h"
+	"stack.h"
+	"TravelHeap.h"
 
 1558546234 c:\users\matt\documents\c++\cisp430nooop\stack.cpp
 	<iostream>
@@ -39,4 +41,14 @@
 	"Heap.h"
 
 1558548228 c:\users\matt\documents\c++\cisp430nooop\include\heap.h
+
+1558570296 c:\users\matt\documents\c++\cisp430nooop\findpath.h
+
+1558569320 c:\users\matt\documents\c++\cisp430nooop\include\travelheap.h
+	"../findPath.h"
+
+1558570450 source:c:\users\matt\documents\c++\cisp430nooop\src\travelheap.cpp
+	<iostream>
+	"TravelHeap.h"
+	"../findPath.h"
 

@@ -18,7 +18,7 @@ struct travelLog{
     travelLog* next;
 };
 
-void print(travelInfo* t);
+void printTravelInfo(travelInfo* t);
 
 adjMatrix* newMatrix(int size);
 bool set(adjMatrix* m, int from, int to, int dist);

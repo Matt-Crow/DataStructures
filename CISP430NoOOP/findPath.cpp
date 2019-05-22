@@ -2,18 +2,20 @@
 #include <cstring>
 #include "findPath.h"
 #include "stack.h"
-#include "heap.h"
+#include "TravelHeap.h"
 
 using namespace std;
 
-
-
 int useFindPath(){
-    Heap<int> h = Heap<int>();
-
-    travelLog* log = 0;
+    //set up everything
     adjMatrix* m = newMatrix(5);
+    TravelHeap* h = new TravelHeap(25);
+    travelLog* log = 0;
     bool visited[5] = {false};
+    int start = 0;
+    int end = 4;
+    int curr = start;
+
     for(int i = 0; i < 5; i++){
         if(visited[i]){
             cout << "not set to false" << endl;
@@ -31,7 +33,32 @@ int useFindPath(){
     set(m, 2, 4, 2);
     set(m, 3, 4, 1);
     print(m);
+    //done with setup
 
+
+    travelInfo* t = get(m, start, start);
+    push(log, t);
+    visited[start] = true;
+    while(curr != end){ //how to check for no path?
+        //get everything adjacent to curr
+        for(int i = 0; i < 5; i++){
+            t = get(m, curr, i);
+            if(t->valid){
+                h->siftUp(t);
+                cout << "After inserting " << i << endl;
+                h->print();
+            }
+        }
+        curr = end;
+    }
+
+    do {
+        t = h->siftDown();
+        //find the shortest path to an unvisited node
+    } while(visited[t->to]);
+
+
+    /*
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 5; j++){
             push(log, get(m, i, j));
@@ -39,14 +66,17 @@ int useFindPath(){
     }
 
     while(log){
-        print(pop(log));
+        h->siftUp(pop(log));
     }
+    */
+
+
     return 0;
 }
 
 
 
-void print(travelInfo* t){
+void printTravelInfo(travelInfo* t){
     cout << "From " << t->from << " to " << t->to << ": ";
     if(t->valid){
         cout << t->dist << endl;
@@ -79,7 +109,7 @@ travelInfo* get(adjMatrix* m, int from, int to){
     travelInfo* ret = new travelInfo;
     ret->from = from;
     ret->to = to;
-    ret->dist = -1;
+    ret->dist = 0;
     ret->valid = (from != to && from < m->size && to < m->size);
     if(ret->valid){
         ret->dist = m->matrix[from][to];
