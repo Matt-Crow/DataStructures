@@ -4,9 +4,6 @@
 
 using namespace std;
 
-
-
-
 string convertNumToBase(int num, int base);
 
 

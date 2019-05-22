@@ -2,7 +2,7 @@
 1558543048 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
 
-1558546239 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
+1558547095 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
 	<iostream>
 	"misc.h"
 	"stack.h"
@@ -34,4 +34,9 @@
 1558546234 c:\users\matt\documents\c++\cisp430nooop\stack.cpp
 	<iostream>
 	"misc.h"
+
+1558548330 source:c:\users\matt\documents\c++\cisp430nooop\src\heap.cpp
+	"Heap.h"
+
+1558548228 c:\users\matt\documents\c++\cisp430nooop\include\heap.h
 

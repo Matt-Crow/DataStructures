@@ -1,31 +1,25 @@
 #include <iostream>
 #include <cstring>
+#include "findPath.h"
 #include "stack.h"
+#include "heap.h"
 
 using namespace std;
 
-struct travelInfo{
-    int from;
-    int to;
-    int dist;
-    bool valid;
-};
 
-struct adjMatrix{
-    int size;
-    int** matrix;
-};
-
-void print(travelInfo* t);
-
-adjMatrix* newMatrix(int size);
-bool set(adjMatrix* m, int from, int to, int dist);
-travelInfo* get(adjMatrix* m, int from, int to);
-void print(adjMatrix* m);
 
 int useFindPath(){
-    stack<travelInfo>* travelLog = 0;
+    Heap<int> h = Heap<int>();
+
+    travelLog* log = 0;
     adjMatrix* m = newMatrix(5);
+    bool visited[5] = {false};
+    for(int i = 0; i < 5; i++){
+        if(visited[i]){
+            cout << "not set to false" << endl;
+        }
+    }
+
     set(m, 0, 1, 1);
     set(m, 0, 2, 2);
     set(m, 0, 3, 3);
@@ -40,9 +34,12 @@ int useFindPath(){
 
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 5; j++){
-            print(get(m, i, j));
-            push(travelLog, *get(m, i, j));
+            push(log, get(m, i, j));
         }
+    }
+
+    while(log){
+        print(pop(log));
     }
     return 0;
 }
@@ -97,4 +94,26 @@ void print(adjMatrix* m){
         }
         cout << endl;
     }
+}
+
+void push(travelLog* &top, travelInfo* value){
+    travelLog* newFrame = new travelLog;
+    newFrame->next = top;
+    newFrame->value = value;
+    top = newFrame;
+    newFrame = 0;
+    delete newFrame;
+}
+
+travelInfo* pop(travelLog* &top){
+    travelInfo* ret = 0;
+    if(top){
+        ret = top->value;
+        if(top->next){
+            top = top->next;
+        } else {
+            top = 0;
+        }
+    }
+    return ret;
 }
