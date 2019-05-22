@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include "stack.h"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ travelInfo* get(adjMatrix* m, int from, int to);
 void print(adjMatrix* m);
 
 int useFindPath(){
+    stack<travelInfo>* travelLog = 0;
     adjMatrix* m = newMatrix(5);
     set(m, 0, 1, 1);
     set(m, 0, 2, 2);
@@ -39,6 +41,7 @@ int useFindPath(){
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 5; j++){
             print(get(m, i, j));
+            push(travelLog, *get(m, i, j));
         }
     }
     return 0;
@@ -75,7 +78,6 @@ bool set(adjMatrix* m, int from, int to, int dist){
     }
     return canSet;
 }
-
 travelInfo* get(adjMatrix* m, int from, int to){
     travelInfo* ret = new travelInfo;
     ret->from = from;
@@ -87,7 +89,6 @@ travelInfo* get(adjMatrix* m, int from, int to){
     }
     return ret;
 }
-
 void print(adjMatrix* m){
     int s = m->size;
     for(int i = 0; i < s; i++){

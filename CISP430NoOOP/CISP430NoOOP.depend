@@ -2,9 +2,10 @@
 1558543048 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
 
-1557964357 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
+1558546239 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
 	<iostream>
 	"misc.h"
+	"stack.h"
 
 1557875906 source:c:\users\matt\documents\c++\cisp430nooop\queue.cpp
 	<iostream>
@@ -18,6 +19,19 @@
 	<iostream>
 
 1558542923 source:c:\users\matt\documents\c++\cisp430nooop\avltree.cpp
+	<iostream>
+	"misc.h"
+
+1558546140 c:\users\matt\documents\c++\cisp430nooop\stack.h
+	<iostream>
+	"misc.h"
+
+1558546212 source:c:\users\matt\documents\c++\cisp430nooop\findpath.cpp
+	<iostream>
+	<cstring>
+	"stack.cpp"
+
+1558546234 c:\users\matt\documents\c++\cisp430nooop\stack.cpp
 	<iostream>
 	"misc.h"
 

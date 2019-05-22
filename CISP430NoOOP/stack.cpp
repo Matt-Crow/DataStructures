@@ -1,23 +1,11 @@
 #include <iostream>
 #include "misc.h"
+#include "stack.h"
 
 using namespace std;
 
 
-template <typename T>
-struct stack{
-    stack<T>* next;
-    T value;
-};
 
-template <typename T>
-void push(stack<T>* &top, T value);
-
-template <typename T>
-T pop(stack<T>* &top);
-
-template <typename T>
-void print(stack<T>* top, ostream &out);
 
 string convertNumToBase(int num, int base);
 
