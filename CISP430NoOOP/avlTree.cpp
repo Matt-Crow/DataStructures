@@ -10,6 +10,19 @@ struct treeNode{
     int height;
 };
 
+struct tQNode{
+    treeNode* data;
+    tQNode* next;
+    tQNode* prev;
+};
+
+struct treeQ{
+    tQNode* head;
+    tQNode* tail;
+};
+
+
+
 treeNode* newTreeNode(int data);
 
 void insert(treeNode* &root, int data);
@@ -35,7 +48,9 @@ bool inTree(treeNode* root, int val);
 void setHeights(treeNode* root);
 int getBalance(treeNode* root);
 
-
+treeQ* newTreeQ();
+void enqueue(treeQ* q, treeNode* data);
+treeNode* deque(treeQ* q);
 
 int useAvlTree(){
     treeNode* root = 0;
@@ -247,25 +262,21 @@ void postOrder(treeNode* root, ostream &output){
 }
 
 void breadthPrint(treeNode* root, ostream &output){
-    //can't do T is pointer type?
-    /*
-    linkedList<treeNode>* currLv = newLinkedList<treeNode>();
+    treeQ* currLv = newTreeQ();
     treeNode* curr = root;
-    enqueue(currLv, *root);
+    enqueue(currLv, root);
 
     while(currLv->head){
-        LinkedList* nextLv = newLinkedList();
+        treeQ* nextLv = newTreeQ();
         while(currLv->head){
-            curr = deq(currLv);
-            output << "Data: " << curr->data << " Height: " << curr->height << " Balance: " << getBalance(curr);
+            curr = deque(currLv);
+            output << curr->data;
 
-            if(curr->leftChild){
-                enq(nextLv, curr->leftChild);
-                output << " Left child is " << curr->leftChild->data << " ";
+            if(curr->left){
+                enqueue(nextLv, curr->left);
             }
-            if(curr->rightChild){
-                enq(nextLv, curr->rightChild);
-                output << " Right child is " << curr->rightChild->data << " ";
+            if(curr->right){
+                enqueue(nextLv, curr->right);
             }
             output << " | ";
         }
@@ -275,7 +286,6 @@ void breadthPrint(treeNode* root, ostream &output){
     }
 
     delete currLv;
-    */
 }
 
 void printTree(treeNode* root){
@@ -335,3 +345,40 @@ int getBalance(treeNode* root){
     }
     return left - right;
 }
+
+treeQ* newTreeQ(){
+    treeQ* ret = new treeQ;
+    ret->head = 0;
+    ret->tail = 0;
+    return ret;
+}
+void enqueue(treeQ* q, treeNode* data){
+    tQNode* n = new tQNode;
+    n->data = data;
+    n->next = 0;
+    n->prev = q->tail;
+    q->tail = n;
+    if(!q->head){
+        //no head, no tail
+        q->head = n;
+    }else{
+        //if a tail did exist before, make this its next
+        n->prev->next = n;
+    }
+}
+treeNode* deque(treeQ* q){
+    treeNode* ret = 0;
+    if(q->head){
+        ret = q->head->data;
+        q->head = q->head->next;
+        if(q->head){
+            //still has head
+            delete q->head->prev;//delete old head
+            q->head->prev = 0;
+        } else {
+            q->tail = 0;
+        }
+    }
+    return ret;
+}
+
