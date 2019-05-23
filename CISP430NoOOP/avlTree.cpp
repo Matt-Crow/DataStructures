@@ -16,6 +16,10 @@ void insert(treeNode* &root, int data);
 
 bool deleteNode(treeNode* &root, int withValue);
 
+void rebalance(treeNode* &root);
+void leftRotate(treeNode* &root);
+void rightRotate(treeNode* &root);
+
 void preOrder(treeNode* root, ostream &output);
 
 void inOrder(treeNode* root, ostream &output);
@@ -27,6 +31,11 @@ void breadthPrint(treeNode* root, ostream &output);
 void printTree(treeNode* root);
 
 bool inTree(treeNode* root, int val);
+
+void setHeights(treeNode* root);
+int getBalance(treeNode* root);
+
+
 
 int useAvlTree(){
     treeNode* root = 0;
@@ -122,7 +131,8 @@ void insert(treeNode* &root, int data){
         insert(root->right, data);
     }
 
-    //rebalance(root);
+    setHeights(root);
+    rebalance(root);
 }
 
 bool deleteNode(treeNode* &root, int withValue){
@@ -162,8 +172,54 @@ bool deleteNode(treeNode* &root, int withValue){
             deleted = deleteNode(root->right, withValue);
         }
     }
-    //rebalance(root);
+
+    setHeights(root);
+    rebalance(root);
     return deleted;
+}
+
+void rebalance(treeNode* &root){
+    if(root){
+        int balance = getBalance(root);
+        if(balance > 1){
+            //left heavy
+            if(getBalance(root->left) < 0){
+                //left heavy inner
+                leftRotate(root->left);
+            }
+            rightRotate(root);
+        } else if(balance < -1){
+            //right heavy
+            if(getBalance(root->right) > 0){
+                //right heavy inner
+                rightRotate(root->right);
+            }
+            leftRotate(root);
+        }
+    }
+}
+
+void leftRotate(treeNode* &root){
+    if(root){
+        if(root->right){
+            treeNode* temp = root;
+            root = root->right;
+            temp->right = root->left;
+            root->left = temp;
+            setHeights(root);
+        }
+    }
+}
+void rightRotate(treeNode* &root){
+    if(root){
+        if(root->left){
+            treeNode* temp = root;
+            root = root->left;
+            temp->left = root->right;
+            root->right = temp;
+            setHeights(root);
+        }
+    }
 }
 
 void preOrder(treeNode* root, ostream &output){
@@ -197,7 +253,27 @@ void breadthPrint(treeNode* root, ostream &output){
     treeNode* curr = root;
     enqueue(currLv, *root);
 
-    currLv = 0;
+    while(currLv->head){
+        LinkedList* nextLv = newLinkedList();
+        while(currLv->head){
+            curr = deq(currLv);
+            output << "Data: " << curr->data << " Height: " << curr->height << " Balance: " << getBalance(curr);
+
+            if(curr->leftChild){
+                enq(nextLv, curr->leftChild);
+                output << " Left child is " << curr->leftChild->data << " ";
+            }
+            if(curr->rightChild){
+                enq(nextLv, curr->rightChild);
+                output << " Right child is " << curr->rightChild->data << " ";
+            }
+            output << " | ";
+        }
+
+        currLv = nextLv;
+        output << endl;
+    }
+
     delete currLv;
     */
 }
@@ -207,6 +283,8 @@ void printTree(treeNode* root){
         return;
     }
     cout << "Node " << root << " (" << root->data << ")" << endl;
+    cout << "Height is " << root->height << endl;
+    cout << "Balance is " << getBalance(root) << endl;
     if(root->left){
         cout << "   Left child: " << root->left << " (" << root->left->data << ")" << endl;
     }
@@ -237,4 +315,23 @@ bool inTree(treeNode* root, int val){
         cout << root->data << " ";
         return false;
     }
+}
+
+void setHeights(treeNode* root){
+    if(root){
+        setHeights(root->left);
+        setHeights(root->right);
+        int left = (root->left) ? root->left->height : -1;
+        int right = (root->right) ? root->right->height : -1;
+        root->height = max(left, right) + 1;
+    }
+}
+int getBalance(treeNode* root){
+    int left = 0;
+    int right = 0;
+    if(root){
+        left = (root->left) ? root->left->height : -1;
+        right = (root->right) ? root->right->height : -1;
+    }
+    return left - right;
 }
