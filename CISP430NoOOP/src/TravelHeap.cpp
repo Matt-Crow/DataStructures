@@ -55,7 +55,6 @@ travelInfo* TravelHeap::siftDown(){
     if(this->firstEmptyIdx > 0){
         ret = this->heap[0];
         this->heap[0] = this->heap[firstEmptyIdx - 1]; //last element becomes first;
-        delete this->heap[firstEmptyIdx - 1]; // works?
         this->firstEmptyIdx--;
 
         //re-sort

@@ -26,7 +26,7 @@
 	<iostream>
 	"misc.h"
 
-1558570307 source:c:\users\matt\documents\c++\cisp430nooop\findpath.cpp
+1558572028 source:c:\users\matt\documents\c++\cisp430nooop\findpath.cpp
 	<iostream>
 	<cstring>
 	"findPath.h"
@@ -47,7 +47,7 @@
 1558569320 c:\users\matt\documents\c++\cisp430nooop\include\travelheap.h
 	"../findPath.h"
 
-1558570450 source:c:\users\matt\documents\c++\cisp430nooop\src\travelheap.cpp
+1558572331 source:c:\users\matt\documents\c++\cisp430nooop\src\travelheap.cpp
 	<iostream>
 	"TravelHeap.h"
 	"../findPath.h"

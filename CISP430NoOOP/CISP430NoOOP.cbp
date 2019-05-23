@@ -37,13 +37,13 @@
 		<Unit filename="avlTree.cpp" />
 		<Unit filename="findPath.cpp" />
 		<Unit filename="findPath.h" />
-		<Unit filename="include/Heap.h" />
+		<Unit filename="include/TravelHeap.h" />
 		<Unit filename="linkedList.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="misc.cpp" />
 		<Unit filename="misc.h" />
 		<Unit filename="queue.cpp" />
-		<Unit filename="src/Heap.cpp" />
+		<Unit filename="src/TravelHeap.cpp" />
 		<Unit filename="stack.cpp" />
 		<Unit filename="stack.h" />
 		<Extensions>

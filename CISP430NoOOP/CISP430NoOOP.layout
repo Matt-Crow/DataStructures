@@ -2,48 +2,29 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="262" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="stack.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2075" topLine="66" />
-		</Cursor>
-	</File>
 	<File name="avlTree.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2688" topLine="104" />
 		</Cursor>
 	</File>
-	<File name="findPath.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="linkedList.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="153" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="48" />
-			<Collapse line="57" />
-			<Collapse line="69" />
-			<Collapse line="77" />
-			<Collapse line="88" />
-			<Collapse line="98" />
-			<Collapse line="107" />
-		</Folding>
-	</File>
-	<File name="misc.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="93" topLine="23" />
+			<Cursor1 position="728" topLine="15" />
 		</Cursor>
 	</File>
-	<File name="stack.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="262" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="stack.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="92" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Heap.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="misc.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="103" topLine="0" />
+			<Cursor1 position="93" topLine="23" />
 		</Cursor>
 	</File>
 	<File name="queue.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -51,9 +32,38 @@
 			<Cursor1 position="1337" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="linkedList.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\TravelHeap.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="728" topLine="15" />
+			<Cursor1 position="188" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\TravelHeap.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="805" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="findPath.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="296" topLine="11" />
+		</Cursor>
+	</File>
+	<File name="findPath.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="587" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="89" />
+			<Collapse line="98" />
+			<Collapse line="110" />
+			<Collapse line="118" />
+			<Collapse line="129" />
+			<Collapse line="139" />
+			<Collapse line="148" />
+		</Folding>
+	</File>
+	<File name="stack.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2075" topLine="66" />
 		</Cursor>
 	</File>
 	<File name="misc.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
