@@ -14,6 +14,8 @@ treeNode* newTreeNode(int data);
 
 void insert(treeNode* &root, int data);
 
+bool deleteNode(treeNode* &root, int withValue);
+
 void preOrder(treeNode* root, ostream &output);
 
 void inOrder(treeNode* root, ostream &output);
@@ -67,6 +69,12 @@ int useAvlTree(){
             insert(root, ip);
             ip = 5;
             break;
+        case 6:
+            cout << "Enter value to delete: ";
+            cin >> ip;
+            deleteNode(root, ip);
+            ip = 6;
+            break;
         case 7:
             cout << "Enter value to search for: ";
             cin >> ip;
@@ -108,6 +116,47 @@ void insert(treeNode* &root, int data){
     }
 
     //rebalance(root);
+}
+
+bool deleteNode(treeNode* &root, int withValue){
+    bool deleted = false;
+    if(root){
+        if(root->data == withValue){
+            if(!(root->left || root->right)){
+                //root is only node in the tree
+                delete root;
+                root = 0;
+                deleted = true;
+            } else if(root->left && root->right){
+                //2 children
+                treeNode* temp = root->right;
+                //either go right by one, and keep going left,
+                //or go left by one, and keep going right,
+                //it doesn't matter which
+                while(temp->left){
+                    temp = temp->left;
+                }
+                int newVal = temp->data;
+
+                //delete the node I will swap with
+                deleteNode(root, temp->data);
+                //take that node's data
+                root->data = newVal;
+                //have to do in this order, otherwise root will be deleted
+                delete temp;
+            } else if(root->left){
+                root = root->left;
+            } else if(root->right){
+                root = root->right;
+            }
+        } else if(root->data > withValue && root->left){
+            deleted = deleteNode(root->left, withValue);
+        } else if(root->data < withValue && root->right){
+            deleted = deleteNode(root->right, withValue);
+        }
+    }
+    //rebalance(root);
+    return deleted;
 }
 
 void preOrder(treeNode* root, ostream &output){
