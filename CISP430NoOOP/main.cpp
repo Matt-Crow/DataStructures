@@ -14,7 +14,7 @@ int main()
     //useStack();
     //useQueue();
     //useLinkedList();
-    //useAvlTree();
-    useFindPath();
+    useAvlTree();
+    //useFindPath();
     return 0;
 }

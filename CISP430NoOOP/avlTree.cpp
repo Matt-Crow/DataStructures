@@ -22,7 +22,9 @@ void postOrder(treeNode* root, ostream &output);
 
 void breadthPrint(treeNode* root, ostream &output);
 
+void printTree(treeNode* root);
 
+bool inTree(treeNode* root, int val);
 
 int useAvlTree(){
     treeNode* root = 0;
@@ -36,7 +38,10 @@ int useAvlTree(){
         cout << "1: print the tree in-order" << endl;
         cout << "2: print the tree post-order" << endl;
         cout << "3: print the tree breadth-print" << endl;
-        cout << "4: insert into the tree" << endl;
+        cout << "4: print the tree (address format)" << endl;
+        cout << "5: insert into the tree" << endl;
+        cout << "6: delete a node from the tree" << endl;
+        cout << "7: check if a number exists in the tree" << endl;
         cout << "-1: quit" << endl;
         cin >> ip;
         cout << endl;
@@ -54,10 +59,24 @@ int useAvlTree(){
             breadthPrint(root, cout);
             break;
         case 4:
+            printTree(root);
+            break;
+        case 5:
             cout << "Enter value to insert: ";
             cin >> ip;
             insert(root, ip);
-            ip = 4;
+            ip = 5;
+            break;
+        case 7:
+            cout << "Enter value to search for: ";
+            cin >> ip;
+            bool found = inTree(root, ip);
+            if(found){
+                cout << ip << " is in the tree" << endl;
+            } else {
+                cout << ip << " is not in the tree" << endl;
+            }
+            ip = 7;
             break;
         }
     }
@@ -125,4 +144,41 @@ void breadthPrint(treeNode* root, ostream &output){
     currLv = 0;
     delete currLv;
     */
+}
+
+void printTree(treeNode* root){
+    if(!root){
+        return;
+    }
+    cout << "Node " << root << " (" << root->data << ")" << endl;
+    if(root->left){
+        cout << "   Left child: " << root->left << " (" << root->left->data << ")" << endl;
+    }
+    if(root->right){
+        cout << "   Right child: " << root->right << " (" << root->right->data << ")" << endl;
+    }
+    if(root->left){
+        printTree(root->left);
+    }
+    if(root->right){
+        printTree(root->right);
+    }
+}
+
+bool inTree(treeNode* root, int val){
+    if(!root){
+        return false;
+    } else if(root->data == val){
+        cout << root->data << " ";
+        return true;
+    } else if(root->data > val && root->left){
+        cout << root->data << " ";
+        return inTree(root->left, val);
+    } else if(root->data < val && root->right){
+        cout << root->data << " ";
+        return inTree(root->right, val);
+    } else {
+        cout << root->data << " ";
+        return false;
+    }
 }
