@@ -31,6 +31,7 @@ bool inTree(treeNode* root, int val);
 int useAvlTree(){
     treeNode* root = 0;
     int ip = 0;
+    bool b = false;
 
     cout << "===AVL TREE===" << endl;
     while(ip != -1){
@@ -72,14 +73,20 @@ int useAvlTree(){
         case 6:
             cout << "Enter value to delete: ";
             cin >> ip;
-            deleteNode(root, ip);
+
+            b = deleteNode(root, ip);
+            if(b){
+                cout << ip << " was deleted" << endl;
+            } else {
+                cout << ip << " was not deleted" << endl;
+            }
             ip = 6;
             break;
         case 7:
             cout << "Enter value to search for: ";
             cin >> ip;
-            bool found = inTree(root, ip);
-            if(found){
+            b = inTree(root, ip);
+            if(b){
                 cout << ip << " is in the tree" << endl;
             } else {
                 cout << ip << " is not in the tree" << endl;
@@ -88,9 +95,9 @@ int useAvlTree(){
             break;
         }
     }
-
-    root = 0;
-    delete root;
+    if(root){
+        delete root;
+    }
 
     return 0;
 }
@@ -122,11 +129,11 @@ bool deleteNode(treeNode* &root, int withValue){
     bool deleted = false;
     if(root){
         if(root->data == withValue){
+            deleted = true;
             if(!(root->left || root->right)){
                 //root is only node in the tree
                 delete root;
                 root = 0;
-                deleted = true;
             } else if(root->left && root->right){
                 //2 children
                 treeNode* temp = root->right;
