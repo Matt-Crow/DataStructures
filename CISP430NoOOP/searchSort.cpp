@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstring>
 
+#include "Queue.h"
+#include "stack.h"
+
 using namespace std;
 
 void print(int a[], int length);
@@ -13,6 +16,10 @@ void shellSort(int a[], int length);
 void quickSort(int a[], int start, int end);
 int partition(int a[], int start, int end);
 void mergeSort(int a[], int start, int end);
+
+void radixSort(int a[], int length);
+void radixSort(int a[], int length, int tenToSomePow);
+void posNegSort(int a[], int length);
 
 int binarySearch(int a[], int length, int searchFor);
 
@@ -290,7 +297,16 @@ void mergeSort(int a[], int start, int end){
     }
 }
 
+void radixSort(int a[], int length){
+    radixSort(a, length, 1);
+    posNegSort(a, length);
+}
+void radixSort(int a[], int length, int tenToSomePow){
 
+}
+void posNegSort(int a[], int length){
+
+}
 
 /*
 Starts at the middle, keeps cutting in half and choosing
