@@ -37,6 +37,8 @@
 		<Unit filename="avlTree.cpp" />
 		<Unit filename="findPath.cpp" />
 		<Unit filename="findPath.h" />
+		<Unit filename="include/Queue.h" />
+		<Unit filename="include/QueueNode.h" />
 		<Unit filename="include/TravelHeap.h" />
 		<Unit filename="linkedList.cpp" />
 		<Unit filename="main.cpp" />
@@ -44,6 +46,8 @@
 		<Unit filename="misc.h" />
 		<Unit filename="queue.cpp" />
 		<Unit filename="searchSort.cpp" />
+		<Unit filename="src/Queue.cpp" />
+		<Unit filename="src/QueueNode.cpp" />
 		<Unit filename="src/TravelHeap.cpp" />
 		<Unit filename="stack.cpp" />
 		<Unit filename="stack.h" />

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-
+#include <cstdlib>
 #include "Queue.h"
 #include "stack.h"
 
@@ -26,7 +26,7 @@ int binarySearch(int a[], int length, int searchFor);
 
 
 int useSearchSort(){
-    int a[] = {3, 2, 7, 8, 1, 9, 4, 5, 0, 6};
+    int a[] = {354, -102, 72, 448, -11, 945, 43, 57, 0, 6};
     int backup[10];
     int ip;
     bool sorted = false;
@@ -42,7 +42,8 @@ int useSearchSort(){
         cout << "5: use shell sort" << endl;
         cout << "6: use quick sort" << endl;
         cout << "7: use merge sort" << endl;
-        cout << "8: use binary search" << endl;
+        cout << "8: use radix sort" << endl;
+        cout << "9: use binary search" << endl;
         cout << "-1: quit" << endl;
         cin >> ip;
 
@@ -91,6 +92,12 @@ int useSearchSort(){
             print(a, 10);
             break;
         case 8:
+            radixSort(a, 10);
+            sorted = true;
+            cout << "After radix sort: ";
+            print(a, 10);
+            break;
+        case 9:
             if(!sorted){
                 cout << "Array must be sorted to perform binary search" << endl;
                 break;
@@ -297,15 +304,78 @@ void mergeSort(int a[], int start, int end){
     }
 }
 
+/*
+Sorts based on first the digit in the ones place,
+then the tens place, hundreds and so on,
+then sort by positive or negative
+*/
 void radixSort(int a[], int length){
     radixSort(a, length, 1);
     posNegSort(a, length);
 }
 void radixSort(int a[], int length, int tenToSomePow){
+    bool higherPow = false; //wow. C++ is an atheist
+    Queue<int> sigFigs[10]; //ten numbers, 10 queues
+    for(int i = 0; i < 10; i++){
+        sigFigs[i] = Queue<int>();
+    }
 
+    for(int i = 0; i < length; i++){
+        //check to see if there are any digits we haven't sorted by yet
+        if(!higherPow && abs(a[i]) > tenToSomePow * 10){
+            higherPow = true;
+        }
+        //       gets the digit we are currently checking
+        sigFigs[(abs(a[i])/tenToSomePow)%10].enqueue(a[i]);
+    }
+    cout << "After enqueing..." << endl;
+    for(int i = 0; i < 10; i++){
+        cout << i << ":";
+        sigFigs[i].print();
+        cout << endl;
+    }
+
+    //empty the queues into the array
+    int aIdx = 0;
+    for(int i = 0; i < 10; i++){
+        while(!sigFigs[i].isEmpty()){
+            a[aIdx] = sigFigs[i].deque();
+            aIdx++;
+        }
+    }
+
+    if(higherPow){
+        radixSort(a, length, tenToSomePow * 10);
+    }
 }
 void posNegSort(int a[], int length){
+    /*
+    a is sorted by absolute value,
+    so now I need to put all the negatives at the front,
+    and positives at the back
+    */
+    stack<int>* neg = 0;
+    Queue<int>* pos = new Queue<int>();
 
+    for(int i = 0; i < length; i++){
+        if(a[i] >= 0){
+            pos->enqueue(a[i]);
+        } else {
+            push(neg, a[i]);
+        }
+    }
+    int aIdx = 0;
+    while(neg){
+        a[aIdx] = pop(neg);
+        aIdx++;
+    }
+    while(!pos->isEmpty()){
+        a[aIdx] = pos->deque();
+        aIdx++;
+    }
+
+    delete pos;
+    delete neg;
 }
 
 /*

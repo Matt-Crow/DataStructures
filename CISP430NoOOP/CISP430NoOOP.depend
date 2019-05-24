@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1558735233 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
+1558735966 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
 
 1558547095 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
@@ -7,7 +7,7 @@
 	"misc.h"
 	"stack.h"
 
-1558735540 source:c:\users\matt\documents\c++\cisp430nooop\queue.cpp
+1558735863 source:c:\users\matt\documents\c++\cisp430nooop\queue.cpp
 	<iostream>
 	"Queue.h"
 
@@ -62,10 +62,10 @@
 
 1558735687 c:\users\matt\documents\c++\cisp430nooop\include\queuenode.h
 
-1558735168 source:c:\users\matt\documents\c++\cisp430nooop\src\queue.cpp
+1558735849 source:c:\users\matt\documents\c++\cisp430nooop\src\queue.cpp
 	"Queue.h"
 	<iostream>
 
-1558735664 c:\users\matt\documents\c++\cisp430nooop\include\queue.h
+1558735804 c:\users\matt\documents\c++\cisp430nooop\include\queue.h
 	"QueueNode.h"
 
