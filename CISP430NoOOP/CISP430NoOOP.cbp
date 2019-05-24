@@ -43,6 +43,7 @@
 		<Unit filename="misc.cpp" />
 		<Unit filename="misc.h" />
 		<Unit filename="queue.cpp" />
+		<Unit filename="searchSort.cpp" />
 		<Unit filename="src/TravelHeap.cpp" />
 		<Unit filename="stack.cpp" />
 		<Unit filename="stack.h" />
