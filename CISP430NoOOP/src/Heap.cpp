@@ -19,6 +19,11 @@ Heap<T>::~Heap()
 }
 
 template <class T>
+bool Heap<T>::isEmpty(){
+    return firstEmptyIdx == 0;
+}
+
+template <class T>
 bool Heap<T>::siftUp(T data){
     bool canSiftUp = firstEmptyIdx < size;
     if(canSiftUp){
@@ -45,7 +50,49 @@ bool Heap<T>::siftUp(T data){
 }
 
 template <class T>
+T Heap<T>::siftDown(){
+    T ret = 0;
+    //delete topmost element, reorder everything
+    if(firstEmptyIdx != 0){
+        ret = arr[0];
+        firstEmptyIdx--;
+        //last becomes first
+        arr[0] = arr[firstEmptyIdx];
+        //sort
+        //since a heap is technically a tree, we can access its children
+        int idx = 0;
+        int left = 2 * idx + 1;
+        int right = 2 * idx + 2;
+        T temp;
+
+        while(
+            ((left < firstEmptyIdx && ((isMinHeap && arr[idx] > arr[left]) || (!isMinHeap && arr[idx] < arr[left]))))
+            ||((right < firstEmptyIdx && ((isMinHeap && arr[idx] > arr[right]) || (!isMinHeap && arr[idx] < arr[right]))))
+        ){
+            if((isMinHeap && arr[left] > arr[right]) || (!isMinHeap && arr[left] < arr[right])){
+                temp = arr[right];
+                arr[right] = arr[idx];
+                arr[idx] = temp;
+                idx = right;
+            } else {
+                temp = arr[left];
+                arr[left] = arr[idx];
+                arr[idx] = temp;
+                idx = left;
+            }
+            left = idx * 2 + 1;
+            right = idx * 2 + 2;
+        }
+    }
+    return ret;
+}
+
+template <class T>
 void Heap<T>::print(){
+    if(isEmpty()){
+        return;
+    }
+
     int row = 0;
     int col = 0;
     int rowWidth = 1;
@@ -79,6 +126,8 @@ int Heap<T>::test(){
         cout << "1: Print the max-heap" << endl;
         cout << "2: sift up a value to the min-heap" << endl;
         cout << "3: sift up a value to the max-heap" << endl;
+        cout << "4: sift down from the min-heap" << endl;
+        cout << "5: sift down from the max-heap" << endl;
         cout << "-1: quit" << endl;
         cout << "Choose an option: ";
         cin >> ip;
@@ -110,6 +159,24 @@ int Heap<T>::test(){
                 cout << "The heap is out of open slots. Couldn't sift up " << ip << endl;
             }
             ip = 3;
+            break;
+        case 4:
+            if(minHeap->isEmpty()){
+                cout << "Nothing to sift down" << endl;
+            } else {
+                ip = minHeap->siftDown();
+                cout << "Sifted down " << ip << endl;
+                ip = 4;
+            }
+            break;
+        case 5:
+            if(maxHeap->isEmpty()){
+                cout << "Nothing to sift down" << endl;
+            }else{
+                ip = maxHeap->siftDown();
+                cout << "Sifted down " << ip << endl;
+                ip = 5;
+            }
             break;
         }
     }while(ip >= 0);

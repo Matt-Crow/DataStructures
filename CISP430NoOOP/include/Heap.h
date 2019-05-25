@@ -7,6 +7,7 @@ class Heap
     public:
         Heap(bool isMinHeap, int size);
         ~Heap();
+        bool isEmpty();
         bool siftUp(T data);
         T siftDown();
         void print();

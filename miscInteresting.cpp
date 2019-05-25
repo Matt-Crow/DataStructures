@@ -1,3 +1,8 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
 bool containsDelete(string s){
     bool ret = false;
     string checking = "delete";
@@ -74,4 +79,15 @@ int sumRecur(int num){
 
     //      preserves sign (+-) of original number
     return (num / absNum) * sumRecur(absNum, numDigits);
+}
+
+int numIntsInFile(string fileName){
+    int ret = 0;
+    int dummy;
+    ifstream in = ifstream(fileName);
+    while(in >> dummy){
+        ret++;
+    }
+    in.close();
+    return ret;
 }
