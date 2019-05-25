@@ -91,3 +91,24 @@ int numIntsInFile(string fileName){
     in.close();
     return ret;
 }
+
+/*
+Big O: worst case scenario for how many lines of code are run
+
+//       1     n + 1  n
+    for(int i = 0; i < n; i++){
+        cout << i << endl; // n
+    }
+    // big O = 3n + 2 -> n
+
+    //       1     n + 1  n
+    for(int i = 0; i < n; i++){
+
+        //                           inner loop run n times
+        //      1      n + 1  n
+        for(int j = 0; j < n; j++){
+            cout << i << " " << j << endl; //n
+        }
+    }
+    //big O = 3n + 2 + n(3n + 2) = 3n^2 + 5n + 2 -> n^2
+*/

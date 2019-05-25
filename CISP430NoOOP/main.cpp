@@ -7,6 +7,7 @@ int useLinkedList();
 int useAvlTree();
 int useFindPath();
 int useSearchSort();
+int useString();
 
 using namespace std;
 
@@ -19,6 +20,7 @@ int main()
     //useAvlTree();
     //useFindPath();
     //useSearchSort();
-    Heap<int>::test();
+    //Heap<int>::test();
+    useString();
     return 0;
 }
