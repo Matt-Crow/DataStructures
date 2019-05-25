@@ -92,6 +92,45 @@ int numIntsInFile(string fileName){
     return ret;
 }
 
+//convert this to just change a number to a char pointer
+int stringLength(char* &a){
+    int length = 0;
+    char* newStr;
+
+    while(*(a + length) != '\0'){
+        length++;
+    }
+
+    int digits = 0; //the number of digits in the length of the string
+    int remainder = length;
+    int tenPow = 1;
+    while(remainder > 0){
+        remainder /= 10;
+        tenPow *= 10;
+        digits++;
+    }
+
+    newStr = (char*)malloc(sizeof(char) * (length + digits + 1));
+
+    int idx = 0;
+    while(idx < digits){
+        tenPow /= 10;
+        *(newStr + idx) = (char)(length / tenPow % 10 + 48);
+        idx++;
+    }
+
+
+    while(*(a + idx - digits) != '\0'){
+        *(newStr + idx) = *(a + idx - digits);
+        idx++;
+    }
+    *(newStr + length + digits) = '\0';
+
+    a = newStr;
+
+    return length;
+}
+
 /*
 Big O: worst case scenario for how many lines of code are run
 
