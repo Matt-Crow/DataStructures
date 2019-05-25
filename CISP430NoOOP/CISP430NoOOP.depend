@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1558735966 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
+1558805066 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
+	"Heap.h"
 
 1558547095 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
 	<iostream>
@@ -38,10 +39,11 @@
 	<iostream>
 	"misc.h"
 
-1558548330 source:c:\users\matt\documents\c++\cisp430nooop\src\heap.cpp
+1558805436 source:c:\users\matt\documents\c++\cisp430nooop\src\heap.cpp
 	"Heap.h"
+	<iostream>
 
-1558548228 c:\users\matt\documents\c++\cisp430nooop\include\heap.h
+1558805092 c:\users\matt\documents\c++\cisp430nooop\include\heap.h
 
 1558570296 c:\users\matt\documents\c++\cisp430nooop\findpath.h
 
@@ -53,9 +55,12 @@
 	"TravelHeap.h"
 	"../findPath.h"
 
-1558734431 source:c:\users\matt\documents\c++\cisp430nooop\searchsort.cpp
+1558738143 source:c:\users\matt\documents\c++\cisp430nooop\searchsort.cpp
 	<iostream>
 	<cstring>
+	<cstdlib>
+	"Queue.h"
+	"stack.h"
 
 1558734768 source:c:\users\matt\documents\c++\cisp430nooop\src\queuenode.cpp
 	"QueueNode.h"

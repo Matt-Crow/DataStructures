@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Heap.h"
 
 int useStack();
 int useQueue();
@@ -17,6 +18,7 @@ int main()
     //useLinkedList();
     //useAvlTree();
     //useFindPath();
-    useSearchSort();
+    //useSearchSort();
+    Heap<int>::test();
     return 0;
 }
