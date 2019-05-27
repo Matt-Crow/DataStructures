@@ -78,9 +78,10 @@
 1558823034 source:c:\users\matt\documents\c++\cisp430nooop\string.cpp
 	<iostream>
 
-1558977875 source:c:\users\matt\documents\c++\cisp430nooop\postfix.cpp
+1558983657 source:c:\users\matt\documents\c++\cisp430nooop\postfix.cpp
 	<iostream>
 	"Stack.h"
+	"TreeNode.h"
 
 1558975468 source:c:\users\matt\documents\c++\cisp430nooop\src\stacknode.cpp
 	"StackNode.h"
@@ -94,4 +95,15 @@
 
 1558977764 c:\users\matt\documents\c++\cisp430nooop\include\stack.h
 	"StackNode.h"
+
+1558981586 source:c:\users\matt\documents\c++\cisp430nooop\src\treenode.cpp
+	"TreeNode.h"
+
+1558982274 c:\users\matt\documents\c++\cisp430nooop\include\treenode.h
+
+1558981672 source:c:\users\matt\documents\c++\cisp430nooop\src\abstracttree.cpp
+	"AbstractTree.h"
+
+1558981631 c:\users\matt\documents\c++\cisp430nooop\include\abstracttree.h
+	"TreeNode.h"
 

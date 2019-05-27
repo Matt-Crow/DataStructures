@@ -1,7 +1,16 @@
 #include <iostream>
 #include "Stack.h"
+#include "TreeNode.h"
 
 using namespace std;
+
+//templates are useless
+struct treeStack{
+    treeStack* next;
+    TreeNode<char>* value;
+};
+void push(treeStack* &ts, TreeNode<char>* value);
+TreeNode<char>* pop(treeStack* &ts);
 
 int toInt(char c);
 char toChar(int i); //defined in misc
@@ -9,9 +18,16 @@ char toChar(int i); //defined in misc
 string toPostfix(string infix);
 int evaluatePostfix(string postfix);
 
+TreeNode<char>* toPostfixTree(string postfix);
+int evaluatePostfixTree(TreeNode<char>* postfix);
+
+void inOrder(TreeNode<char>* root);
+
+
 int usePostfix(){
     string ip = "";
     string post = "";
+    TreeNode<char>* tree = 0;
     int i = 0;
     do{
         cout << "Enter a prefix expression (like 1 + 1) or 'q' to quit: ";
@@ -21,10 +37,19 @@ int usePostfix(){
             cout << ip << " : " << post << endl;
             i = evaluatePostfix(post);
             cout << ip << " = " << i << endl;
+
+            cout << "As tree: " << endl;
+            tree = toPostfixTree(post);
+            i = evaluatePostfixTree(tree);
+            inOrder(tree);
+            cout << " = " << i << endl;
         }
     }while(ip != "q");
     return 0;
 }
+
+
+
 
 int toInt(char c){
     int ret = -1;
@@ -62,7 +87,6 @@ int toInt(char c){
     }
     return ret;
 }
-
 
 string toPostfix(string infix){
     string result = "";
@@ -169,4 +193,91 @@ int evaluatePostfix(string postfix){
     }
 
     return nums->pop();
+}
+
+
+TreeNode<char>* toPostfixTree(string postfix){
+    TreeNode<char>* ret = 0;
+    treeStack* stack = 0;
+
+    for(char token : postfix){
+        if(isdigit(token)){
+            push(stack, new TreeNode<char>(token));
+        } else {
+            TreeNode<char>* right = pop(stack);
+            TreeNode<char>* left = pop(stack);
+            TreeNode<char>* a = new TreeNode<char>(token);
+            a->left = left;
+            a->right = right;
+            push(stack, a);
+        }
+    }
+    if(stack){
+        ret = stack->value;
+    }
+    return ret;
+}
+
+int evaluatePostfixTree(TreeNode<char>* postfix){
+    int ret = 0;
+
+    if(postfix){
+        char binaryOp = postfix->getData();
+        int left = evaluatePostfixTree(postfix->left);
+        int right = evaluatePostfixTree(postfix->right);
+
+        switch(binaryOp){
+        case '+':
+            ret = left + right;
+            break;
+        case '-':
+            ret = left - right;
+            break;
+        case '*':
+            ret = left * right;
+            break;
+        case '/':
+            ret = left / right;
+            break;
+        default:
+            //if it is not an operator, just return the value
+            ret = toInt(binaryOp);
+        }
+    }
+
+    return ret;
+}
+
+
+void push(treeStack* &ts, TreeNode<char>* value){
+    treeStack* nn = new treeStack;
+    nn->value = value;
+    nn->next = ts;
+    ts = nn;
+}
+
+TreeNode<char>* pop(treeStack* &ts){
+    TreeNode<char>* ret = 0;
+    if(ts){
+        treeStack* temp = ts;
+        ret = temp->value;
+        ts = temp->next;
+        delete temp;
+    }
+    return ret;
+}
+
+void inOrder(TreeNode<char>* root){
+    if(root){
+        bool isLeaf = !(root->left || root->right);
+        if(!isLeaf){
+            cout << "( ";
+        }
+        inOrder(root->left);
+        cout << root->getData() << " ";
+        inOrder(root->right);
+        if(!isLeaf){
+            cout << ") ";
+        }
+    }
 }
