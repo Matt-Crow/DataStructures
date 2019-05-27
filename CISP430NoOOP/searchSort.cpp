@@ -2,7 +2,7 @@
 #include <cstring>
 #include <cstdlib>
 #include "Queue.h"
-#include "stack.h"
+#include "Stack.h"
 
 using namespace std;
 
@@ -354,19 +354,19 @@ void posNegSort(int a[], int length){
     so now I need to put all the negatives at the front,
     and positives at the back
     */
-    stack<int>* neg = 0;
+    Stack<int>* neg = new Stack<int>();
     Queue<int>* pos = new Queue<int>();
 
     for(int i = 0; i < length; i++){
         if(a[i] >= 0){
             pos->enqueue(a[i]);
         } else {
-            push(neg, a[i]);
+            neg->push(a[i]);
         }
     }
     int aIdx = 0;
-    while(neg){
-        a[aIdx] = pop(neg);
+    while(!neg->isEmpty()){
+        a[aIdx] = neg->pop();
         aIdx++;
     }
     while(!pos->isEmpty()){

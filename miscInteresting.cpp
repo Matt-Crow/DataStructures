@@ -131,6 +131,24 @@ int stringLength(char* &a){
     return length;
 }
 
+string convertNumToBase(int num, int base){
+    stack<int>* myStack = 0;
+    string ret = "";
+
+    int remainder = num;
+    stack<int>* curr = myStack;
+
+    while(remainder > 0){
+        push(curr, remainder % base);
+        remainder = remainder / base;
+    }
+    while(curr){
+        ret += toChar(pop(curr));
+    }
+
+    return ret;
+}
+
 /*
 Big O: worst case scenario for how many lines of code are run
 
