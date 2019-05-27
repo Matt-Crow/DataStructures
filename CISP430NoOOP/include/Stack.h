@@ -17,11 +17,13 @@ class Stack
         void push(T value);
         T pop();
         void print();
+        T peek();
         static int test();
     private:
         StackNode<T>* top;
 };
 
 template class Stack<int>;
+template class Stack<char>;
 
 #endif // STACK_H

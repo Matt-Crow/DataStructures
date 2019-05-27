@@ -13,5 +13,6 @@ class StackNode
 };
 
 template class StackNode<int>;
+template class StackNode<char>;
 
 #endif // STACKNODE_H

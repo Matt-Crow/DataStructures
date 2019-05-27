@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1558977018 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
+1558978069 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
 	"Heap.h"
 	"./include/Stack.h"
@@ -78,19 +78,20 @@
 1558823034 source:c:\users\matt\documents\c++\cisp430nooop\string.cpp
 	<iostream>
 
-1558975201 source:c:\users\matt\documents\c++\cisp430nooop\postfix.cpp
+1558977875 source:c:\users\matt\documents\c++\cisp430nooop\postfix.cpp
 	<iostream>
+	"Stack.h"
 
 1558975468 source:c:\users\matt\documents\c++\cisp430nooop\src\stacknode.cpp
 	"StackNode.h"
 
-1558976836 c:\users\matt\documents\c++\cisp430nooop\include\stacknode.h
+1558977901 c:\users\matt\documents\c++\cisp430nooop\include\stacknode.h
 
-1558976894 source:c:\users\matt\documents\c++\cisp430nooop\src\stack.cpp
+1558977812 source:c:\users\matt\documents\c++\cisp430nooop\src\stack.cpp
 	"Stack.h"
 	"StackNode.h"
 	<iostream>
 
-1558976664 c:\users\matt\documents\c++\cisp430nooop\include\stack.h
+1558977764 c:\users\matt\documents\c++\cisp430nooop\include\stack.h
 	"StackNode.h"
 

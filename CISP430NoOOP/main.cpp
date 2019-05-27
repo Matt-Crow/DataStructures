@@ -8,6 +8,7 @@ int useAvlTree();
 int useFindPath();
 int useSearchSort();
 int useString();
+int usePostfix();
 
 using namespace std;
 
@@ -19,9 +20,10 @@ int main()
     //useLinkedList();
     //useAvlTree();
     //useFindPath();
-    useSearchSort();
+    //useSearchSort();
     //Heap<int>::test();
     //useString();
     //Stack<int>::test();
+    usePostfix();
     return 0;
 }

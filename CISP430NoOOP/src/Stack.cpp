@@ -61,6 +61,15 @@ void Stack<T>::print(){
 }
 
 template <class T>
+T Stack<T>::peek(){
+    T ret = 0;
+    if(top){
+        ret = top->getData();
+    }
+    return ret;
+}
+
+template <class T>
 int Stack<T>::test(){
     int ip = 0;
     Stack<int>* myStack = new Stack<int>(); //LoL stack on the heap
