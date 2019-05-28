@@ -3,10 +3,10 @@
 #include <cstdlib>
 #include "Queue.h"
 #include "Stack.h"
+#include "misc.h"
 
 using namespace std;
 
-void print(int a[], int length);
 void bubbleSort(int a[], int length);
 void selectSort(int a[], int length);
 void gappedSort(int a[], int length, int gapSize);
@@ -121,12 +121,7 @@ int useSearchSort(){
 
 
 
-void print(int a[], int length){
-    for(int i = 0; i < length; i++){
-        cout << a[i] << " ";
-    }
-    cout << endl;
-}
+
 
 /*
 Pushes largest ints to the top first,

@@ -207,8 +207,8 @@ TreeNode<char>* toPostfixTree(string postfix){
             TreeNode<char>* right = pop(stack);
             TreeNode<char>* left = pop(stack);
             TreeNode<char>* a = new TreeNode<char>(token);
-            a->left = left;
-            a->right = right;
+            a->setLeft(left);
+            a->setRight(right);
             push(stack, a);
         }
     }
@@ -223,8 +223,8 @@ int evaluatePostfixTree(TreeNode<char>* postfix){
 
     if(postfix){
         char binaryOp = postfix->getData();
-        int left = evaluatePostfixTree(postfix->left);
-        int right = evaluatePostfixTree(postfix->right);
+        int left = evaluatePostfixTree(postfix->getLeft());
+        int right = evaluatePostfixTree(postfix->getRight());
 
         switch(binaryOp){
         case '+':
@@ -269,13 +269,13 @@ TreeNode<char>* pop(treeStack* &ts){
 
 void inOrder(TreeNode<char>* root){
     if(root){
-        bool isLeaf = !(root->left || root->right);
+        bool isLeaf = !(root->getLeft() || root->getRight());
         if(!isLeaf){
             cout << "( ";
         }
-        inOrder(root->left);
+        inOrder(root->getLeft());
         cout << root->getData() << " ";
-        inOrder(root->right);
+        inOrder(root->getRight());
         if(!isLeaf){
             cout << ") ";
         }

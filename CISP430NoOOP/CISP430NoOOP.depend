@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1558978069 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
+1559085681 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
 	"Heap.h"
+	"TreeNode.h"
 	"./include/Stack.h"
 
 1558547095 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
@@ -16,9 +17,11 @@
 1557966174 source:c:\users\matt\documents\c++\cisp430nooop\linkedlist.cpp
 	<iostream>
 
-1557963387 source:c:\users\matt\documents\c++\cisp430nooop\misc.cpp
+1559088137 source:c:\users\matt\documents\c++\cisp430nooop\misc.cpp
+	"misc.h"
+	<iostream>
 
-1558044213 c:\users\matt\documents\c++\cisp430nooop\misc.h
+1559088073 c:\users\matt\documents\c++\cisp430nooop\misc.h
 	<iostream>
 
 1558652613 source:c:\users\matt\documents\c++\cisp430nooop\avltree.cpp
@@ -56,12 +59,13 @@
 	"TravelHeap.h"
 	"../findPath.h"
 
-1558977101 source:c:\users\matt\documents\c++\cisp430nooop\searchsort.cpp
+1559088101 source:c:\users\matt\documents\c++\cisp430nooop\searchsort.cpp
 	<iostream>
 	<cstring>
 	<cstdlib>
 	"Queue.h"
 	"Stack.h"
+	"misc.h"
 
 1558734768 source:c:\users\matt\documents\c++\cisp430nooop\src\queuenode.cpp
 	"QueueNode.h"
@@ -78,7 +82,7 @@
 1558823034 source:c:\users\matt\documents\c++\cisp430nooop\string.cpp
 	<iostream>
 
-1558983657 source:c:\users\matt\documents\c++\cisp430nooop\postfix.cpp
+1559086948 source:c:\users\matt\documents\c++\cisp430nooop\postfix.cpp
 	<iostream>
 	"Stack.h"
 	"TreeNode.h"
@@ -96,10 +100,12 @@
 1558977764 c:\users\matt\documents\c++\cisp430nooop\include\stack.h
 	"StackNode.h"
 
-1558981586 source:c:\users\matt\documents\c++\cisp430nooop\src\treenode.cpp
+1559086866 source:c:\users\matt\documents\c++\cisp430nooop\src\treenode.cpp
 	"TreeNode.h"
+	<iostream>
+	<algorithm>
 
-1558982274 c:\users\matt\documents\c++\cisp430nooop\include\treenode.h
+1559087658 c:\users\matt\documents\c++\cisp430nooop\include\treenode.h
 
 1558981672 source:c:\users\matt\documents\c++\cisp430nooop\src\abstracttree.cpp
 	"AbstractTree.h"

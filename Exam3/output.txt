@@ -1,4 +1,0 @@
-Data: 4 Height: 3 Balance: -1 Left child is 2  Right child is 6  | 
-Data: 2 Height: 1 Balance: 0 Left child is 1  Right child is 3  | Data: 6 Height: 2 Balance: -1 Left child is 5  Right child is 8  | 
-Data: 1 Height: 0 Balance: 0 | Data: 3 Height: 0 Balance: 0 | Data: 5 Height: 0 Balance: 0 | Data: 8 Height: 1 Balance: 0 Left child is 7  Right child is 9  | 
-Data: 7 Height: 0 Balance: 0 | Data: 9 Height: 0 Balance: 0 | 

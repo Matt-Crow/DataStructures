@@ -1,3 +1,15 @@
+#include "misc.h"
+#include <iostream>
+
+using namespace std;
+
+void print(int a[], int length){
+    for(int i = 0; i < length; i++){
+        cout << a[i] << " ";
+    }
+    cout << endl;
+}
+
 char toChar(int i){
     //supports hexadecimal
     char ret = (char)(48 + i);

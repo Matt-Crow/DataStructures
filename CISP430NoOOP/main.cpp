@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Heap.h"
+#include "TreeNode.h"
 #include "./include/Stack.h"
 
 int useQueue();
@@ -24,6 +25,7 @@ int main()
     //Heap<int>::test();
     //useString();
     //Stack<int>::test();
-    usePostfix();
+    //usePostfix();
+    TreeNode<int>::test();
     return 0;
 }
