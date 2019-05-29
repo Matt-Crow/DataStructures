@@ -28,7 +28,6 @@ searchResult* HashArray::put(int val){
     if(a[address] == 0){
         ret->found = true;
         ret->atIndex = address;
-        a[address] = new int(val);
     } else {
         //slot is not empty
         ret->collisions++;
@@ -41,7 +40,6 @@ searchResult* HashArray::put(int val){
         if(a[address] == 0){
             ret->found = true;
             ret->atIndex = address;
-            a[address] = new int(val);
         } else {
             ret->collisions++;
         }
@@ -54,9 +52,74 @@ searchResult* HashArray::put(int val){
         if(qp->found){
             ret->found = true;
             ret->atIndex = qp->atIndex;
-            a[ret->atIndex] = new int(val);
         }
         delete qp;
+    }
+
+    if(!ret->found){
+        //linear probe
+        searchResult* lp = lpForEmpty(address);
+        ret->collisions += lp->collisions;
+        if(lp->found){
+            ret->found = true;
+            ret->atIndex = lp->atIndex;
+        }
+        delete lp;
+    }
+
+    if(ret->found){
+        a[ret->atIndex] = new int(val);
+    }
+
+    return ret;
+}
+
+searchResult* HashArray::get(int val){
+    searchResult* ret = new searchResult;
+    ret->found = false;
+    ret->atIndex = -1;
+    ret->collisions = 0;
+
+    int addr = val%size;
+    if(a[addr] && *(a[addr]) == val){
+        ret->found = true;
+        ret->atIndex = addr;
+    } else {
+        ret->collisions++;
+    }
+
+    if(!ret->found){
+        //double hash
+        int p = prevPrime(size);
+        addr = p - val%p;
+        if(a[addr] && *(a[addr]) == val){
+            ret->found = true;
+            ret->atIndex = addr;
+        } else {
+            ret->collisions++;
+        }
+    }
+
+    if(!ret->found){
+        //quadratic probe
+        searchResult* qp = quadraticProbe(addr, val);
+        ret->collisions += qp->collisions;
+        if(qp->found){
+            ret->found = true;
+            ret->atIndex = qp->atIndex;
+        }
+        delete qp;
+    }
+
+    if(!ret->found){
+        //linear probe
+        searchResult* lp = linearProbe(addr, val);
+        ret->collisions += lp->collisions;
+        if(lp->found){
+            ret->found = true;
+            ret->atIndex = lp->atIndex;
+        }
+        delete lp;
     }
 
     return ret;
@@ -83,7 +146,7 @@ searchResult* HashArray::quadraticProbe(int fromIndex, int searchFor){
     int newAddr = 0;
     for(int i = 1; !ret->found && i <= 3; i++){
         newAddr = (fromIndex + i * i) % size;
-        if(*(a[newAddr]) == searchFor){
+        if(a[newAddr] && *(a[newAddr]) == searchFor){
             ret->found = true;
             ret->atIndex = newAddr;
         }else{
@@ -114,6 +177,42 @@ searchResult* HashArray::qpForEmpty(int fromIndex){
     return ret;
 }
 
+searchResult* HashArray::linearProbe(int fromIndex, int searchFor){
+    searchResult* ret = new searchResult;
+    ret->found = false;
+    ret->atIndex = -1;
+    ret->collisions = 0;
+    int adr = 0;
+    for(int i = 0; i < size && !ret->found; i++){
+        adr = (fromIndex + i) % size;
+        if(a[adr] && *(a[adr]) == searchFor){
+            ret->found = true;
+            ret->atIndex = adr;
+        } else {
+            ret->collisions++;
+        }
+    }
+    return ret;
+}
+
+searchResult* HashArray::lpForEmpty(int fromIndex){
+    searchResult* ret = new searchResult;
+    ret->found = false;
+    ret->atIndex = -1;
+    ret->collisions = 0;
+    int adr = 0;
+    for(int i = 0; i < size && !ret->found; i++){
+        adr = (fromIndex + i) % size;
+        if(a[adr] == 0){
+            ret->found = true;
+            ret->atIndex = adr;
+        } else {
+            ret->collisions++;
+        }
+    }
+    return ret;
+}
+
 int HashArray::test(){
     HashArray* a = new HashArray(10);
     int ip = 0;
@@ -129,7 +228,7 @@ int HashArray::test(){
         case 0:
             a->print();
             break;
-        case 1:
+        case 1: {
             cout << "Enter value to insert: ";
             cin >> ip;
             searchResult* res = a->put(ip);
@@ -142,8 +241,21 @@ int HashArray::test(){
             }
             ip = 1;
             delete res;
-            break;
-
+            } break;
+        case 2: {
+            cout << "Enter value to search for: ";
+            cin >> ip;
+            searchResult* s = a->get(ip);
+            if(s->found){
+                cout << ip << " was found at index ";
+                cout << s->atIndex << " . Colliding ";
+                cout << s->collisions << " times" << endl;
+            } else {
+                cout << ip << " is not in the array" << endl;
+            }
+            ip = 2;
+            delete s;
+            } break;
         }
     }while(ip >= 0);
 

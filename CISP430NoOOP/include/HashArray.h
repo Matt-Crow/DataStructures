@@ -21,6 +21,8 @@ class HashArray
         int** a; //array of int pointers
         searchResult* quadraticProbe(int fromIndex, int searchFor);
         searchResult* qpForEmpty(int fromIndex);
+        searchResult* linearProbe(int fromIndex, int searchFor);
+        searchResult* lpForEmpty(int fromIndex);
 };
 
 #endif // HASHARRAY_H
