@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1559085681 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
+1559149874 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
 	<iostream>
 	"Heap.h"
 	"TreeNode.h"
 	"./include/Stack.h"
+	"./include/HashArray.h"
 
 1558547095 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
 	<iostream>
@@ -100,8 +101,9 @@
 1558977764 c:\users\matt\documents\c++\cisp430nooop\include\stack.h
 	"StackNode.h"
 
-1559086866 source:c:\users\matt\documents\c++\cisp430nooop\src\treenode.cpp
+1559088327 source:c:\users\matt\documents\c++\cisp430nooop\src\treenode.cpp
 	"TreeNode.h"
+	"../misc.h"
 	<iostream>
 	<algorithm>
 
@@ -112,4 +114,10 @@
 
 1558981631 c:\users\matt\documents\c++\cisp430nooop\include\abstracttree.h
 	"TreeNode.h"
+
+1559149895 c:\users\matt\documents\c++\cisp430nooop\include\hasharray.h
+
+1559149840 source:c:\users\matt\documents\c++\cisp430nooop\src\hasharray.cpp
+	"HashArray.h"
+	<iostream>
 

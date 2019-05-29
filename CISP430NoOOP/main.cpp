@@ -2,6 +2,7 @@
 #include "Heap.h"
 #include "TreeNode.h"
 #include "./include/Stack.h"
+#include "./include/HashArray.h"
 
 int useQueue();
 int useLinkedList();
@@ -26,6 +27,7 @@ int main()
     //useString();
     //Stack<int>::test();
     //usePostfix();
-    TreeNode<int>::test();
+    //TreeNode<int>::test();
+    HashArray<int>::test();
     return 0;
 }
