@@ -7,21 +7,20 @@ struct searchResult{
     int collisions;
 };
 
-template <class T>
 class HashArray
 {
     public:
         HashArray(int size);
         ~HashArray();
-        searchResult* put(T val);
-        searchResult* get(T val);
+        searchResult* put(int val);
+        searchResult* get(int val);
         void print();
         static int test();
     private:
         int size;
-        T** a; //array of pointers
+        int** a; //array of int pointers
+        searchResult* quadraticProbe(int fromIndex, int searchFor);
+        searchResult* qpForEmpty(int fromIndex);
 };
-
-template class HashArray<int>;
 
 #endif // HASHARRAY_H

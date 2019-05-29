@@ -28,6 +28,6 @@ int main()
     //Stack<int>::test();
     //usePostfix();
     //TreeNode<int>::test();
-    HashArray<int>::test();
+    HashArray::test();
     return 0;
 }

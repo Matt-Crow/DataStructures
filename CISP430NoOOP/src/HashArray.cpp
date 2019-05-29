@@ -1,39 +1,70 @@
 #include "HashArray.h"
+#include "../misc.h"
 #include <iostream>
 #include <cstring>
 
 using namespace std;
 
-template <class T>
-HashArray<T>::HashArray(int size)
+HashArray::HashArray(int size)
 {
     this->size = size;
-    this->a = (T**)(malloc(sizeof(T*) * size));
+    this->a = (int**)(malloc(sizeof(int*) * size));
     memset(a, 0, size);
 }
 
-template <class T>
-HashArray<T>::~HashArray()
+HashArray::~HashArray()
 {
     //dtor
 }
 
-template <class T>
-searchResult* HashArray<T>::put(T val){
+searchResult* HashArray::put(int val){
     searchResult* ret = new searchResult;
     ret->found = false;
     ret->atIndex = -1;
     ret->collisions = 0;
 
+    //regular hash
+    int address = val % size;
+    if(a[address] == 0){
+        ret->found = true;
+        ret->atIndex = address;
+        a[address] = new int(val);
+    } else {
+        //slot is not empty
+        ret->collisions++;
+    }
 
+    if(!ret->found){
+        //double hash
+        int p = prevPrime(size);
+        address = p - val%p;
+        if(a[address] == 0){
+            ret->found = true;
+            ret->atIndex = address;
+            a[address] = new int(val);
+        } else {
+            ret->collisions++;
+        }
+    }
+
+    if(!ret->found){
+        //quadratic probe
+        searchResult* qp = qpForEmpty(address);
+        ret->collisions += qp->collisions;
+        if(qp->found){
+            ret->found = true;
+            ret->atIndex = qp->atIndex;
+            a[ret->atIndex] = new int(val);
+        }
+        delete qp;
+    }
 
     return ret;
 }
 
-template <class T>
-void HashArray<T>::print(){
+void HashArray::print(){
     for(int i = 0; i < size; i++){
-        cout << "a[" << i << "]: " << a[i] << "(";
+        cout << "a[" << i << "]: " << a[i] << " (";
         if(a[i]){
             cout << *(a[i]);
         } else {
@@ -43,9 +74,48 @@ void HashArray<T>::print(){
     }
 }
 
-template <class T>
-int HashArray<T>::test(){
-    HashArray<int>* a = new HashArray<int>(10);
+searchResult* HashArray::quadraticProbe(int fromIndex, int searchFor){
+    searchResult* ret = new searchResult;
+    ret->found = false;
+    ret->atIndex = -1;
+    ret->collisions = 0;
+
+    int newAddr = 0;
+    for(int i = 1; !ret->found && i <= 3; i++){
+        newAddr = (fromIndex + i * i) % size;
+        if(*(a[newAddr]) == searchFor){
+            ret->found = true;
+            ret->atIndex = newAddr;
+        }else{
+            ret->collisions++;
+        }
+    }
+
+    return ret;
+}
+
+searchResult* HashArray::qpForEmpty(int fromIndex){
+    searchResult* ret = new searchResult;
+    ret->found = false;
+    ret->atIndex = -1;
+    ret->collisions = 0;
+
+    int newAddr = 0;
+    for(int i = 1; !ret->found && i <= 3; i++){
+        newAddr = (fromIndex + i * i) % size;
+        if(a[newAddr] == 0){
+            ret->found = true;
+            ret->atIndex = newAddr;
+        }else{
+            ret->collisions++;
+        }
+    }
+
+    return ret;
+}
+
+int HashArray::test(){
+    HashArray* a = new HashArray(10);
     int ip = 0;
     do {
         cout << "###HASH###" << endl;
@@ -64,9 +134,11 @@ int HashArray<T>::test(){
             cin >> ip;
             searchResult* res = a->put(ip);
             if(res->found){
-                cout << ip << " was inserted at index "
-                cout << res->atIndex << " . Colliding "
+                cout << ip << " was inserted at index ";
+                cout << res->atIndex << " . Colliding ";
                 cout << res->collisions << " times" << endl;
+            } else {
+                cout << ip << " could not be inserted: the array is full" << endl;
             }
             ip = 1;
             delete res;

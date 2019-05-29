@@ -6,6 +6,9 @@ using namespace std;
 
 void print(int a[], int length);
 
+bool isPrime(int num);
+int prevPrime(int num);
+
 char toChar(int i);
 template <typename T>
 struct node {

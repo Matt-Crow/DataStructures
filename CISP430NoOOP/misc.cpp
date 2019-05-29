@@ -10,6 +10,28 @@ void print(int a[], int length){
     cout << endl;
 }
 
+bool isPrime(int num){
+    bool ret = true;
+    ret = !(num%2 == 0); //get rid of evens
+    //doesn't enter loop with 1, but defaults to true
+    for(int i = 3; ret && i < num; i+=2){
+        ret = !(num%i == 0);
+    }
+    return ret;
+}
+
+int prevPrime(int num){
+    int ret = num - 1;
+    while(ret > 1){
+        if(isPrime(ret)){
+            break;
+        } else {
+            ret--;
+        }
+    }
+    return ret;
+}
+
 char toChar(int i){
     //supports hexadecimal
     char ret = (char)(48 + i);
