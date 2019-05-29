@@ -21,13 +21,13 @@ int main()
     //useQueue();
     //useLinkedList();
     //useAvlTree();
-    //useFindPath();
+    useFindPath();
     //useSearchSort();
     //Heap<int>::test();
     //useString();
     //Stack<int>::test();
     //usePostfix();
     //TreeNode<int>::test();
-    HashArray::test();
+    //HashArray::test();
     return 0;
 }
