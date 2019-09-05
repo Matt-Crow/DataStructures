@@ -54,6 +54,9 @@ int initTable(string symbols[], bool table[MAX_ROWS][MAX_COLS])
 void printTable(string symbols[], bool table[MAX_ROWS][MAX_COLS], int numProps)
 {
     //begin Matt's code
+
+    string line = ""; //the line separating the header from the body
+    //headers
     for(int i = 0; i < numProps; i++){
         cout << setw(symbols[i].size() + 1) << symbols[i];
         if(i == numProps - 1){
@@ -61,7 +64,14 @@ void printTable(string symbols[], bool table[MAX_ROWS][MAX_COLS], int numProps)
         }else{
             cout << "|";
         }
+        for(int len = 0; len < symbols[i].size() + 2; len++){
+            line += "-";
+        }
     }
+
+    cout << line << endl;
+
+    //body
     for(int row = 0; row < MAX_ROWS; row++){
         for(int col = 0; col < numProps; col++){
             cout << setw(symbols[col].size() + 1) << ((table[row][col]) ? "T" : "F");
@@ -72,18 +82,6 @@ void printTable(string symbols[], bool table[MAX_ROWS][MAX_COLS], int numProps)
             }
         }
     }
-
-    if(DEBUG){
-        return;
-        cout << endl;
-        cout << numProps << endl;
-        for(int i = 0; i < MAX_ROWS; i++){
-            for(int j = 0; j < numProps; j++){
-                cout << i << "," << j << ": " << ((table[i][j]) ? "T" : "F") << endl;
-            }
-        }
-    }
-
     //end Matt's code
 }
 
@@ -94,7 +92,12 @@ void printTable(string symbols[], bool table[MAX_ROWS][MAX_COLS], int numProps)
 int appendColumn(string statement, string symbols[], bool table[MAX_ROWS][MAX_COLS], int numProps)
 {
     ///fill in the column header and truth values
-
+    //begin Matt's code
+    symbols[numProps] = statement;
+    for(int row = 0; row < MAX_ROWS; row++){
+        table[row][numProps] = evaluate(table[row][0], table[row][1], table[row][2], statement);
+    }
+    //end Matt's code
     numProps++;
     return numProps;
 }
