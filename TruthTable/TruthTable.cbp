@@ -24,6 +24,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="main.cpp" />
+		<Unit filename="parser.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
