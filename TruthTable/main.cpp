@@ -23,22 +23,19 @@ int initTable(string symbols[], bool table[MAX_ROWS][MAX_COLS])
 
     ///assign table
     //begin Matt's code
-    bool vals[] = {true, false};
-
-
-    //this doesn't work
-    for(int i = 0; i < 2; i++){
-        for(int j = 0; j < 2; j++){
-            for(int k = 0; k < 2; k++){
-                table[j][i] = vals[k];
-            }
-        }
-    }
-
-    //try this instead?
-    bool currVals[] = {true, true, true};
+    //this is really strange, but it works
+    bool currVals[] = {true, true, true}; // the values the next row should have
+    int twoPow; // how many times each symbol (t/f) will repeat before switching
     for(int row = 0; row < 8; row++){
-
+        twoPow = 4; //start at 4
+        for(int col = 0; col < 3; col++){
+            table[row][col] = currVals[col];
+            if((row + 1) % twoPow == 0){
+                // alternate if the current symbol has repeated enough times
+                currVals[col] = !currVals[col];
+            }
+            twoPow /= 2; // symbols alternate twice as fast with each column
+        }
     }
 
 
