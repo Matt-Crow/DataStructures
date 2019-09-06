@@ -44,33 +44,19 @@ int initTable(string symbols[], bool table[MAX_ROWS][MAX_COLS])
 void printTable(string symbols[], bool table[MAX_ROWS][MAX_COLS], int numProps)
 {
     //begin Matt's code
-
-    string line = ""; //the line separating the header from the body
     //headers
     for(int i = 0; i < numProps; i++){
-        cout << setw(symbols[i].size() + 1) << symbols[i];
-        if(i == numProps - 1){
-            cout << endl;
-        }else{
-            cout << "|";
-        }
-        for(int len = 0; len < symbols[i].size() + 2; len++){
-            line += "-";
-        }
+        cout << setw(symbols[i].size() + 2) << symbols[i];
     }
 
-    cout << line << endl;
+    cout << endl << endl;
 
     //body
     for(int row = 0; row < MAX_ROWS; row++){
         for(int col = 0; col < numProps; col++){
-            cout << setw(symbols[col].size() + 1) << ((table[row][col]) ? "T" : "F");
-            if(col == numProps - 1){
-                cout << endl;
-            } else {
-                cout << "|";
-            }
+            cout << setw(symbols[col].size() + 2) << ((table[row][col]) ? "T" : "F");
         }
+        cout << endl;
     }
     //end Matt's code
 }
