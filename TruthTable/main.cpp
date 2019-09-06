@@ -6,10 +6,6 @@ using namespace std;
 #define MAX_ROWS 8
 #define MAX_COLS 10
 
-const bool DEBUG = true;
-
-void printTable(string symbols[], bool table[MAX_ROWS][MAX_COLS], int numProps);
-
 
 ///Initialize the table for all possible truth values of p, q, and r
 ///Give each symbol its own column, as we have done in class
@@ -36,12 +32,6 @@ int initTable(string symbols[], bool table[MAX_ROWS][MAX_COLS])
             }
             twoPow /= 2; // symbols alternate twice as fast with each column
         }
-    }
-
-
-    if(DEBUG){
-        printTable(symbols, table, 3);
-        cout << endl << "Table has inited" << endl;
     }
 
     //end Matt's code
@@ -110,7 +100,33 @@ int appendColumn(string statement, string symbols[], bool table[MAX_ROWS][MAX_CO
 bool isValid(bool table[MAX_ROWS][MAX_COLS], int numProps)
 {
     //begin Matt's code
-    return false;
+    //first, how many of the propositions are just our variables?
+    //we already know this from the assignment, but this is how I would check if I didn't
+    int numVars = 0;
+    int twoToSomePow = MAX_ROWS;
+    while(twoToSomePow != 1){
+        twoToSomePow /= 2;
+        numVars++;
+    }
+    //number of variables is Log base 2 of MAX_ROWS
+
+    bool valid = true;
+    bool hypsTrue; //all hypotheses thus far are true
+    for(int row = 0; valid && row < MAX_ROWS; row++){
+        //break once the conclusion is false
+        hypsTrue = true; //reset each row, as we are testing new variable values
+        for(int col = numVars; hypsTrue && col < numProps; col++){
+            //skip over the variables, go through each hypothesis.
+            //break once I encounter a false hypothesis
+            if(col == numProps - 1){
+                //on the conclusion
+                valid = table[row][col];
+            } else {
+                hypsTrue = table[row][col];
+            }
+        }
+    }
+    return valid;
     //end Matt's code
 }
 
