@@ -1,17 +1,21 @@
 #include <iostream>
+#include <math.h>
 
-void initTable(bool table[1024][10]);
-bool isRowSat(bool row[10]);
-void printRow(bool row[10]);
+#define COLS 4
+#define ROWS (int)std::pow(2, COLS)
+
+void initTable(bool table[ROWS][COLS]);
+bool isRowSat(bool row[COLS]);
+void printRow(bool row[COLS]);
 
 using namespace std;
 
 int main(){
-    bool table[1024][10];
+    bool table[ROWS][COLS];
 
     initTable(table);
 
-    for(int i = 0; i < 1024; i++){
+    for(int i = 0; i < ROWS; i++){
         if(isRowSat(table[i])){
             printRow(table[i]);
         }
@@ -19,13 +23,13 @@ int main(){
     return 0;
 }
 
-void initTable(bool table[1024][10]){
+void initTable(bool table[ROWS][COLS]){
     bool nextSymbol;
-    int switchingPoint = 1024 / 2;
+    int switchingPoint = ROWS / 2;
 
-    for(int col = 0; col < 10; col++){
+    for(int col = 0; col < COLS; col++){
         nextSymbol = true;
-        for(int row = 0; row < 1024; row++){
+        for(int row = 0; row < ROWS; row++){
             if(row % switchingPoint == 0 && row != 0){
                 nextSymbol = !nextSymbol;
             }
@@ -34,11 +38,11 @@ void initTable(bool table[1024][10]){
         switchingPoint /= 2;
     }
 }
-bool isRowSat(bool row[10]){
+bool isRowSat(bool row[COLS]){
     return true;
 }
-void printRow(bool row[10]){
-    for(int i = 0; i < 10; i++){
+void printRow(bool row[COLS]){
+    for(int i = 0; i < COLS; i++){
         cout << ((row[i]) ? 'T' : 'F') << ' ';
     }
     cout << endl;
