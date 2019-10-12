@@ -20,6 +20,16 @@ private:
 
 int main()
 {
+    ifstream in = ifstream("nodeConn.csv");
+    string s;
+    int id1;
+    int id2;
+    getline(in, s); //get rid of header
+    while(in.good()){
+        in >> id1;
+        in >> id2;
+        cout << id1 << "=>" << id2 << endl;
+    }
     return 0;
 }
 
