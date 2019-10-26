@@ -35,10 +35,11 @@ int main()
     bool isTransitioning;
     //initialize transition function,
     //set all to invalid first
-    Transition tf[5][4] = {};
+    Transition tf[5][3] = {};
     for(int i = q0; i <= q20; i++)
     {
-        for(int j = NICKEL; j <= QUIT; j++)
+        //                      don't include QUIT: we don't need it
+        for(int j = NICKEL; j < QUIT; j++)
         {
             tf[i][j] = T((Q)i, INVALID);
         }
@@ -50,6 +51,21 @@ int main()
     tf[q10][NICKEL] = T(q15, NONE);
     tf[q15][NICKEL] = T(q20, NONE);
     tf[q20][NICKEL] = T(q20, RETURN);
+
+    //all the dime stuff
+    tf[q0][DIME] = T(q10, NONE);
+    tf[q5][DIME] = T(q15, NONE);
+    tf[q10][DIME] = T(q20, NONE);
+    tf[q15][DIME] = T(q15, RETURN);
+    tf[q20][DIME] = T(q20, RETURN);
+
+    //buying
+    tf[q0][BUY] = T(q0, MESSAGE);
+    tf[q5][BUY] = T(q5, MESSAGE);
+    tf[q10][BUY] = T(q10, MESSAGE);
+    tf[q15][BUY] = T(q15, MESSAGE);
+    tf[q20][BUY] = T(q0, GUMBALL);
+
     //end Matt's code
 
     cout << PROMPT_STRING;
@@ -60,12 +76,23 @@ int main()
 
         ///assign output and q based on current state and input
         //begin Matt's code
-        isTransitioning = false;
-        if(input.compare("NICKEL") == 0){
+        isTransitioning = true;
+        if(input.compare("NICKEL") == 0)
+        {
             currTransition = tf[q][NICKEL];
-            isTransitioning = true;
-        } else {
+        }
+        else if(input.compare("DIME") == 0)
+        {
+            currTransition = tf[q][DIME];
+        }
+        else if(input.compare("BUY") == 0)
+        {
+            currTransition = tf[q][BUY];
+        }
+        else
+        {
             output = O_STRINGS[INVALID];
+            isTransitioning = false;
         }
 
         if(isTransitioning)
