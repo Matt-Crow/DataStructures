@@ -14,9 +14,8 @@ Transition T(char newState, char newVal, bool moveRight); //constructor
 class TransitionFunction{
 public:
     TransitionFunction(int numStates, char* states, int numSymbols, char* symbols);
-    Transition*** transitions;
     void set(char state, char symbol, Transition* t);
-    Transition* get(char state, char symbol);
+    Transition get(char state, char symbol);
     ~TransitionFunction();
     void print();
 private:
@@ -24,6 +23,7 @@ private:
     int numStates;
     char* symbols;
     int numSymbols;
+    Transition*** transitions;
 };
 
 int indexOf(char val, char* a, int len);
@@ -51,7 +51,7 @@ int main()
     t.print();
 
     return 0;
-
+    /*
     Transition** tf = (Transition**)malloc(12 * sizeof(Transition));
     tf[0][0] = T('0', 'a', true);
     tf[0][1] = T('1', 'b', true);
@@ -74,6 +74,7 @@ int main()
         5
     );
     cout << "Turning machine returned " << result << endl;
+    */
     //need to write a function for creating the transition function
     /*
     Transition tf[5][3] = {};
@@ -198,18 +199,42 @@ TransitionFunction::TransitionFunction(int numStates, char* states, int numSymbo
     for(int i = 0; i < numSymbols; i++){
         this->symbols[i] = symbols[i];
     }
+
+    this->transitions = (Transition***)malloc(sizeof(Transition**) * numStates);
+    for(int i = 0; i < numStates; i++)
+    {
+        this->transitions[i] = (Transition**)malloc(sizeof(Transition*) * numSymbols);
+    }
+    for(int i = 0; i < numStates; i++)
+    {
+        for(int j = 0; j < numSymbols; j++)
+        {
+            this->transitions[i][j] = (Transition*)nullptr;
+        }
+    }
 }
 
 void TransitionFunction::print()
 {
+    Transition t;
     cout << "TRANSITION FUNCTION IS" << endl;
-    cout << "Q | I" << endl;
-    cout << "-----" << endl;
+    cout << "Q | I | q | i | r" << endl;
+    cout << "-----------------" << endl;
     for(int i = 0; i < this->numStates; i++)
     {
         for(int j = 0; j < this->numSymbols; j++)
         {
-            cout << this->states[i] << " | " << this->symbols[j] << endl;
+            cout << this->states[i] << " | " << this->symbols[j] << " | ";
+            if(this->transitions[i][j] == nullptr)
+            {
+                cout << "  |   |  ";
+            }
+            else
+            {
+                t = *(this->transitions[i][j]);
+                cout << t.newState << " | " << t.newVal << " | " << ((t.moveRight) ? 'R' : 'L');
+            }
+            cout << endl;
         }
     }
 }
@@ -218,4 +243,5 @@ TransitionFunction::~TransitionFunction()
 {
     delete[] this->states;
     delete[] this->symbols;
+    delete[] this->transitions;
 }
