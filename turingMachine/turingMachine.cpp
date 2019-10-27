@@ -65,6 +65,46 @@ int main()
     );
     cout << "Turning machine returned " << ((result) ? "true" : "false") << endl;
 
+    //more complex turing machine now
+
+    char ss2[] = {'0', '1', 'e', 'o', '_'};//oh wait, don't need acc/rej for any of these
+    char sy2[] = {'a', 'x', '*'};
+    TransitionFunction t2 = TransitionFunction(5, ss2, 3, sy2);
+    t2.set('0', 'a', T('1', '*', true));
+    t2.set('0', 'x', T('r', '*', true));
+    t2.set('0', '*', T('r', 'x', true));
+
+    t2.set('1', 'a', T('e', 'x', true));
+    t2.set('1', 'x', T('1', 'x', true));
+    t2.set('1', '*', T('a', '*', true));
+
+    t2.set('e', 'a', T('o', 'a', true));
+    t2.set('e', 'x', T('e', 'x', true));
+    t2.set('e', '*', T('_', '*', false));
+
+    t2.set('o', 'a', T('e', 'x', true));
+    t2.set('o', 'x', T('o', 'x', true));
+    t2.set('o', '*', T('r', '*', false));
+
+    t2.set('_', 'a', T('_', 'a', false));
+    t2.set('_', 'x', T('_', 'x', false));
+    t2.set('_', '*', T('1', '*', true));
+    t2.print();
+
+    char tape2[] = {'a', 'a', 'a', 'a', '*'};
+
+    bool result2 = runTuringMachine(
+        t2,
+        'a',
+        'r',
+        '0',
+        0,
+        tape2,
+        5
+    );
+    cout << "Turning machine returned " << ((result2) ? "true" : "false") << endl;
+
+
     return 0;
 }
 
