@@ -31,10 +31,6 @@ void print(char* a, int len);
 
 bool runTuringMachine(
     TransitionFunction t,
-    char* states,
-    int numStates,
-    char* tapeSymbols,
-    int numTapeSymbols,
     char acceptState,
     char rejectState,
     char initialState,
@@ -60,10 +56,6 @@ int main()
 
     bool result = runTuringMachine(
         t,
-        ss,
-        4,
-        sy,
-        3,
         'a',
         'r',
         '0',
@@ -71,7 +63,7 @@ int main()
         tape,
         5
     );
-    cout << "Turning machine returned " << result << endl;
+    cout << "Turning machine returned " << ((result) ? "true" : "false") << endl;
 
     return 0;
 }
@@ -105,18 +97,13 @@ void print(char* a, int len)
     cout << endl;
 }
 
-//either move some stuff to structs, or validate before running
 bool runTuringMachine(
     TransitionFunction t,
-    char* states,
-    int numStates,
-    char* tapeSymbols,
-    int numTapeSymbols,
     char acceptState,
     char rejectState,
     char initialState,
     int initialPosition,
-    char* tape, //validate this beforehand
+    char* tape,
     int tapeLen
 )
 {
@@ -128,7 +115,11 @@ bool runTuringMachine(
     Transition* currTransition;
 
     cout << "CURRENT STATE: " << currState << endl;
-    cout << "CURRENT POS:   " << currPos << endl;
+    for(int i = 0; i < currPos; i++)
+    {
+        cout << "  ";
+    }
+    cout << 'V' << endl;
     print(tape, tapeLen);
     while(running)
     {
@@ -145,6 +136,15 @@ bool runTuringMachine(
         }
         currState = currTransition->newState;
         tape[currPos] = currTransition->newVal;
+
+
+        cout << "CURRENT STATE: " << currState << endl;
+        for(int i = 0; i < currPos; i++)
+        {
+            cout << "  ";
+        }
+        cout << 'V' << endl;
+        print(tape, tapeLen);
         if(currTransition->moveRight)
         {
             currPos++;
@@ -153,10 +153,16 @@ bool runTuringMachine(
         {
             currPos--;
         }
-
-        cout << "CURRENT STATE: " << currState << endl;
-        cout << "CURRENT POS:   " << currPos << endl;
-        print(tape, tapeLen);
+        if(currState == rejectState)
+        {
+            ret = false;
+            running = false;
+        }
+        else if(currState == acceptState)
+        {
+            ret = true;
+            running = false;
+        }
     }
 
     return ret;
