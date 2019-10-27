@@ -30,13 +30,13 @@ int indexOf(char val, char* a, int len);
 void print(char* a, int len);
 
 bool runTuringMachine(
+    TransitionFunction t,
     char* states,
     int numStates,
     char* tapeSymbols,
     int numTapeSymbols,
     char acceptState,
     char rejectState,
-    Transition** transitionFunction,
     char initialState,
     int initialPosition,
     char* tape,
@@ -56,64 +56,22 @@ int main()
     t.set('1', '*', T('r', '*', true));
     t.print();
 
-    return 0;
-    /*
-    Transition** tf = (Transition**)malloc(12 * sizeof(Transition));
-    tf[0][0] = T('0', 'a', true);
-    tf[0][1] = T('1', 'b', true);
-    tf[0][2] = T('r', '*', true);
-    tf[1][0] = T('1', 'a', true);
-    tf[1][1] = T('a', 'b', true);
-    tf[1][2] = T('r', '*', true);
+    char tape[] = {'a', 'a', 'b', 'b', '*'};
 
     bool result = runTuringMachine(
+        t,
         ss,
         4,
         sy,
         3,
         'a',
         'r',
-        tf,
         '0',
         0,
-        "abba*",
+        tape,
         5
     );
     cout << "Turning machine returned " << result << endl;
-    */
-    //need to write a function for creating the transition function
-    /*
-    Transition tf[5][3] = {};
-    for(int i = q0; i <= q20; i++)
-    {
-        //                      don't include QUIT: we don't need it
-        for(int j = NICKEL; j < QUIT; j++)
-        {
-            tf[i][j] = T((Q)i, INVALID);
-        }
-    }
-
-    //all the nickel stuff
-    tf[q0][NICKEL] = T(q5, NONE);
-    tf[q5][NICKEL] = T(q10, NONE);
-    tf[q10][NICKEL] = T(q15, NONE);
-    tf[q15][NICKEL] = T(q20, NONE);
-    tf[q20][NICKEL] = T(q20, RETURN);
-
-    //all the dime stuff
-    tf[q0][DIME] = T(q10, NONE);
-    tf[q5][DIME] = T(q15, NONE);
-    tf[q10][DIME] = T(q20, NONE);
-    tf[q15][DIME] = T(q15, RETURN);
-    tf[q20][DIME] = T(q20, RETURN);
-
-    //buying
-    tf[q0][BUY] = T(q0, MESSAGE);
-    tf[q5][BUY] = T(q5, MESSAGE);
-    tf[q10][BUY] = T(q10, MESSAGE);
-    tf[q15][BUY] = T(q15, MESSAGE);
-    tf[q20][BUY] = T(q0, GUMBALL);
-    */
 
     return 0;
 }
@@ -149,13 +107,13 @@ void print(char* a, int len)
 
 //either move some stuff to structs, or validate before running
 bool runTuringMachine(
+    TransitionFunction t,
     char* states,
     int numStates,
     char* tapeSymbols,
     int numTapeSymbols,
     char acceptState,
     char rejectState,
-    Transition** transitionFunction, //validate this beforehand
     char initialState,
     int initialPosition,
     char* tape, //validate this beforehand
@@ -167,7 +125,7 @@ bool runTuringMachine(
     bool running = true;
     bool ret = false;
     char input;
-    Transition currTransition;
+    Transition* currTransition;
 
     cout << "CURRENT STATE: " << currState << endl;
     cout << "CURRENT POS:   " << currPos << endl;
@@ -179,11 +137,22 @@ bool runTuringMachine(
             break;
         }
         input = tape[currPos];
-        //                                  need to find index
-        currTransition = transitionFunction[indexOf(currState, states, numStates)][indexOf(input, tapeSymbols, numTapeSymbols)];
-        currState = currTransition.newState;
-        tape[currPos] = currTransition.newVal;
-        (currTransition.moveRight) ? currPos++ : currPos--;
+        currTransition = t.get(currState, tape[currPos]);
+        if(currTransition == nullptr)
+        {
+            ret = false;
+            break;
+        }
+        currState = currTransition->newState;
+        tape[currPos] = currTransition->newVal;
+        if(currTransition->moveRight)
+        {
+            currPos++;
+        }
+        else
+        {
+            currPos--;
+        }
 
         cout << "CURRENT STATE: " << currState << endl;
         cout << "CURRENT POS:   " << currPos << endl;
@@ -281,7 +250,7 @@ void TransitionFunction::print()
 
 TransitionFunction::~TransitionFunction()
 {
-    delete[] this->states;
-    delete[] this->symbols;
-    delete[] this->transitions;
+    delete this->states;
+    delete this->symbols;
+    delete this->transitions;
 }
