@@ -9,13 +9,13 @@ struct Transition
     char newVal;
     bool moveRight;
 };
-Transition T(char newState, char newVal, bool moveRight); //constructor
+Transition* T(char newState, char newVal, bool moveRight); //constructor
 
 class TransitionFunction{
 public:
     TransitionFunction(int numStates, char* states, int numSymbols, char* symbols);
     void set(char state, char symbol, Transition* t);
-    Transition get(char state, char symbol);
+    Transition* get(char state, char symbol);
     ~TransitionFunction();
     void print();
 private:
@@ -48,6 +48,12 @@ int main()
     char ss[] = {'0', '1', 'a', 'r'};
     char sy[] = {'a', 'b', '*'};
     TransitionFunction t = TransitionFunction(4, ss, 3, sy);
+    t.set('0', 'a', T('0', 'a', true));
+    t.set('0', 'b', T('1', 'b', true));
+    t.set('0', '*', T('r', '*', true));
+    t.set('1', 'a', T('1', 'a', true));
+    t.set('1', 'b', T('a', 'b', true));
+    t.set('1', '*', T('r', '*', true));
     t.print();
 
     return 0;
@@ -112,12 +118,12 @@ int main()
     return 0;
 }
 
-Transition T(char newState, char newVal, bool moveRight)
+Transition* T(char newState, char newVal, bool moveRight)
 {
-    Transition t;
-    t.newState = newState;
-    t.newVal = newVal;
-    t.moveRight = moveRight;
+    Transition* t = (Transition*)malloc(sizeof(Transition));
+    t->newState = newState;
+    t->newVal = newVal;
+    t->moveRight = moveRight;
     return t;
 }
 
@@ -212,6 +218,40 @@ TransitionFunction::TransitionFunction(int numStates, char* states, int numSymbo
             this->transitions[i][j] = (Transition*)nullptr;
         }
     }
+}
+
+void TransitionFunction::set(char state, char symbol, Transition* t)
+{
+    int i = indexOf(state, this->states, this->numStates);
+    int j = indexOf(symbol, this->symbols, this->numSymbols);
+    if(i == -1)
+    {
+        cerr << "Invalid state: " << state << endl;
+        return;
+    }
+    if(j == -1)
+    {
+        cerr << "Invalid symbol: " << symbol << endl;
+        return;
+    }
+    this->transitions[i][j] = t;
+}
+
+Transition* TransitionFunction::get(char state, char symbol)
+{
+    int i = indexOf(state, this->states, this->numStates);
+    int j = indexOf(symbol, this->symbols, this->numSymbols);
+    if(i == -1)
+    {
+        cerr << "Invalid state: " << state << endl;
+        return nullptr;
+    }
+    if(j == -1)
+    {
+        cerr << "Invalid symbol: " << symbol << endl;
+        return nullptr;
+    }
+    return this->transitions[i][j];
 }
 
 void TransitionFunction::print()
