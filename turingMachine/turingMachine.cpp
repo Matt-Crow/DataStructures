@@ -11,6 +11,21 @@ struct Transition
 };
 Transition T(char newState, char newVal, bool moveRight); //constructor
 
+class TransitionFunction{
+public:
+    TransitionFunction(int numStates, char* states, int numSymbols, char* symbols);
+    Transition*** transitions;
+    void set(char state, char symbol, Transition* t);
+    Transition* get(char state, char symbol);
+    ~TransitionFunction();
+    void print();
+private:
+    char* states;
+    int numStates;
+    char* symbols;
+    int numSymbols;
+};
+
 int indexOf(char val, char* a, int len);
 void print(char* a, int len);
 
@@ -30,6 +45,13 @@ bool runTuringMachine(
 
 int main()
 {
+    char ss[] = {'0', '1', 'a', 'r'};
+    char sy[] = {'a', 'b', '*'};
+    TransitionFunction t = TransitionFunction(4, ss, 3, sy);
+    t.print();
+
+    return 0;
+
     Transition** tf = (Transition**)malloc(12 * sizeof(Transition));
     tf[0][0] = T('0', 'a', true);
     tf[0][1] = T('1', 'b', true);
@@ -37,8 +59,7 @@ int main()
     tf[1][0] = T('1', 'a', true);
     tf[1][1] = T('a', 'b', true);
     tf[1][2] = T('r', '*', true);
-    char ss[] = {'0', '1', 'a', 'r'};
-    char sy[] = {'a', 'b', '*'};
+
     bool result = runTuringMachine(
         ss,
         4,
@@ -163,4 +184,38 @@ bool runTuringMachine(
     }
 
     return ret;
+}
+
+TransitionFunction::TransitionFunction(int numStates, char* states, int numSymbols, char* symbols)
+{
+    this->numStates = numStates;
+    this->numSymbols = numSymbols;
+    this->states = (char*)malloc(numStates * sizeof(char));
+    this->symbols = (char*)malloc(numSymbols * sizeof(char));
+    for(int i = 0; i < numStates; i++){
+        this->states[i] = states[i];
+    }
+    for(int i = 0; i < numSymbols; i++){
+        this->symbols[i] = symbols[i];
+    }
+}
+
+void TransitionFunction::print()
+{
+    cout << "TRANSITION FUNCTION IS" << endl;
+    cout << "Q | I" << endl;
+    cout << "-----" << endl;
+    for(int i = 0; i < this->numStates; i++)
+    {
+        for(int j = 0; j < this->numSymbols; j++)
+        {
+            cout << this->states[i] << " | " << this->symbols[j] << endl;
+        }
+    }
+}
+
+TransitionFunction::~TransitionFunction()
+{
+    delete[] this->states;
+    delete[] this->symbols;
 }
