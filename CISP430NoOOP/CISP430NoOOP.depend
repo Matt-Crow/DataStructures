@@ -1,0 +1,123 @@
+# depslib dependency file v1.0
+1559150472 source:c:\users\matt\documents\c++\cisp430nooop\main.cpp
+	<iostream>
+	"Heap.h"
+	"TreeNode.h"
+	"./include/Stack.h"
+	"./include/HashArray.h"
+
+1558547095 source:c:\users\matt\documents\c++\cisp430nooop\stack.cpp
+	<iostream>
+	"misc.h"
+	"stack.h"
+
+1558735863 source:c:\users\matt\documents\c++\cisp430nooop\queue.cpp
+	<iostream>
+	"Queue.h"
+
+1557966174 source:c:\users\matt\documents\c++\cisp430nooop\linkedlist.cpp
+	<iostream>
+
+1559150838 source:c:\users\matt\documents\c++\cisp430nooop\misc.cpp
+	"misc.h"
+	<iostream>
+
+1559150823 c:\users\matt\documents\c++\cisp430nooop\misc.h
+	<iostream>
+
+1558652613 source:c:\users\matt\documents\c++\cisp430nooop\avltree.cpp
+	<iostream>
+	"misc.h"
+
+1558568661 c:\users\matt\documents\c++\cisp430nooop\stack.h
+	<iostream>
+	"misc.h"
+
+1558573433 source:c:\users\matt\documents\c++\cisp430nooop\findpath.cpp
+	<iostream>
+	<cstring>
+	"findPath.h"
+	"stack.h"
+	"TravelHeap.h"
+
+1558546234 c:\users\matt\documents\c++\cisp430nooop\stack.cpp
+	<iostream>
+	"misc.h"
+
+1558806863 source:c:\users\matt\documents\c++\cisp430nooop\src\heap.cpp
+	"Heap.h"
+	<iostream>
+
+1558806719 c:\users\matt\documents\c++\cisp430nooop\include\heap.h
+
+1558570296 c:\users\matt\documents\c++\cisp430nooop\findpath.h
+
+1558569320 c:\users\matt\documents\c++\cisp430nooop\include\travelheap.h
+	"../findPath.h"
+
+1558572331 source:c:\users\matt\documents\c++\cisp430nooop\src\travelheap.cpp
+	<iostream>
+	"TravelHeap.h"
+	"../findPath.h"
+
+1559088101 source:c:\users\matt\documents\c++\cisp430nooop\searchsort.cpp
+	<iostream>
+	<cstring>
+	<cstdlib>
+	"Queue.h"
+	"Stack.h"
+	"misc.h"
+
+1558734768 source:c:\users\matt\documents\c++\cisp430nooop\src\queuenode.cpp
+	"QueueNode.h"
+
+1558735687 c:\users\matt\documents\c++\cisp430nooop\include\queuenode.h
+
+1558735849 source:c:\users\matt\documents\c++\cisp430nooop\src\queue.cpp
+	"Queue.h"
+	<iostream>
+
+1558735804 c:\users\matt\documents\c++\cisp430nooop\include\queue.h
+	"QueueNode.h"
+
+1558823034 source:c:\users\matt\documents\c++\cisp430nooop\string.cpp
+	<iostream>
+
+1559086948 source:c:\users\matt\documents\c++\cisp430nooop\postfix.cpp
+	<iostream>
+	"Stack.h"
+	"TreeNode.h"
+
+1558975468 source:c:\users\matt\documents\c++\cisp430nooop\src\stacknode.cpp
+	"StackNode.h"
+
+1558977901 c:\users\matt\documents\c++\cisp430nooop\include\stacknode.h
+
+1558977812 source:c:\users\matt\documents\c++\cisp430nooop\src\stack.cpp
+	"Stack.h"
+	"StackNode.h"
+	<iostream>
+
+1558977764 c:\users\matt\documents\c++\cisp430nooop\include\stack.h
+	"StackNode.h"
+
+1559088327 source:c:\users\matt\documents\c++\cisp430nooop\src\treenode.cpp
+	"TreeNode.h"
+	"../misc.h"
+	<iostream>
+	<algorithm>
+
+1559087658 c:\users\matt\documents\c++\cisp430nooop\include\treenode.h
+
+1558981672 source:c:\users\matt\documents\c++\cisp430nooop\src\abstracttree.cpp
+	"AbstractTree.h"
+
+1558981631 c:\users\matt\documents\c++\cisp430nooop\include\abstracttree.h
+	"TreeNode.h"
+
+1559152748 c:\users\matt\documents\c++\cisp430nooop\include\hasharray.h
+
+1559149840 source:c:\users\matt\documents\c++\cisp430nooop\src\hasharray.cpp
+	"HashArray.h"
+	<iostream>
+
