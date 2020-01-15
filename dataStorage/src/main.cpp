@@ -1,5 +1,6 @@
 #include <stdio.h>
+#include "stack.h"
 
 int main(){
-    printf("%s", "hello world!");
+    Stack<int>::test();
 }
