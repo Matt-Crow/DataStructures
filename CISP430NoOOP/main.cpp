@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Heap.h"
 #include "TreeNode.h"
-#include "./include/Stack.h"
 #include "./include/HashArray.h"
 
 int useQueue();
@@ -17,7 +16,6 @@ using namespace std;
 
 int main()
 {
-    //useStack();
     //useQueue();
     //useLinkedList();
     //useAvlTree();

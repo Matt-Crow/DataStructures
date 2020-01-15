@@ -42,8 +42,6 @@
 		<Unit filename="include/Heap.h" />
 		<Unit filename="include/Queue.h" />
 		<Unit filename="include/QueueNode.h" />
-		<Unit filename="include/Stack.h" />
-		<Unit filename="include/StackNode.h" />
 		<Unit filename="include/TravelHeap.h" />
 		<Unit filename="include/TreeNode.h" />
 		<Unit filename="linkedList.cpp" />
@@ -58,8 +56,6 @@
 		<Unit filename="src/Heap.cpp" />
 		<Unit filename="src/Queue.cpp" />
 		<Unit filename="src/QueueNode.cpp" />
-		<Unit filename="src/Stack.cpp" />
-		<Unit filename="src/StackNode.cpp" />
 		<Unit filename="src/TravelHeap.cpp" />
 		<Unit filename="src/TreeNode.cpp" />
 		<Unit filename="string.cpp" />
