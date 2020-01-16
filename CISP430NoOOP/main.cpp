@@ -3,7 +3,6 @@
 #include "TreeNode.h"
 #include "./include/HashArray.h"
 
-int useLinkedList();
 int useAvlTree();
 int useFindPath();
 int useSearchSort();
@@ -15,7 +14,6 @@ using namespace std;
 
 int main()
 {
-    //useLinkedList();
     //useAvlTree();
     useFindPath();
     //useSearchSort();
