@@ -11,10 +11,6 @@ StackNode<T>::StackNode(T val){
 template<class T>
 StackNode<T>::~StackNode(){
     std::cout << "Delete " << this->value << std::endl;
-    if(this->next){
-        delete this->next;
-        this->next = 0;
-    }
 }
 
 template<class T>
@@ -41,8 +37,13 @@ Stack<T>::Stack(){
 
 template<class T>
 Stack<T>::~Stack(){
-    if(this->top){
-        delete this->top;
+    StackNode<T>* curr = this->top;
+    StackNode<T>* temp;
+    while(curr){
+        temp = curr->getNext();
+        delete curr;
+        curr = temp;
+        temp = 0;
     }
     this->top = 0;
 }
