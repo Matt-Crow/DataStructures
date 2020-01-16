@@ -73,7 +73,9 @@ T Queue<T>::dequeue(){
         ret = oldHead->getValue();
         this->head = oldHead->getNext();
         delete oldHead;
-        if(!this->head){
+        if(this->head){
+            this->head->setPrev(0);
+        } else {
             this->tail = 0;
         }
     }

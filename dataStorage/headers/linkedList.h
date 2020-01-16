@@ -26,12 +26,17 @@ class LinkedList{
         void pushToBack(T val);
         T popFromFront();
         T popFromBack();
+        T peekFront();
+        T peekBack();
         bool deleteNode(T withValue);
+        bool isEmpty();
         void print();
         static int test();
     private:
         LinkedListNode<T>* head;
         LinkedListNode<T>* tail;
 };
+
+template class LinkedList<int>;
 
 #endif

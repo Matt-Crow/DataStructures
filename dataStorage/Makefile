@@ -5,7 +5,7 @@ SRC = ./src
 BIN = ./bin
 OBJ = ./obj
 
-main: main.o stack.o queue.o | $(BIN)
+main: main.o stack.o queue.o linkedList.o | $(BIN)
 	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
 
 main.o: $(SRC)/main.cpp | $(OBJ)
@@ -16,6 +16,9 @@ stack.o: $(SRC)/stack.cpp | $(OBJ)
 
 queue.o: $(SRC)/queue.cpp | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/queue.cpp -o $(OBJ)/queue.o -I $(HEADERS)
+
+linkedList.o: $(SRC)/linkedList.cpp | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/linkedList.cpp -o $(OBJ)/linkedList.o -I $(HEADERS)
 
 $(BIN):
 	mkdir $(BIN)
