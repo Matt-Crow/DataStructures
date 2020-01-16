@@ -48,28 +48,21 @@ Queue<T>::Queue(){
 
 template<class T>
 Queue<T>::~Queue(){
-    QueueNode<T>* curr = this->head;
-    QueueNode<T>* temp = 0;
-    while(curr){
-        temp = curr->getNext();
-        delete curr;
-        curr = temp;
-        temp = 0;
+    while(this->head){
+        this->dequeue();
     }
 }
 
 template<class T>
 void Queue<T>::enqueue(T val){
     QueueNode<T>* nn = new QueueNode<T>(val);
-    nn->setNext(0);
-    nn->setPrev(this->tail);
     if(this->tail){
         this->tail->setNext(nn);
-    }
-    this->tail = nn;
-    if(!this->head){
+        nn->setPrev(this->tail);
+    } else {
         this->head = nn;
     }
+    this->tail = nn;
 }
 
 template<class T>
