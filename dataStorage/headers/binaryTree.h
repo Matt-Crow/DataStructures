@@ -12,6 +12,9 @@ class TreeNode{
         TreeNode<T>* getLeft();
         TreeNode<T>* getRight();
         T getValue();
+        int getHeight();
+        int getArraySize();
+        void populateArray(T* a, int aLen, int idx);
         void inOrder();
     private:
         T value;
@@ -26,6 +29,8 @@ class BinaryTree{
         ~BinaryTree();
         void put(T val);
         bool isEmpty();
+        T* toArray();
+        int getArraySize();
         void print();
         static int test();
     private:
