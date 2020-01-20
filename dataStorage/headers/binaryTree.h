@@ -1,6 +1,6 @@
 #ifndef BINARY_TREE
 #define BINARY_TREE
-
+/*
 template<class T>
 class TreeNode{
     public:
@@ -38,5 +38,5 @@ class BinaryTree{
 };
 
 template class BinaryTree<int>;
-
+*/
 #endif

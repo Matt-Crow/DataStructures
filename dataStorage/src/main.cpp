@@ -2,7 +2,7 @@
 #include "stack.h"
 #include "queue.h"
 #include "linkedList.h"
-#include "binaryTree.h"
+#include "tree.h"
 
 int main(){
     int ip = 0;
@@ -25,7 +25,7 @@ int main(){
                 LinkedList<int>::test();
                 break;
             case 4:
-                BinaryTree<int>::test();
+                testBinaryTree();
                 break;
         }
     } while(ip != -1);

@@ -5,7 +5,7 @@ SRC = ./src
 BIN = ./bin
 OBJ = ./obj
 
-main: main.o stack.o queue.o linkedList.o binaryTree.o | $(BIN)
+main: main.o stack.o queue.o linkedList.o tree.o | $(BIN)
 	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
 
 main.o: $(SRC)/main.cpp | $(OBJ)
@@ -22,6 +22,10 @@ linkedList.o: $(SRC)/linkedList.cpp | $(OBJ)
 
 binaryTree.o: $(SRC)/binaryTree.cpp | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/binaryTree.cpp -o $(OBJ)/binaryTree.o -I $(HEADERS)
+
+tree.o: $(SRC)/tree.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/tree.c -o $(OBJ)/tree.o -I $(HEADERS)
+
 
 $(BIN):
 	mkdir $(BIN)
