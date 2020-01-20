@@ -20,38 +20,32 @@ void deleteBinaryTree(struct BinaryTree* root){
     }
 }
 
-bool insertIntoTree(struct BinaryTree* root, int val){
+bool insertIntoTree(struct BinaryTree** root, int val){
     bool inserted = false;
     if(root){
-        if(root->value > val){
-            if(root->left){
-                inserted = insertIntoTree(root->left, val);
+        //if root is null pointer, there is nothing I can do with it.
+        if(*root){
+            //root has been allocated
+            if((*root)->value > val){
+                inserted = insertIntoTree(&((*root)->left), val);
+            } else if((*root)->value < val){
+                inserted = insertIntoTree(&((*root)->right), val);
             } else {
-                root->left = newBinaryTree(val);
-                inserted = true;
-            }
-        } else if(root->value < val){
-            if(root->right){
-                inserted = insertIntoTree(root->right, val);
-            } else {
-                root->right = newBinaryTree(val);
-                inserted = true;
+                //value already in tree, do not insert
             }
         } else {
-            //value already in tree, do not insert
+            *root = newBinaryTree(val);
+            inserted = true;
         }
-    } else {
-        *root = *(newBinaryTree(val));
-        inserted = true;
     }
     return inserted;
 }
 
 void inOrder(struct BinaryTree* root){
     if(root){
-        //inOrder(root->left);
+        inOrder(root->left);
         printf("%i ", root->value);
-        //inOrder(root->right);
+        inOrder(root->right);
     }
 }
 
@@ -71,11 +65,12 @@ int testBinaryTree(){
         switch(ip){
             case 0:
                 inOrder(root);
+                printf("%s", "\n");
                 break;
             case 1:
                 printf("%s", "enter a value to insert: ");
                 scanf("%d", &ip);
-                success = insertIntoTree(root, ip);
+                success = insertIntoTree(&root, ip);
                 if(success){
                     printf("%i %s", ip, "was inserted\n");
                 } else {
@@ -85,6 +80,7 @@ int testBinaryTree(){
                 break;
             case 2:
                 deleteBinaryTree(root);
+                root = 0;
                 break;
         }
     } while(ip != -1);

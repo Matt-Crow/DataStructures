@@ -12,7 +12,7 @@ struct BinaryTree{
 struct BinaryTree* newBinaryTree(int val);
 void deleteBinaryTree(struct BinaryTree* root);
 
-bool insertIntoTree(struct BinaryTree* root, int val);
+bool insertIntoTree(struct BinaryTree** root, int val);
 
 void inOrder(struct BinaryTree* root);
 
