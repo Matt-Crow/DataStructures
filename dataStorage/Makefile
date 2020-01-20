@@ -20,9 +20,6 @@ queue.o: $(SRC)/queue.cpp | $(OBJ)
 linkedList.o: $(SRC)/linkedList.cpp | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/linkedList.cpp -o $(OBJ)/linkedList.o -I $(HEADERS)
 
-binaryTree.o: $(SRC)/binaryTree.cpp | $(OBJ)
-	$(CXX) $(CXXFLAGS) -c $(SRC)/binaryTree.cpp -o $(OBJ)/binaryTree.o -I $(HEADERS)
-
 tree.o: $(SRC)/tree.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/tree.c -o $(OBJ)/tree.o -I $(HEADERS)
 
