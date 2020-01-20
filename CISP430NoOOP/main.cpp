@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Heap.h"
-#include "TreeNode.h"
 #include "./include/HashArray.h"
 
 int useAvlTree();
@@ -19,9 +18,7 @@ int main()
     //useSearchSort();
     //Heap<int>::test();
     //useString();
-    //Stack<int>::test();
     //usePostfix();
-    //TreeNode<int>::test();
     //HashArray::test();
     return 0;
 }

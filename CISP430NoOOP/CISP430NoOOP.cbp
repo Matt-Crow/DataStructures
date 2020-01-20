@@ -37,22 +37,18 @@
 		<Unit filename="avlTree.cpp" />
 		<Unit filename="findPath.cpp" />
 		<Unit filename="findPath.h" />
-		<Unit filename="include/AbstractTree.h" />
 		<Unit filename="include/HashArray.h" />
 		<Unit filename="include/Heap.h" />
 		<Unit filename="include/TravelHeap.h" />
-		<Unit filename="include/TreeNode.h" />
 		<Unit filename="linkedList.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="misc.cpp" />
 		<Unit filename="misc.h" />
 		<Unit filename="postfix.cpp" />
 		<Unit filename="searchSort.cpp" />
-		<Unit filename="src/AbstractTree.cpp" />
 		<Unit filename="src/HashArray.cpp" />
 		<Unit filename="src/Heap.cpp" />
 		<Unit filename="src/TravelHeap.cpp" />
-		<Unit filename="src/TreeNode.cpp" />
 		<Unit filename="string.cpp" />
 		<Extensions>
 			<code_completion />

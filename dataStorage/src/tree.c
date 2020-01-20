@@ -92,6 +92,39 @@ int* toArray(struct BinaryTree* root){
     return ret;
 }
 
+struct BinaryTree* fromSortedArrayIdx(int* a, int start, int end){
+    struct BinaryTree* ret = 0;
+    if(start <= end && a){
+        int mid = (start + end) / 2;
+        ret = newBinaryTree(a[mid]);
+        ret->left = fromSortedArrayIdx(a, start, mid - 1);
+        ret->right = fromSortedArrayIdx(a, mid + 1, end);
+    }
+    return ret;
+}
+
+struct BinaryTree* fromSortedArray(int* a, int len){
+    return fromSortedArrayIdx(a, 0, len - 1);
+}
+
+struct BinaryTree* fromUnsoredArrayIdx(int* a, int len, int idx){
+    struct BinaryTree* ret = 0;
+    if(a){
+        if(idx >= 0 && idx < len){
+            int left = 2 * idx + 1;
+            int right = 2 * idx + 2;
+            ret = newBinaryTree(a[idx]);
+            ret->left = fromUnsoredArrayIdx(a, len, left);
+            ret->right = fromUnsoredArrayIdx(a, len, right);
+        }
+    }
+    return ret;
+}
+
+struct BinaryTree* fromUnsoredArray(int* a, int len){
+    return fromUnsoredArrayIdx(a, len, 0);
+}
+
 void inOrder(struct BinaryTree* root){
     if(root){
         inOrder(root->left);
@@ -102,6 +135,7 @@ void inOrder(struct BinaryTree* root){
 
 int testBinaryTree(){
     struct BinaryTree* root = 0;
+    struct BinaryTree* temp = 0;
     int ip = 0;
     bool success;
     int* a = 0;
@@ -111,6 +145,8 @@ int testBinaryTree(){
         printf("%s", "1: Insert into the binary tree\n");
         printf("%s", "2: Delete the binary tree\n");
         printf("%s", "3: Convert the binary tree to an array\n");
+        printf("%s", "4: Convert [1, 2, 3, 4, 5, 6, 7] to a binary tree\n");
+        printf("%s", "5: Convert [5, 1, 3, 2, 4] to a binary tree\n");
         printf("%s", "-1: Quit\n");
         scanf("%d", &ip);
 
@@ -150,6 +186,24 @@ int testBinaryTree(){
                     a = 0;
                 }
                 ip = 3;
+                break;
+            case 4:
+                a = new int[7]{1, 2, 3, 4, 5, 6, 7};
+                temp = fromSortedArray(a, 7);
+                inOrder(temp);
+                printf("%s", "\n");
+                deleteBinaryTree(temp);
+                temp = 0;
+                delete a;
+                break;
+            case 5:
+                a = new int[5]{5, 1, 3, 2, 4};
+                temp = fromUnsoredArray(a, 5);
+                inOrder(temp);
+                printf("%s", "\n");
+                deleteBinaryTree(temp);
+                temp = 0;
+                delete a;
                 break;
         }
     } while(ip != -1);
