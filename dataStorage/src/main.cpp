@@ -16,7 +16,7 @@ int main(){
         std::cin >> ip;
         switch(ip){
             case 1:
-                Stack<int>::test();
+                testStack();
                 break;
             case 2:
                 Queue<int>::test();

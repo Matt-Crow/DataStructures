@@ -1,32 +1,21 @@
 #ifndef STACK
 #define STACK
 
-template<class T>
-class StackNode{
-    public:
-        StackNode(T val);
-        ~StackNode();
-        void setNext(StackNode<T>* next);
-        StackNode<T>* getNext();
-        T getValue();
-    private:
-        StackNode<T>* next;
-        T value;
+struct Stack{
+    int value;
+    Stack* next;
 };
 
-template<class T>
-class Stack{
-    public:
-        Stack();
-        ~Stack();
-        void push(T val);
-        T pop();
-        T peek();
-        void print();
-        bool isEmpty();
-        static int test();
-    private:
-        StackNode<T>* top;
-};
+struct Stack* newStack(int val);
+
+void deleteStack(struct Stack* top);
+
+void push(struct Stack** top, int val);
+int peek(struct Stack* top);
+int pop(struct Stack** top);
+
+void printStack(struct Stack* top);
+
+int testStack();
 
 #endif
