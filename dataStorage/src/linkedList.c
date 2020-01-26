@@ -11,7 +11,7 @@ struct LinkedList* newLinkedList(int val){
 }
 
 void deleteLinkedList(struct LinkedList** head, struct LinkedList** tail){
-     while(head){
+     while(*head){
          printf("Delete %i\n", popFromFront(head, tail));
      }
 }
@@ -48,7 +48,7 @@ void pushToBack(struct LinkedList** head, struct LinkedList** tail, int val){
 
 int popFromFront(struct LinkedList** head, struct LinkedList** tail){
     int ret = 0;
-    if(head && tail){
+    if(head && tail && *head){
         ret = peekFront(*head);
         struct LinkedList* oldHead = *head;
         struct LinkedList* newHead = oldHead->next;
