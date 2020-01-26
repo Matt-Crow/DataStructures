@@ -22,7 +22,7 @@ int main(){
                 Queue<int>::test();
                 break;
             case 3:
-                LinkedList<int>::test();
+                testLinkedList();
                 break;
             case 4:
                 testBinaryTree();

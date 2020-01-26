@@ -17,8 +17,8 @@ stack.o: $(SRC)/stack.c | $(OBJ)
 queue.o: $(SRC)/queue.cpp | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/queue.cpp -o $(OBJ)/queue.o -I $(HEADERS)
 
-linkedList.o: $(SRC)/linkedList.cpp | $(OBJ)
-	$(CXX) $(CXXFLAGS) -c $(SRC)/linkedList.cpp -o $(OBJ)/linkedList.o -I $(HEADERS)
+linkedList.o: $(SRC)/linkedList.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/linkedList.c -o $(OBJ)/linkedList.o -I $(HEADERS)
 
 tree.o: $(SRC)/tree.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/tree.c -o $(OBJ)/tree.o -I $(HEADERS)

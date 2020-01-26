@@ -1,42 +1,23 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
-template<class T>
-class LinkedListNode{
-    public:
-        LinkedListNode(T val);
-        ~LinkedListNode();
-        void setNext(LinkedListNode<T>* next);
-        void setPrev(LinkedListNode<T>* prev);
-        LinkedListNode<T>* getNext();
-        LinkedListNode<T>* getPrev();
-        T getValue();
-    private:
-        T value;
-        LinkedListNode<T>* next;
-        LinkedListNode<T>* prev;
+struct LinkedList{
+    struct LinkedList* next;
+    struct LinkedList* prev;
+    int value;
 };
 
-template<class T>
-class LinkedList{
-    public:
-        LinkedList();
-        ~LinkedList();
-        void pushToFront(T val);
-        void pushToBack(T val);
-        T popFromFront();
-        T popFromBack();
-        T peekFront();
-        T peekBack();
-        bool deleteNode(T withValue);
-        bool isEmpty();
-        void print();
-        static int test();
-    private:
-        LinkedListNode<T>* head;
-        LinkedListNode<T>* tail;
-};
+struct LinkedList* newLinkedList(int val);
+void deleteLinkedList(struct LinkedList** head, struct LinkedList** tail);
+void pushToFront(struct LinkedList** head, struct LinkedList** tail, int val);
+void pushToBack(struct LinkedList** head, struct LinkedList** tail, int val);
+int popFromFront(struct LinkedList** head, struct LinkedList** tail);
+int popFromBack(struct LinkedList** head, struct LinkedList** tail);
+int peekFront(struct LinkedList* head);
+int peekBack(struct LinkedList* tail);
+bool deleteNode(struct LinkedList** head, struct LinkedList** tail, int withValue);
+void printLinkedList(struct LinkedList* head);
 
-template class LinkedList<int>;
+int testLinkedList();
 
 #endif
