@@ -19,7 +19,7 @@ int main(){
                 testStack();
                 break;
             case 2:
-                Queue<int>::test();
+                testQueue();
                 break;
             case 3:
                 testLinkedList();

@@ -1,38 +1,21 @@
 #ifndef QUEUE
 #define QUEUE
 
-template<class T>
-class QueueNode{
-    public:
-        QueueNode(T val);
-        ~QueueNode();
-        void setPrev(QueueNode<T>* prev);
-        void setNext(QueueNode<T>* next);
-        QueueNode<T>* getPrev();
-        QueueNode<T>* getNext();
-        T getValue();
-    private:
-        T value;
-        QueueNode<T>* prev;
-        QueueNode<T>* next;
-};
+typedef struct Queue {
+    Queue* next;
+    Queue* prev;
+    int value;
+} Queue;
 
-template<class T>
-class Queue{
-    public:
-        Queue();
-        ~Queue();
-        void enqueue(T val);
-        T dequeue();
-        T peek();
-        bool isEmpty();
-        void print();
-        static int test();
-    private:
-        QueueNode<T>* head;
-        QueueNode<T>* tail;
-};
+Queue* newQueue(int val);
+void deleteQueue(Queue** head, Queue** tail);
 
-template class Queue<int>;
+void enqueue(Queue** head, Queue** tail, int val);
+int dequeue(Queue** head, Queue** tail);
+int peek(Queue* head);
+
+void printQueue(Queue* head);
+
+int testQueue();
 
 #endif

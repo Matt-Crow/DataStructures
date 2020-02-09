@@ -14,8 +14,8 @@ main.o: $(SRC)/main.cpp | $(OBJ)
 stack.o: $(SRC)/stack.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/stack.c -o $(OBJ)/stack.o -I $(HEADERS)
 
-queue.o: $(SRC)/queue.cpp | $(OBJ)
-	$(CXX) $(CXXFLAGS) -c $(SRC)/queue.cpp -o $(OBJ)/queue.o -I $(HEADERS)
+queue.o: $(SRC)/queue.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/queue.c -o $(OBJ)/queue.o -I $(HEADERS)
 
 linkedList.o: $(SRC)/linkedList.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/linkedList.c -o $(OBJ)/linkedList.o -I $(HEADERS)
