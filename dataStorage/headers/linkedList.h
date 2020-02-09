@@ -1,6 +1,8 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
+#include <stdbool.h>
+
 struct LinkedList{
     struct LinkedList* next;
     struct LinkedList* prev;

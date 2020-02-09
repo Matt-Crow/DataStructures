@@ -1,20 +1,20 @@
 #ifndef STACK
 #define STACK
 
-struct Stack{
+typedef struct Stack{
     int value;
-    Stack* next;
-};
+    struct Stack* next;
+} Stack;
 
-struct Stack* newStack(int val);
+Stack* newStack(int val);
 
-void deleteStack(struct Stack* top);
+void deleteStack(Stack* top);
 
-void push(struct Stack** top, int val);
-int peek(struct Stack* top);
-int pop(struct Stack** top);
+void push(Stack** top, int val);
+int peekStack(Stack* top);
+int pop(Stack** top);
 
-void printStack(struct Stack* top);
+void printStack(Stack* top);
 
 int testStack();
 

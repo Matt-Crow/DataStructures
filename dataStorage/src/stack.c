@@ -1,33 +1,32 @@
 #include <stdio.h>
-#include <iostream>
+#include <stdlib.h>
 #include "stack.h"
 
-struct Stack* newStack(int val){
-    struct Stack* ret = (struct Stack*)malloc(sizeof(struct Stack));
+Stack* newStack(int val){
+    Stack* ret = (Stack*)malloc(sizeof(Stack));
     ret->value = val;
     ret->next = 0;
     return ret;
 }
 
-void deleteStack(struct Stack* top){
+void deleteStack(Stack* top){
     if(top){
         deleteStack(top->next);
         printf("delete %i\n", top->value);
-        delete top;
-        top = 0;
+        free(top);
     }
 }
 
-void push(struct Stack** top, int val){
+void push(Stack** top, int val){
     if(top){
         //cannot be null pointer.
-        struct Stack* newTop = newStack(val);
+        Stack* newTop = newStack(val);
         newTop->next = *top; //if nothing on the stack, *top is null, which is fine
         *top = newTop;
     }
 }
 
-int peek(struct Stack* top){
+int peekStack(Stack* top){
     int ret = 0;
     if(top){
         ret = top->value;
@@ -35,12 +34,12 @@ int peek(struct Stack* top){
     return ret;
 }
 
-int pop(struct Stack** top){
+int pop(Stack** top){
     int ret = 0;
     if(top && *top){
         //top isn't null pointer, and has at least 1 item in the stack
-        struct Stack* oldTop = *top;
-        struct Stack* newTop = (*top)->next;
+        Stack* oldTop = *top;
+        Stack* newTop = (*top)->next;
         ret = oldTop->value;
         oldTop->next = 0; //prevent deleteStack from cascading
         deleteStack(oldTop);
@@ -50,8 +49,8 @@ int pop(struct Stack** top){
     return ret;
 }
 
-void printStack(struct Stack* top){
-    struct Stack* curr = top;
+void printStack(Stack* top){
+    Stack* curr = top;
     printf("%s", "Top of the stack\n");
     while(curr){
         printf("%i\n", curr->value);
@@ -104,18 +103,3 @@ int testStack(){
 
     return 0;
 }
-
-/*
-template<class T>
-Stack<T>::~Stack(){
-    StackNode<T>* curr = this->top;
-    StackNode<T>* temp;
-    while(curr){
-        temp = curr->getNext();
-        delete curr;
-        curr = temp;
-        temp = 0;
-    }
-    this->top = 0;
-}
-*/

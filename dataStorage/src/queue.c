@@ -36,7 +36,7 @@ int dequeue(Queue** head, Queue** tail){
             Queue* temp = *head;
             *head = temp->next;
             temp->next = 0;
-            delete temp;
+            free(temp);
             if(*head){
                 (*head)->prev = 0;
             } else {

@@ -2,8 +2,8 @@
 #define QUEUE
 
 typedef struct Queue {
-    Queue* next;
-    Queue* prev;
+    struct Queue* next;
+    struct Queue* prev;
     int value;
 } Queue;
 

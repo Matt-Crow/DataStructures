@@ -53,7 +53,7 @@ int popFromFront(struct LinkedList** head, struct LinkedList** tail){
         struct LinkedList* oldHead = *head;
         struct LinkedList* newHead = oldHead->next;
         oldHead->next = 0;
-        delete oldHead;
+        free(oldHead);
 
         if(newHead){
             *head = newHead;
@@ -73,7 +73,7 @@ int popFromBack(struct LinkedList** head, struct LinkedList** tail){
         struct LinkedList* oldTail = *tail;
         struct LinkedList* newTail = oldTail->prev;
         oldTail->prev = 0;
-        delete oldTail;
+        free(oldTail);
 
         if(newTail){
             *tail = newTail;
@@ -118,7 +118,7 @@ bool deleteNode(struct LinkedList** head, struct LinkedList** tail, int withValu
                     curr->next->prev = curr->prev;
                     curr->prev = 0;
                     curr->next = 0;
-                    delete curr;
+                    free(curr);
                 }
                 curr = 0;
             } else {

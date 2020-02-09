@@ -16,7 +16,7 @@ void deleteBinaryTree(struct BinaryTree* root){
         deleteBinaryTree(root->left);
         deleteBinaryTree(root->right);
         printf("deleted %i\n", root->value);
-        delete root;
+        free(root);
         root = 0;
     }
 }
@@ -187,24 +187,24 @@ int testBinaryTree(){
                 }
                 ip = 3;
                 break;
-            case 4:
-                a = new int[7]{1, 2, 3, 4, 5, 6, 7};
-                temp = fromSortedArray(a, 7);
+            case 4: {
+                int arr[] = {1, 2, 3, 4, 5, 6, 7};
+                temp = fromSortedArray(arr, 7);
                 inOrder(temp);
                 printf("%s", "\n");
                 deleteBinaryTree(temp);
                 temp = 0;
-                delete a;
                 break;
-            case 5:
-                a = new int[5]{5, 1, 3, 2, 4};
-                temp = fromUnsoredArray(a, 5);
+            }
+            case 5: {
+                int arr[] = {5, 1, 3, 2, 4};
+                temp = fromUnsoredArray(arr, 5);
                 inOrder(temp);
                 printf("%s", "\n");
                 deleteBinaryTree(temp);
                 temp = 0;
-                delete a;
                 break;
+            }
         }
     } while(ip != -1);
 

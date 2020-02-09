@@ -1,4 +1,4 @@
-CXX = g++
+CXX = gcc
 CXXFLAGS = -Wall -g
 HEADERS = ./headers
 SRC = ./src
@@ -8,8 +8,8 @@ OBJ = ./obj
 main: main.o stack.o queue.o linkedList.o tree.o | $(BIN)
 	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
 
-main.o: $(SRC)/main.cpp | $(OBJ)
-	$(CXX) $(CXXFLAGS) -c $(SRC)/main.cpp -o $(OBJ)/main.o -I $(HEADERS)
+main.o: $(SRC)/main.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/main.c -o $(OBJ)/main.o -I $(HEADERS)
 
 stack.o: $(SRC)/stack.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/stack.c -o $(OBJ)/stack.o -I $(HEADERS)
