@@ -1,3 +1,4 @@
 *.o
 *.exe
 *.docx
+dataStorage/bin/main

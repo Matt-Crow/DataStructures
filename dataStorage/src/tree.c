@@ -3,15 +3,15 @@
 #include<string.h>
 #include "tree.h"
 
-struct BinaryTree* newBinaryTree(int val){
-    struct BinaryTree* ret = (struct BinaryTree*)malloc(sizeof(struct BinaryTree));
+BinaryTree* newBinaryTree(int val){
+    BinaryTree* ret = (BinaryTree*)malloc(sizeof(BinaryTree));
     ret->value = val;
     ret->left = 0;
     ret->right = 0;
     return ret;
 }
 
-void deleteBinaryTree(struct BinaryTree* root){
+void deleteBinaryTree(BinaryTree* root){
     if(root){
         deleteBinaryTree(root->left);
         deleteBinaryTree(root->right);
@@ -21,7 +21,7 @@ void deleteBinaryTree(struct BinaryTree* root){
     }
 }
 
-bool insertIntoTree(struct BinaryTree** root, int val){
+bool insertIntoTree(BinaryTree** root, int val){
     bool inserted = false;
     if(root){
         //if root is null pointer, there is nothing I can do with it.
@@ -42,8 +42,7 @@ bool insertIntoTree(struct BinaryTree** root, int val){
     return inserted;
 }
 
-
-int getHeight(struct BinaryTree* root){
+int getHeight(BinaryTree* root){
     int ret = -1;
     if(root){
         int left = getHeight(root->left);
@@ -54,7 +53,7 @@ int getHeight(struct BinaryTree* root){
     return ret;
 }
 
-int getArraySize(struct BinaryTree* root){
+int getArraySize(BinaryTree* root){
     int ret = 1;
     int height = getHeight(root);
     // if root is null, height is -1
@@ -66,7 +65,7 @@ int getArraySize(struct BinaryTree* root){
     return ret;
 }
 
-void populateArray(struct BinaryTree* root, int* a, int aLen, int idx){
+void populateArray(BinaryTree* root, int* a, int aLen, int idx){
     if(root && a){
         if(idx >= 0 && idx < aLen){
             a[idx] = root->value;
@@ -81,7 +80,7 @@ void populateArray(struct BinaryTree* root, int* a, int aLen, int idx){
         }
     }
 }
-int* toArray(struct BinaryTree* root){
+int* toArray(BinaryTree* root){
     int* ret = 0;
     if(root){
         int len = getArraySize(root);
@@ -92,8 +91,8 @@ int* toArray(struct BinaryTree* root){
     return ret;
 }
 
-struct BinaryTree* fromSortedArrayIdx(int* a, int start, int end){
-    struct BinaryTree* ret = 0;
+BinaryTree* fromSortedArrayIdx(int* a, int start, int end){
+    BinaryTree* ret = 0;
     if(start <= end && a){
         int mid = (start + end) / 2;
         ret = newBinaryTree(a[mid]);
@@ -103,12 +102,12 @@ struct BinaryTree* fromSortedArrayIdx(int* a, int start, int end){
     return ret;
 }
 
-struct BinaryTree* fromSortedArray(int* a, int len){
+BinaryTree* fromSortedArray(int* a, int len){
     return fromSortedArrayIdx(a, 0, len - 1);
 }
 
-struct BinaryTree* fromUnsoredArrayIdx(int* a, int len, int idx){
-    struct BinaryTree* ret = 0;
+BinaryTree* fromUnsoredArrayIdx(int* a, int len, int idx){
+    BinaryTree* ret = 0;
     if(a){
         if(idx >= 0 && idx < len){
             int left = 2 * idx + 1;
@@ -121,11 +120,11 @@ struct BinaryTree* fromUnsoredArrayIdx(int* a, int len, int idx){
     return ret;
 }
 
-struct BinaryTree* fromUnsoredArray(int* a, int len){
+BinaryTree* fromUnsoredArray(int* a, int len){
     return fromUnsoredArrayIdx(a, len, 0);
 }
 
-void inOrder(struct BinaryTree* root){
+void inOrder(BinaryTree* root){
     if(root){
         inOrder(root->left);
         printf("%i ", root->value);
@@ -134,8 +133,8 @@ void inOrder(struct BinaryTree* root){
 }
 
 int testBinaryTree(){
-    struct BinaryTree* root = 0;
-    struct BinaryTree* temp = 0;
+    BinaryTree* root = 0;
+    BinaryTree* temp = 0;
     int ip = 0;
     bool success;
     int* a = 0;

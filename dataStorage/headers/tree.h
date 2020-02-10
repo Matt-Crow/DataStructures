@@ -3,27 +3,27 @@
 
 #include<stdbool.h>
 
-struct BinaryTree{
+typedef struct BinaryTree{
     int value;
     struct BinaryTree* left;
     struct BinaryTree* right;
-};
+} BinaryTree;
 
-struct BinaryTree* newBinaryTree(int val);
-void deleteBinaryTree(struct BinaryTree* root);
+BinaryTree* newBinaryTree(int val);
+void deleteBinaryTree(BinaryTree* root);
 
-bool insertIntoTree(struct BinaryTree** root, int val);
+bool insertIntoTree(BinaryTree** root, int val);
 
-int getHeight(struct BinaryTree* root);
-int getArraySize(struct BinaryTree* root);
-void populateArray(struct BinaryTree* root, int* a, int aLen, int idx);
-int* toArray(struct BinaryTree* root);
-struct BinaryTree* fromSortedArrayIdx(int* a, int start, int end);
-struct BinaryTree* fromSortedArray(int* a, int len);
-struct BinaryTree* fromUnsoredArrayIdx(int* a, int len, int idx);
-struct BinaryTree* fromUnsoredArray(int* a, int len);
+int getHeight(BinaryTree* root);
+int getArraySize(BinaryTree* root);
+void populateArray(BinaryTree* root, int* a, int aLen, int idx);
+int* toArray(BinaryTree* root);
+BinaryTree* fromSortedArrayIdx(int* a, int start, int end);
+BinaryTree* fromSortedArray(int* a, int len);
+BinaryTree* fromUnsoredArrayIdx(int* a, int len, int idx);
+BinaryTree* fromUnsoredArray(int* a, int len);
 
-void inOrder(struct BinaryTree* root);
+void inOrder(BinaryTree* root);
 
 int testBinaryTree();
 
