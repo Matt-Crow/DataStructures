@@ -10,14 +10,18 @@ BinaryTree* newBinaryTree(int val){
     ret->right = 0;
     return ret;
 }
-
-void deleteBinaryTree(BinaryTree* root){
+void deleteBinaryTree(BinaryTree** root){
     if(root){
-        deleteBinaryTree(root->left);
-        deleteBinaryTree(root->right);
-        printf("deleted %i\n", root->value);
-        free(root);
-        root = 0;
+        BinaryTree* ptr = *root;
+        if(ptr->left){
+            deleteBinaryTree(&(ptr->left));
+        }
+        if(ptr->right){
+            deleteBinaryTree(&(ptr->right));
+        }
+        printf("deleted %i\n", ptr->value);
+        free(*root);
+        *root = 0;
     }
 }
 
@@ -40,6 +44,59 @@ bool insertIntoTree(BinaryTree** root, int val){
         }
     }
     return inserted;
+}
+bool deleteFromTree(BinaryTree** root, int val){
+    bool deleted = false;
+    if(root && *root){
+        BinaryTree* curr = *root;
+        if(curr->value > val){
+            if(curr->left){
+                deleted = deleteFromTree(&(curr->left), val);
+            }
+        } else if(curr->value < val){
+            if(curr->right){
+                deleted = deleteFromTree(&(curr->right), val);
+            }
+        } else {
+            deleted = true;
+            BinaryTree* deleteMe = curr;
+            if(!(deleteMe->left || deleteMe->right)){
+                //no children
+                free(deleteMe);
+                *root = 0;
+            } else if(deleteMe->left && deleteMe->right){
+                //2 children
+                BinaryTree* swapMe = deleteMe->right;
+                /*
+                can either go right one, then keep going left,
+                or left one, then keep going right
+                */
+                while(swapMe->left){
+                    swapMe = swapMe->left;
+                }
+
+                int newVal = swapMe->value;
+
+                deleteFromTree(root, swapMe->value);
+                // delete the node I swapped with.
+                swapMe = 0; //freed by deleteFromTree
+
+                deleteMe->value = newVal;
+                // old value has been "deleted"
+            } else if(deleteMe->left){
+                *root = deleteMe->left; //move root
+                deleteMe->left = 0;
+                free(deleteMe);
+            } else if(deleteMe->right){
+                *root = deleteMe->right;
+                deleteMe->right = 0;
+                free(deleteMe);
+            } else {
+                //will never go here
+            }
+        }
+    }
+    return deleted;
 }
 
 int getHeight(BinaryTree* root){
@@ -146,6 +203,7 @@ int testBinaryTree(){
         printf("%s", "3: Convert the binary tree to an array\n");
         printf("%s", "4: Convert [1, 2, 3, 4, 5, 6, 7] to a binary tree\n");
         printf("%s", "5: Convert [5, 1, 3, 2, 4] to a binary tree\n");
+        printf("%s", "6: Delete from the binary tree\n");
         printf("%s", "-1: Quit\n");
         scanf("%d", &ip);
 
@@ -166,7 +224,7 @@ int testBinaryTree(){
                 ip = 1;
                 break;
             case 2:
-                deleteBinaryTree(root);
+                deleteBinaryTree(&root);
                 root = 0;
                 break;
             case 3:
@@ -191,7 +249,7 @@ int testBinaryTree(){
                 temp = fromSortedArray(arr, 7);
                 inOrder(temp);
                 printf("%s", "\n");
-                deleteBinaryTree(temp);
+                deleteBinaryTree(&temp);
                 temp = 0;
                 break;
             }
@@ -200,15 +258,26 @@ int testBinaryTree(){
                 temp = fromUnsoredArray(arr, 5);
                 inOrder(temp);
                 printf("%s", "\n");
-                deleteBinaryTree(temp);
+                deleteBinaryTree(&temp);
                 temp = 0;
                 break;
             }
+            case 6:
+                printf("%s", "enter a value to delete: ");
+                scanf("%d", &ip);
+                success = deleteFromTree(&root, ip);
+                if(success){
+                    printf("%i was deleted from the tree.\n", ip);
+                } else {
+                    printf("%i is not in the tree.\n", ip);
+                }
+                ip = 6;
+                break;
         }
     } while(ip != -1);
 
     if(root){
-        deleteBinaryTree(root);
+        deleteBinaryTree(&root);
         root = 0;
     }
 
