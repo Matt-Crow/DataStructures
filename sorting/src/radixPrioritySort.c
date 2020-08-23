@@ -44,7 +44,7 @@ RecordQueue* newRecordQueue(Record* value){
     q->next = 0;
     q->prev = 0;
     q->value = value;
-    return 0;
+    return q;
 }
 void deleteRecordQueue(RecordQueue** head, RecordQueue** tail){
     while(*head){
@@ -63,8 +63,6 @@ void enqueueRecordQueue(RecordQueue** head, RecordQueue** tail, Record* value){
         } else {
             // tail points to null pointer, so no nodes exist
             *head = newNode;
-
-                printf("gets here??? No tail");
         }
         *tail = newNode;
     }
@@ -93,8 +91,6 @@ Record* dequeueRecordQueue(RecordQueue** head, RecordQueue** tail){
 void printRecordQueue(RecordQueue* head){
     RecordQueue* curr = head;
     while(curr){
-
-            printf("gets here??? printRecordQueue");
         printRecord(curr->value);
         if(curr->next){
             printf("%s", " => ");
