@@ -20,7 +20,8 @@ void printRecord(Record* record);
 
 RecordQueue* newRecordQueue(Record* value);
 void deleteRecordQueue(RecordQueue** head, RecordQueue** tail);
-void enqueue(RecordQueue** head, RecordQueue** tail, Record* value);
+void enqueueRecordQueue(RecordQueue** head, RecordQueue** tail, Record* value);
+Record* dequeueRecordQueue(RecordQueue** head, RecordQueue** tail);
 void printRecordQueue(RecordQueue* head);
 
 
