@@ -9,6 +9,30 @@ int testRadixPrioritySort(){
     //printRecord(me);
     //deleteRecord(me);
     //me = 0;
+
+    Record* allRecords[] = {
+        newRecord("Matt", "Crow", 22),
+        newRecord("John", "Doe", 18),
+        newRecord("Jane", "Doe", 9999999)
+    };
+    enum SortType priorities[] = {
+        AGE,
+        F_NAME,
+        L_NAME
+    };
+    for(int i = 0; i < 3; i++){
+        printRecord(allRecords[i]);
+        printf("%s", "\n");
+    }
+    radixPrioritySort(allRecords, 3, priorities, 3);
+    printf("%s", "After sorting:\n");
+    for(int i = 0; i < 3; i++){
+        printRecord(allRecords[i]);
+        deleteRecord(allRecords[i]);
+        allRecords[i] = 0;
+        printf("%s", "\n");
+    }
+    /*
     RecordQueue* head = 0;
     RecordQueue* tail = 0;
     enqueueRecordQueue(&head, &tail, newRecord("Matt", "Crow", 22));
@@ -18,6 +42,7 @@ int testRadixPrioritySort(){
     deleteRecordQueue(&head, &tail);
     head = 0;
     tail = 0;
+    */
     return 0;
 }
 
@@ -96,5 +121,53 @@ void printRecordQueue(RecordQueue* head){
             printf("%s", " => ");
         }
         curr = curr->next;
+    }
+}
+
+
+void radixPrioritySort(Record* records[], int numRecords, enum SortType priorities[], int numPriorities){
+    if(numPriorities > 0){
+        Record* temp;
+        switch(priorities[numPriorities - 1]){
+            case F_NAME: // just do bubble sort, as I am tired
+                for(int i = 0; i < numRecords - 1; i++){
+                    for(int j = 0; j < numRecords - i - 1; j++){
+                        if(records[j]->fName > records[j + 1]->fName){
+                            temp = records[j + 1];
+                            records[j + 1] = records[j];
+                            records[j] = temp;
+                            temp = 0;
+                        }
+                    }
+                }
+                break;
+            case L_NAME:
+                for(int i = 0; i < numRecords - 1; i++){
+                    for(int j = 0; j < numRecords - i - 1; j++){
+                        if(records[j]->lName > records[j + 1]->lName){
+                            temp = records[j + 1];
+                            records[j + 1] = records[j];
+                            records[j] = temp;
+                            temp = 0;
+                        }
+                    }
+                }
+                break;
+            case AGE:
+                for(int i = 0; i < numRecords - 1; i++){
+                    for(int j = 0; j < numRecords - i - 1; j++){
+                        if(records[j]->age > records[j + 1]->age){
+                            temp = records[j + 1];
+                            records[j + 1] = records[j];
+                            records[j] = temp;
+                            temp = 0;
+                        }
+                    }
+                }
+                break;
+            default:
+                printf("Uncaught SortType in radixPrioritySort: %d", priorities[numPriorities - 1]);
+        }
+        radixPrioritySort(records, numRecords, priorities, numPriorities - 1);
     }
 }

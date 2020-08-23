@@ -1,6 +1,8 @@
 #ifndef RADIX_PRIOR
 #define RADIX_PRIOR
 
+enum SortType {F_NAME, L_NAME, AGE};
+
 typedef struct Record {
     char* fName;
     char* lName;
@@ -24,6 +26,7 @@ void enqueueRecordQueue(RecordQueue** head, RecordQueue** tail, Record* value);
 Record* dequeueRecordQueue(RecordQueue** head, RecordQueue** tail);
 void printRecordQueue(RecordQueue* head);
 
+void radixPrioritySort(Record* records[], int numRecords, enum SortType priorities[], int numPriorities);
 
 int testRadixPrioritySort();
 
