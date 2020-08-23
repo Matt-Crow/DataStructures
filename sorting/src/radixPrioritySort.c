@@ -5,44 +5,27 @@
 
 
 int testRadixPrioritySort(){
-    //Record* me = newRecord("Matt", "Crow", 22);
-    //printRecord(me);
-    //deleteRecord(me);
-    //me = 0;
-
     Record* allRecords[] = {
         newRecord("Matt", "Crow", 22),
         newRecord("John", "Doe", 18),
         newRecord("Jane", "Doe", 9999999)
     };
+    int numRecords = sizeof(allRecords) / sizeof(Record*);
     enum SortType priorities[] = {
         AGE,
         F_NAME,
         L_NAME
     };
-    for(int i = 0; i < 3; i++){
-        printRecord(allRecords[i]);
-        printf("%s", "\n");
-    }
-    radixPrioritySort(allRecords, 3, priorities, 3);
+    int numPriorities = sizeof(priorities) / sizeof(enum SortType);
+
+    printRecords(allRecords, numRecords);
+    radixPrioritySort(allRecords, numRecords, priorities, numPriorities);
     printf("%s", "After sorting:\n");
-    for(int i = 0; i < 3; i++){
-        printRecord(allRecords[i]);
+    printRecords(allRecords, numRecords);
+    for(int i = 0; i < numRecords; i++){
         deleteRecord(allRecords[i]);
         allRecords[i] = 0;
-        printf("%s", "\n");
     }
-    /*
-    RecordQueue* head = 0;
-    RecordQueue* tail = 0;
-    enqueueRecordQueue(&head, &tail, newRecord("Matt", "Crow", 22));
-    enqueueRecordQueue(&head, &tail, newRecord("John", "Doe", 18));
-    enqueueRecordQueue(&head, &tail, newRecord("Jane", "Doe", 9999999));
-    printRecordQueue(head);
-    deleteRecordQueue(&head, &tail);
-    head = 0;
-    tail = 0;
-    */
     return 0;
 }
 
@@ -63,67 +46,14 @@ void printRecord(Record* record){
         printf("%s", "Record is null");
     }
 }
-
-RecordQueue* newRecordQueue(Record* value){
-    RecordQueue* q = (RecordQueue*)malloc(sizeof(RecordQueue));
-    q->next = 0;
-    q->prev = 0;
-    q->value = value;
-    return q;
-}
-void deleteRecordQueue(RecordQueue** head, RecordQueue** tail){
-    while(*head){
-        printf("%s", "deleting ");
-        printRecord(dequeueRecordQueue(head, tail));
+void printRecords(Record* records[], int recordCount){
+    printf("%s", "RECORDS:");
+    for(int i = 0; i < recordCount; i++){
         printf("%s", "\n");
+        printRecord(records[i]);
     }
+    printf("%s", "\nEND OF RECORDS\n");
 }
-void enqueueRecordQueue(RecordQueue** head, RecordQueue** tail, Record* value){
-    if(head && tail){
-        RecordQueue* newNode = newRecordQueue(value);
-        if(*tail){
-            // has at least 1 node, so append to end
-            (*tail)->next = newNode;
-            newNode->prev = *tail;
-        } else {
-            // tail points to null pointer, so no nodes exist
-            *head = newNode;
-        }
-        *tail = newNode;
-    }
-}
-Record* dequeueRecordQueue(RecordQueue** head, RecordQueue** tail){
-    Record* ret = 0;
-    //                 make sure head doesn't point to null pointer
-    if(head && tail && *head){
-        RecordQueue* temp = *head; // keep track of local head...
-        *head = temp->next; // move external head forward...
-        temp->prev = 0;
-        temp->next = 0; // cut local head off from the other nodes.
-        ret = temp->value; // prepare to return the head's value
-        temp->value = 0; // prevent its value from being deleted
-        free(temp); // deletes the local head
-        if(*head){
-            // check if there were at least 2 nodes. This is the new head.
-            (*head)->prev = 0;
-        } else {
-            // nope, only had one node
-            *tail = 0;
-        }
-    }
-    return ret;
-}
-void printRecordQueue(RecordQueue* head){
-    RecordQueue* curr = head;
-    while(curr){
-        printRecord(curr->value);
-        if(curr->next){
-            printf("%s", " => ");
-        }
-        curr = curr->next;
-    }
-}
-
 
 void radixPrioritySort(Record* records[], int numRecords, enum SortType priorities[], int numPriorities){
     if(numPriorities > 0){
