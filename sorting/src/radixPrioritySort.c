@@ -12,9 +12,9 @@ int testRadixPrioritySort(){
     };
     int numRecords = sizeof(allRecords) / sizeof(Record*);
     enum SortType priorities[] = {
+        L_NAME,
         AGE,
-        F_NAME,
-        L_NAME
+        F_NAME
     };
     int numPriorities = sizeof(priorities) / sizeof(enum SortType);
 
@@ -55,48 +55,57 @@ void printRecords(Record* records[], int recordCount){
     printf("%s", "\nEND OF RECORDS\n");
 }
 
+bool compareFName(Record* r1, Record* r2){
+    return r1->fName > r2->fName;
+}
+bool compareLName(Record* r1, Record* r2){
+    return r1->lName > r2->lName;
+}
+bool compareAge(Record* r1, Record* r2){
+    return r1->age > r2->age;
+}
+
 void radixPrioritySort(Record* records[], int numRecords, enum SortType priorities[], int numPriorities){
     if(numPriorities > 0){
         Record* temp;
+
+        /*
+        C function pointers.
+
+        returns bool
+              function address. Store in variable "comparator"
+                           accepts 2 Record pointers
+        */
+        bool (*comparator)(Record*, Record*);
+
         switch(priorities[numPriorities - 1]){
             case F_NAME: // just do bubble sort, as I am tired
-                for(int i = 0; i < numRecords - 1; i++){
-                    for(int j = 0; j < numRecords - i - 1; j++){
-                        if(records[j]->fName > records[j + 1]->fName){
-                            temp = records[j + 1];
-                            records[j + 1] = records[j];
-                            records[j] = temp;
-                            temp = 0;
-                        }
-                    }
-                }
+                comparator = &compareFName;
                 break;
             case L_NAME:
-                for(int i = 0; i < numRecords - 1; i++){
-                    for(int j = 0; j < numRecords - i - 1; j++){
-                        if(records[j]->lName > records[j + 1]->lName){
-                            temp = records[j + 1];
-                            records[j + 1] = records[j];
-                            records[j] = temp;
-                            temp = 0;
-                        }
-                    }
-                }
+                comparator = &compareLName;
                 break;
             case AGE:
-                for(int i = 0; i < numRecords - 1; i++){
-                    for(int j = 0; j < numRecords - i - 1; j++){
-                        if(records[j]->age > records[j + 1]->age){
-                            temp = records[j + 1];
-                            records[j + 1] = records[j];
-                            records[j] = temp;
-                            temp = 0;
-                        }
-                    }
-                }
+                comparator = &compareAge;
                 break;
             default:
                 printf("Uncaught SortType in radixPrioritySort: %d", priorities[numPriorities - 1]);
+                comparator = 0;
+                break;
+        }
+        if(comparator){
+            for(int i = 0; i < numRecords - 1; i++){
+                for(int j = 0; j < numRecords - i - 1; j++){
+                    //  comparator function
+                    //               pass these arguments
+                    if((*comparator)(records[j], records[j + 1])){
+                        temp = records[j + 1];
+                        records[j + 1] = records[j];
+                        records[j] = temp;
+                        temp = 0;
+                    }
+                }
+            }
         }
         radixPrioritySort(records, numRecords, priorities, numPriorities - 1);
     }
