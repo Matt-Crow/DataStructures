@@ -2,7 +2,34 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-
+/*
+So basically, here's my idea:
+1. Radix sort seems useless for sorting numbers and strings, as it is comparitively slow,
+   takes up a lot of space with queues, and its only advantage is it doesn't make any actual comparisons.
+   Furthermore, the queue based version relies on knowing exactly the range of potential values the input
+   it is sorting may have, as it must allocate 1 queue per potential value.
+2. That got me thinking... What is unique about radix sort?
+   Well, it sorts each digit of the numbers it's given, in order of least to most importance.
+   (sort numbers by ones place, then tens place, then hundreds, etc.).
+   What if radix sort is really about this ascending order of importance, rather than just comparisonless sorting?
+3. So radix sort can be expressed as just a series of sorts, ranging from least important sort to most important sort,
+   where it is typically doing a "ones place sort", followed by a "tens place sort", then a "hundreds place sort", etc.
+4. With that in mind, why does each sort need to be based on the same data type? It doesn't.
+   With this idea of "unimportant sort", "moderately important sort", "important sort",
+   one could sort different data types with each sort!
+5. This is perfect for sorting objects (structs in this case), as normal sorting algorithms can't say
+   "is object A greater than object B?" without assigning a comparable value to A and B.
+   And rather than simply stating "is object A's property C greater than object B's property C?"
+   we can say
+   """
+   first sort the list by property C,
+   then by property D,
+   then by property E,
+   etc
+   """
+   So we can sort objects based on how important each property is!
+   Cool!
+*/
 
 int testRadixPrioritySort(){
     Record* allRecords[] = {
@@ -65,6 +92,10 @@ bool compareAge(Record* r1, Record* r2){
     return r1->age > r2->age;
 }
 
+/*
+Sorts the given list of records based on the priority array.
+The first element of priorities is the most important, with each after it being less and less important
+*/
 void radixPrioritySort(Record* records[], int numRecords, enum SortType priorities[], int numPriorities){
     if(numPriorities > 0){
         Record* temp;
