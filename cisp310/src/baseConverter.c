@@ -12,18 +12,18 @@ const int MAX_BASE = sizeof(ALPHABET) / sizeof(char);
 int testBaseConverter(){
     char ip[MAX_BASE + 1];
     char* sanitized = 0;
-    int from;
-    int to;
+    int from = 10;
+    int to = 2;
     char* op;
     bool keepGoing = true;
 
     while(keepGoing){
         printf("%s", "Enter a number in base 2-16: ");
         fgets(ip, MAX_BASE + 1, stdin);
-        printf("%s", "Enter the base this number is in: ");
-        scanf("%d", &from);
-        printf("%s", "Enter the base to convert to: ");
-        scanf("%d", &to);
+        //printf("%s", "Enter the base this number is in: ");
+        //scanf("%d", &from);
+        //printf("%s", "Enter the base to convert to: ");
+        //scanf("%d", &to);
         sanitized = sanitize(ip);
         op = convert(sanitized, from, to);
         printf("%s in base %d is %s in base %d", sanitized, from, op, to);
@@ -37,11 +37,6 @@ int testBaseConverter(){
         fgets(ip, 3, stdin);
         keepGoing = strcmp(ip, "yes") == 0;
     }
-    /*
-    printf("%s", "Testing base converter...");
-    free(convert("11111111", 2, 10));
-    free(convert("00001111", 2, 10));
-    free(convert("00000000", 2, 10));*/
     return 0;
 }
 
@@ -77,6 +72,7 @@ int intVal(char c){
     return ret;
 }
 
+// this might be wrong, as I don't think I'm returning in base 10 all the time
 int calcIntValue(char ip[], int fromBase){
     int ret = -1;
     if(fromBase <= 1 || fromBase > MAX_BASE){
@@ -87,8 +83,6 @@ int calcIntValue(char ip[], int fromBase){
         int digits = 0;
         unsigned int basePower = 1;
 
-        //TODO need to account for spaces in the number
-        // probably want a sanitizer
         // currently has issues with more than 31 digits, due to integer limits
         while(ip[digits] != '\0'){
             digits++;
@@ -126,12 +120,21 @@ char* convert(char ip[], int fromBase, int toBase){
         printf("I can convert from base %d to base %d\n", fromBase, toBase);
         int intValue = calcIntValue(ip, fromBase);
         printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
-        long maxDigitValue = (long)pow(fromBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base fromBase
-        printf("%d^(%d-1) = %ld\n", fromBase, MAX_DIGITS, maxDigitValue);
+        long long maxDigitValue = (long)pow(fromBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base fromBase
+        printf("%d^(%d-1) = %lld\n", fromBase, MAX_DIGITS, maxDigitValue);
+        int count; // number of maxDigitValues in intValue
         for(int place = 0; place < MAX_DIGITS; place++){
-            ret[place] = ALPHABET[intValue / maxDigitValue];
-            intValue -= (intValue / maxDigitValue) * maxDigitValue;
+            if(maxDigitValue < 0){
+                maxDigitValue = -maxDigitValue;
+            }
+            count = intValue / maxDigitValue;
+            printf("Place is %d\n", place);
+            ret[place] = ALPHABET[count];
+            printf("Ret is %s\n", ret);
+            intValue -= count * maxDigitValue;
+            printf("Int value is %d\n", intValue);
             maxDigitValue /= fromBase;
+            printf("maxDigitValue is %lld\n", maxDigitValue);
         }
     }
     printf("ret is %s\n", ret);
