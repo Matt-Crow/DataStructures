@@ -1,0 +1,26 @@
+CXX = gcc
+CXXFLAGS = -Wall -g
+HEADERS = ./headers
+SRC = ./src
+BIN = ./bin
+OBJ = ./obj
+
+main: main.o baseConverter.o | $(BIN)
+	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
+
+main.o: $(SRC)/main.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/main.c -o $(OBJ)/main.o -I $(HEADERS)
+
+baseConverter.o: $(SRC)/baseConverter.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/baseConverter.c -o $(OBJ)/baseConverter.o -I $(HEADERS)
+
+
+$(BIN):
+	mkdir $(BIN)
+
+$(OBJ):
+	mkdir $(OBJ)
+
+clean:
+	rm -r $(BIN)
+	rm -r $(OBJ)
