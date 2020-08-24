@@ -2,15 +2,69 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<math.h>
+#include<stdbool.h>
 
 const int MAX_DIGITS = 32; // may change this to a parameter to functions later
 const char ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 const int MAX_BASE = sizeof(ALPHABET) / sizeof(char);
 
 int testBaseConverter(){
+    char ip[MAX_BASE + 1];
+    char* sanitized = 0;
+    int from;
+    int to;
+    char* op;
+    bool keepGoing = true;
+
+    while(keepGoing){
+        printf("%s", "Enter a number in base 2-16: ");
+        fgets(ip, MAX_BASE + 1, stdin);
+        printf("%s", "Enter the base this number is in: ");
+        scanf("%d", &from);
+        printf("%s", "Enter the base to convert to: ");
+        scanf("%d", &to);
+        sanitized = sanitize(ip);
+        op = convert(sanitized, from, to);
+        printf("%s in base %d is %s in base %d", sanitized, from, op, to);
+        if(sanitized){
+            free(sanitized);
+            sanitized = 0;
+        }
+        free(op);
+        op = 0;
+        printf("Enter yes to continue: ");
+        fgets(ip, 3, stdin);
+        keepGoing = strcmp(ip, "yes") == 0;
+    }
+    /*
     printf("%s", "Testing base converter...");
-    free(convert("0000000000000000000000000000010", 2, 10));
+    free(convert("11111111", 2, 10));
+    free(convert("00001111", 2, 10));
+    free(convert("00000000", 2, 10));*/
     return 0;
+}
+
+char* sanitize(char* src){
+    int validChars = 0;
+    // count valid chars
+    for(int i = 0; src[i] != '\0'; i++){
+        if(intVal(src[i]) != -1){
+            validChars++;
+        }
+    }
+
+    char* ret = (char*)malloc(sizeof(char) * (validChars + 1));
+    // copy valid chars over
+    int newStrIdx = 0;
+    for(int oldStrIdx = 0; src[oldStrIdx] != '\0'; oldStrIdx++){
+        if(intVal(src[oldStrIdx]) != -1){
+            ret[newStrIdx] = src[oldStrIdx];
+            newStrIdx++;
+        }
+    }
+    ret[validChars] = '\0';
+    return ret;
 }
 
 int intVal(char c){
@@ -72,7 +126,14 @@ char* convert(char ip[], int fromBase, int toBase){
         printf("I can convert from base %d to base %d\n", fromBase, toBase);
         int intValue = calcIntValue(ip, fromBase);
         printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
+        long maxDigitValue = (long)pow(fromBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base fromBase
+        printf("%d^(%d-1) = %ld\n", fromBase, MAX_DIGITS, maxDigitValue);
+        for(int place = 0; place < MAX_DIGITS; place++){
+            ret[place] = ALPHABET[intValue / maxDigitValue];
+            intValue -= (intValue / maxDigitValue) * maxDigitValue;
+            maxDigitValue /= fromBase;
+        }
     }
-    //printf("ret is %s", ret);
+    printf("ret is %s\n", ret);
     return ret;
 }

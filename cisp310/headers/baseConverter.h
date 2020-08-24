@@ -1,6 +1,8 @@
 #ifndef BASE_CONVERTER
 #define BASE_CONVERTER
 
+char* sanitize(char* src);
+
 /*
 Returns the integer
 value of c when it
