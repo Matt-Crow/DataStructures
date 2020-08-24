@@ -35,7 +35,7 @@ int testBaseConverter(){
         op = 0;
         printf("Enter yes to continue: ");
         fgets(ip, 3, stdin);
-        keepGoing = strcmp(ip, "yes") == 0;
+        keepGoing = strcmp(ip, "yes") == 0; // doesn't work, likely because of newline character
     }
     return 0;
 }
@@ -103,9 +103,7 @@ int calcIntValue(char ip[], int fromBase){
 }
 
 char* convert(char ip[], int fromBase, int toBase){
-    char* ret = (char*)malloc(sizeof(char) * (MAX_DIGITS + 1));
-    memset(ret, ALPHABET[0], MAX_DIGITS);
-    ret[MAX_DIGITS] = '\0';
+    char* ret = 0;
 
     if(fromBase <= 1){
         printf("Provided fromBase %d is too low: must be greater than 1\n", fromBase);
@@ -117,11 +115,14 @@ char* convert(char ip[], int fromBase, int toBase){
         printf("Provided toBase %d is to high: must be at most %d\n", toBase, MAX_BASE);
     } else {
         // yay, finally some valid input!
+        ret = (char*)malloc(sizeof(char) * (MAX_DIGITS + 1));
+        memset(ret, ALPHABET[0], MAX_DIGITS);
+        ret[MAX_DIGITS] = '\0';
         printf("I can convert from base %d to base %d\n", fromBase, toBase);
         int intValue = calcIntValue(ip, fromBase);
         printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
-        long long maxDigitValue = (long)pow(fromBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base fromBase
-        printf("%d^(%d-1) = %lld\n", fromBase, MAX_DIGITS, maxDigitValue);
+        long long maxDigitValue = (long)pow(toBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base toBase
+        printf("%d^(%d-1) = %lld\n", toBase, MAX_DIGITS, maxDigitValue);
         int count; // number of maxDigitValues in intValue
         for(int place = 0; place < MAX_DIGITS; place++){
             if(maxDigitValue < 0){
@@ -133,7 +134,7 @@ char* convert(char ip[], int fromBase, int toBase){
             printf("Ret is %s\n", ret);
             intValue -= count * maxDigitValue;
             printf("Int value is %d\n", intValue);
-            maxDigitValue /= fromBase;
+            maxDigitValue /= toBase;
             printf("maxDigitValue is %lld\n", maxDigitValue);
         }
     }
