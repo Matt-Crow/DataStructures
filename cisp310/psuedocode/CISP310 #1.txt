@@ -1,0 +1,24 @@
+ 7845 => "0001111010100101"
+    3 => "0000000000000011"
+49152 => "1100000000000000"
+
+
+
+CREATE input to hold INTEGER
+CREATE output to hold STRING
+CREATE maxDigitValue to hold INTEGER
+CREATE power to hold INTEGER
+CREATE quotient to hold INTEGER
+CREATE remainder to hold INTEGER
+CREATE subtractMe to hold INTEGER
+
+SHOW "enter a decimal number: " on screen
+GET input number from keyboard
+COPY the value into input
+COPY input into remainder
+
+COPY 0 into power
+COPY 1 into maxDigitValue
+WHILE (power is less than 16)
+    MULTIPLY maxDigitValue by 2
+    ADD 1 to power
