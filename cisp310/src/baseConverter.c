@@ -18,7 +18,7 @@ int testBaseConverter(){
     bool keepGoing = true;
 
     while(keepGoing){
-        printf("%s", "Enter a number in base 2-16: ");
+        printf("%s", "Enter a number in base 10: "); //printf("%s", "Enter a number in base 2-16: ");
         fgets(ip, MAX_BASE + 1, stdin);
         //printf("%s", "Enter the base this number is in: ");
         //scanf("%d", &from);
@@ -127,6 +127,7 @@ char* convert(char ip[], int fromBase, int toBase){
 
         // first, convert the input number string to a decimal integer so we can do division and other opertations
         int intValue = calcIntValue(ip, fromBase);
+        // TODO: make sure this does not excede the maximum value. (still need to calculate that)
         printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
 
         // calculate the digits of the new number string in the new base
