@@ -35,7 +35,7 @@ WHILE(maxDigitValue is more than 0)
         APPEND "1" to output
     END IF
     COPY quotient into subtractMe
-    MULTIPLY subtractMe by maxDigitValue
+    MULTIPLY subtractMe by maxDigitValue // subtractMe is now (remainder / maxDigitValue) * maxDigitValue
     SUBTRACT subtractMe from remainder
     DIVIDE maxDigitValue by 2
 END WHILE
