@@ -2,7 +2,7 @@
     3 => "0000000000000011"
 49152 => "1100000000000000"
 
-
+TODO trace this
 
 CREATE input to hold INTEGER
 CREATE output to hold STRING
@@ -15,10 +15,28 @@ CREATE subtractMe to hold INTEGER
 SHOW "enter a decimal number: " on screen
 GET input number from keyboard
 COPY the value into input
-COPY input into remainder
 
 COPY 0 into power
 COPY 1 into maxDigitValue
 WHILE (power is less than 16)
     MULTIPLY maxDigitValue by 2
     ADD 1 to power
+END WHILE
+
+COPY input into remainder
+COPY "" into output
+WHILE(maxDigitValue is more than 0)
+    COPY remainder into quotient
+    DIVIDE quotient by maxDigitValue
+    IF(quotient is same as 0) THEN
+        APPEND "0" to output
+    ELSE
+        APPEND "1" to output
+    END IF
+    COPY quotient into subtractMe
+    MULTIPLY subtractMe by maxDigitValue
+    SUBTRACT subtractMe from remainder
+    DIVIDE maxDigitValue by 2
+END WHILE
+
+SHOW input, " in base 10 is ", output, " in base 2"
