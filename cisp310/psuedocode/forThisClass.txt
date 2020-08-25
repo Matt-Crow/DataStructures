@@ -1,0 +1,44 @@
+Allowed Operations:
+    // comment
+    
+    SHOW one line on screen and move cursor to next line
+        ex. SHOW "message text here" on screen
+
+	GET one piece of data from keyboard into one variable
+        ex. GET input number from keyboard
+            COPY the value into varName
+
+	CREATE variable (REAL, INTEGER, BOOLEAN, STRING)
+        ex. CREATE varName to hold INTEGER
+
+	COPY data into variable
+        ex. COPY "" into varName
+
+	ADD, SUBTRACT, MULTIPLY, DIVIDE two pieces of data into one answer
+        ex.
+            ADD 1 to x
+            SUBTRACT 1 from x
+            MULTIPLY x by 2
+            DIVIDE x by 2
+
+	APPEND two strings into one string
+        ex. APPEND "\n" to line
+
+	compare two pieces of data (IS MORE THAN, IS MORE THAN OR THE SAME AS, IS LESS THAN, IS LESS THAN OR THE SAME AS, IS SAME AS, IS NOT SAME AS)
+
+	use if logic to do one set or some other set of operations, like
+		IF (person_count IS MORE THAN 100) THEN
+
+		ELSE IF (person_count IS MORE THAN 50) THEN
+
+		ELSE
+
+		END IF
+
+	use loop logic to repeat one set of operations, like
+		COPY starting value into user_choice
+		WHILE (user_choice IS NOT SAME AS -99)
+
+
+		   // change value of user_choice somehow
+		END WHILE
