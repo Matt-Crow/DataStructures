@@ -4,24 +4,30 @@
 
 TODO trace this
 
+// first, initialize all variables at the top
 CREATE input to hold INTEGER
 CREATE output to hold STRING
-CREATE maxDigitValue to hold INTEGER
-CREATE power to hold INTEGER
+CREATE maxInput to hold INTEGER
+CREATE maxDigitValue to hold INTEGER // maximum value of any single binary digit
+CREATE power to hold INTEGER //
+// Essentially, 2^power = maxDigitValue
 CREATE quotient to hold INTEGER
 CREATE remainder to hold INTEGER
 CREATE subtractMe to hold INTEGER
 
-SHOW "enter a decimal number: " on screen
-GET input number from keyboard
-COPY the value into input
-
+// next, compute the maximum value the user can enter.
+COPY 0 into maxInput
 COPY 0 into power
 COPY 1 into maxDigitValue
-WHILE (power is less than 16)
-    MULTIPLY maxDigitValue by 2
+WHILE(power is less than 16)
+    ADD maxDigitValue to maxInput
     ADD 1 to power
+    MULTIPLY maxDigitValue by 2
 END WHILE
+
+SHOW "enter a decimal number between 0 and ", maxInput, ": " on screen
+GET input number from keyboard
+COPY the value into input
 
 COPY input into remainder
 COPY "" into output
