@@ -2,6 +2,7 @@
 #include "baseConverter.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 int testBinary(){
     int ip1;
@@ -47,12 +48,13 @@ char* binaryAdd(char* binString1, char* binString2){
     int val1;
     int val2;
     int sum;
-    for(int i = MAX_DIGITS; i >= 0; i--){
+    for(int i = MAX_DIGITS - 1; i >= 0; i--){
         val1 = (binString1[i] == '0') ? 0 : 1;
         val2 = (binString2[i] == '0') ? 0 : 1;
         sum = val1 + val2 + carryBit;
         sumBit = sum % 2;
         carryBit = sum / 2;
+        //printf("%c + %c + %d = sum %d, carry %d\n", binString1[i], binString2[i], carryBit, sumBit, carryBit);
         ret[i] = ALPHABET[sumBit];
     }
 

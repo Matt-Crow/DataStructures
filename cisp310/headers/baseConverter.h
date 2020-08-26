@@ -1,9 +1,10 @@
 #ifndef BASE_CONVERTER
 #define BASE_CONVERTER
 
-const int MAX_DIGITS = 32; // may change this to a parameter to functions later
-const char ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-const int MAX_BASE = sizeof(ALPHABET) / sizeof(char);
+//https://stackoverflow.com/questions/17764661/multiple-definition-of-linker-error
+extern const int MAX_DIGITS;
+extern const char ALPHABET[];
+extern const int MAX_BASE;
 
 char* sanitize(char* src);
 
