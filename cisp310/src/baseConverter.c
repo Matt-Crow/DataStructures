@@ -106,6 +106,30 @@ int calcIntValue(char ip[], int fromBase){
     return ret;
 }
 
+char* decimalIntToBase(int decimalValue, int toBase){
+    char* ret = 0;
+    // create the number string to return, padded with 0s
+    ret = (char*)malloc(sizeof(char) * (MAX_DIGITS + 1));
+    memset(ret, ALPHABET[0], MAX_DIGITS);
+    ret[MAX_DIGITS] = '\0';
+
+    // calculate the digits of the new number string in the new base
+    long long maxDigitValue = (long)pow(toBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base toBase
+    int count; // number of maxDigitValues in decimalValue
+    for(int place = 0; place < MAX_DIGITS; place++){
+        if(maxDigitValue < 0){
+            maxDigitValue = -maxDigitValue; // I was having issues with the sign flipping, probably due to integer overflow,
+            // but that was when I had another bug, so I'm not sure if this is needed anymore
+        }
+        count = decimalValue / maxDigitValue; // "how many (toBase)^(MAX_DIGITS - 1 - place) are there in decimalValue?"
+        ret[place] = ALPHABET[count]; // I don't think this will pose a problem, so long as nobody enters some number like 16^33
+        decimalValue -= count * maxDigitValue; // there are [count] maxDigitValues in decimalValue, so this is (decimalValue / maxDigitValue) * maxDigitValue
+        // which gives the whole number of maxDigitValues in decimalValue.
+        maxDigitValue /= toBase; // move to the next digit of the output base number system.
+    }
+    return ret;
+}
+
 char* convert(char ip[], int fromBase, int toBase){
     char* ret = 0;
     // may want to move this somewhere else
@@ -119,31 +143,11 @@ char* convert(char ip[], int fromBase, int toBase){
         printf("Provided toBase %d is to high: must be at most %d\n", toBase, MAX_BASE);
     } else {
         // yay, finally some valid input!
-
-        // create the number string to return, padded with 0s
-        ret = (char*)malloc(sizeof(char) * (MAX_DIGITS + 1));
-        memset(ret, ALPHABET[0], MAX_DIGITS);
-        ret[MAX_DIGITS] = '\0';
-
         // first, convert the input number string to a decimal integer so we can do division and other opertations
         int intValue = calcIntValue(ip, fromBase);
         // TODO: make sure this does not excede the maximum value. (still need to calculate that)
         printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
-
-        // calculate the digits of the new number string in the new base
-        long long maxDigitValue = (long)pow(toBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base toBase
-        int count; // number of maxDigitValues in intValue
-        for(int place = 0; place < MAX_DIGITS; place++){
-            if(maxDigitValue < 0){
-                maxDigitValue = -maxDigitValue; // I was having issues with the sign flipping, probably due to integer overflow,
-                // but that was when I had another bug, so I'm not sure if this is needed anymore
-            }
-            count = intValue / maxDigitValue; // "how many (toBase)^(MAX_DIGITS - 1 - place) are there in intValue?"
-            ret[place] = ALPHABET[count]; // I don't think this will pose a problem, so long as nobody enters some number like 16^33
-            intValue -= count * maxDigitValue; // there are [count] maxDigitValues in intValue, so this is (intValue / maxDigitValue) * maxDigitValue
-            // which gives the whole number of maxDigitValues in intValue.
-            maxDigitValue /= toBase; // move to the next digit of the output base number system.
-        }
+        ret = decimalIntToBase(intValue, toBase);
     }
     return ret;
 }

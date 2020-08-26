@@ -17,6 +17,8 @@ base fromBase) to a decimal integer.
 */
 int calcIntValue(char ip[], int fromBase);
 
+char* decimalIntToBase(int decimalValue, int toBase);
+
 /*
 Converts the given number string from the first base
 to the second. Note the returned value is allocated on
