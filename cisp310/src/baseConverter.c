@@ -14,7 +14,7 @@ int testBaseConverter(){
     char* sanitized = 0;
     int from = 10;
     int to = 2;
-    char* op;
+    char* op = 0;
     bool keepGoing = true;
 
     while(keepGoing){
@@ -22,8 +22,8 @@ int testBaseConverter(){
         fgets(ip, MAX_BASE + 1, stdin);
         //printf("%s", "Enter the base this number is in: ");
         //scanf("%d", &from);
-        //printf("%s", "Enter the base to convert to: ");
-        //scanf("%d", &to);
+        printf("%s", "Enter the base to convert to: ");
+        scanf("%d", &to);
         sanitized = sanitize(ip);
         op = convert(sanitized, from, to);
         printf("%s in base %d is %s in base %d\n", sanitized, from, op, to);
@@ -117,6 +117,7 @@ char* decimalIntToBase(int decimalValue, int toBase){
     long long maxDigitValue = (long)pow(toBase, MAX_DIGITS - 1); //the largest value of a single digit of a number in base toBase
     int count; // number of maxDigitValues in decimalValue
     for(int place = 0; place < MAX_DIGITS; place++){
+
         if(maxDigitValue < 0){
             maxDigitValue = -maxDigitValue; // I was having issues with the sign flipping, probably due to integer overflow,
             // but that was when I had another bug, so I'm not sure if this is needed anymore
@@ -126,6 +127,8 @@ char* decimalIntToBase(int decimalValue, int toBase){
         decimalValue -= count * maxDigitValue; // there are [count] maxDigitValues in decimalValue, so this is (decimalValue / maxDigitValue) * maxDigitValue
         // which gives the whole number of maxDigitValues in decimalValue.
         maxDigitValue /= toBase; // move to the next digit of the output base number system.
+
+        printf("%s | %lld | %d | %d\n", ret, maxDigitValue, count, decimalValue);
     }
     return ret;
 }
@@ -146,7 +149,7 @@ char* convert(char ip[], int fromBase, int toBase){
         // first, convert the input number string to a decimal integer so we can do division and other opertations
         int intValue = calcIntValue(ip, fromBase);
         // TODO: make sure this does not excede the maximum value. (still need to calculate that)
-        printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
+        //printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
         ret = decimalIntToBase(intValue, toBase);
     }
     return ret;

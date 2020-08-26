@@ -1,4 +1,5 @@
 *.o
 *.exe
 *.docx
+*.stackdump
 dataStorage/bin/main
