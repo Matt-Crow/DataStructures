@@ -38,8 +38,14 @@ int testBaseConverter(){
     char* asBin = hexStrToBinStr(asHex);
     printf("%s is %s is %s\n", ip, asHex, asBin);
     deleteHex(&asHex);
+
+    asHex = binStrToHexStr(asBin);
+    printf("And back to hex again: %s\n", asHex);
+    deleteHex(&asHex);
     free(asBin);
     asBin = 0;
+
+
 
     /*
     char ip[MAX_BASE + 1];
@@ -197,6 +203,16 @@ const char* hexCharToBinStr(char c){
         return HEX_TO_BIN_TABLE[idx];
     }
 }
+char binChunkToHexChar(char* chunk){
+    char ret = ' ';
+    // search for chunk in the HEX_TO_BIN_TABLE
+    for(int i = 0; i < HEX_ALPHABET_SIZE && ret == ' '; i++){
+        if(strcmp(chunk, HEX_TO_BIN_TABLE[i]) == 0){
+            ret = HEX_ALPHABET[i];
+        }
+    }
+    return ret;
+}
 
 char* hexStrToBinStr(char* hexStr){
     char* ret = 0;
@@ -223,4 +239,39 @@ char* hexStrToBinStr(char* hexStr){
         hexStrIdx--;
     }
     return ret;
+}
+
+char* binStrToHexStr(char* binStr){
+    char* hexStr = newHex();
+    char chunk[5] = {'0', '0', '0', '0', '\0'};
+    int hexStrIdx = HEX_LEN - 1;
+    int binStrIdx = MAX_DIGITS - 1;
+
+    while(hexStrIdx >= 0 && binStrIdx >= 0){
+        // gather the chunks in reverse order.
+        memset(chunk, '0', 4); // wipe the previous chunk, setting all bits to 0
+        /*
+        Gather up to four bits from binStr. Note that
+        if binStr is formatted incorrectly as strlen(binStr) % 4 != 0,
+        since we set all bits of the chunk to zero, and fill the chunk
+        backwards, we'll be fine:
+        binStr 01101110 will chunk as 0110 and 1110, as it can be fully chunked properly
+        while   1101110 (only 7 digits) will produce it's second chunk first as 1110, but only has 3 bits left: not a whole chunk
+        BUT memset sets the chunk to 0000, and each iteration will go as follows: (values are prior to iteration)
+        i | binStrIdx | chunk | binStr (from 0 to binStrIdx)
+        0 | 2         | 0000  | 110
+        1 | 1         | 0000  | 11
+        2 | 0         | 0010  | 1
+        3 | -1        | 0110  | \0
+        So it breaks out of the loop, but, hey look! Complete and correct chunk!
+        */
+        for(int i = 0; i < 4 && binStrIdx >= 0; i++){ // fill as much as possible. Missing chunk pieces will be '0'
+            chunk[3 - i] = binStr[binStrIdx];
+            binStrIdx--;
+            //printf("Chunk is %s\n", chunk);
+        }
+        hexStr[hexStrIdx] = binChunkToHexChar(chunk);
+        hexStrIdx--;
+    }
+    return hexStr;
 }

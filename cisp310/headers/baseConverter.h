@@ -33,7 +33,9 @@ the heap, and must therefore be manually freed.
 char* convert(char ip[], int fromBase, int toBase);
 
 const char* hexCharToBinStr(char c);
+char binChunkToHexChar(char* chunk);
 char* hexStrToBinStr(char* hexStr);
+char* binStrToHexStr(char* binStr);
 
 int testBaseConverter();
 
