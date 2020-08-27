@@ -5,11 +5,11 @@
 #include<stdio.h>
 
 int main(){
-    //int convertStatus = testBaseConverter();
-    //printf("Converter returned %d\n", convertStatus);
+    int convertStatus = testBaseConverter();
+    printf("Converter returned %d\n", convertStatus);
     //int binaryStatus = testBinary();
     //printf("Binary returned %d\n", binaryStatus);
-    int hexStatus = testHex();
-    printf("Hexadecimal returned %d\n", hexStatus);
+    //int hexStatus = testHex();
+    //printf("Hexadecimal returned %d\n", hexStatus);
     return 0;
 }

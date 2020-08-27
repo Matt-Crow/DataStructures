@@ -11,6 +11,7 @@ const char HEX_ALPHABET[] = {
     '8', '9', 'a', 'b',
     'c', 'd', 'e', 'f'
 }; // 0-15 in hex
+
 const int HEX_ALPHABET_SIZE = sizeof(HEX_ALPHABET) / sizeof(char);
 
 int hexIdx(char c){
@@ -32,7 +33,7 @@ char* newHex(){
 char* toHexStr(char* str){
     char* ret = newHex();
     int rawStrLen = strlen(str);
-    printf("%s is %d long\n", str, rawStrLen);
+    //printf("%s is %d long\n", str, rawStrLen);
     int rawStrIdx = rawStrLen - 1; // start at the end of the old string
     int retStrIdx = HEX_LEN - 1; // and at the back of the new string
     int hexI;

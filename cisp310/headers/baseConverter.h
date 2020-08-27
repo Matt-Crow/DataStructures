@@ -5,6 +5,7 @@
 extern const int MAX_DIGITS;
 extern const char ALPHABET[];
 extern const int MAX_BASE;
+extern const char* HEX_TO_BIN_TABLE[];
 
 char* sanitize(char* src);
 
@@ -30,6 +31,9 @@ to the second. Note the returned value is allocated on
 the heap, and must therefore be manually freed.
 */
 char* convert(char ip[], int fromBase, int toBase);
+
+const char* hexCharToBinStr(char c);
+char* hexStrToBinStr(char* hexStr);
 
 int testBaseConverter();
 

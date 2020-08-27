@@ -1,4 +1,5 @@
 #include "baseConverter.h"
+#include "hexadecimal.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -8,8 +9,39 @@
 const int MAX_DIGITS = 32; // may change this to a parameter to functions later
 const char ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 const int MAX_BASE = sizeof(ALPHABET) / sizeof(char);
+const char* HEX_TO_BIN_TABLE[] = {
+    "0000",
+    "0001",
+    "0010",
+    "0011",
+    "0100",
+    "0101",
+    "0110",
+    "0111",
+    "1000",
+    "1001",
+    "1010",
+    "1011",
+    "1100",
+    "1101",
+    "1110",
+    "1111"
+}; // ew. Don't like this
+
+
 
 int testBaseConverter(){
+    char ip[100];
+    printf("%s", "Enter hex string: ");
+    gets(ip);
+    char* asHex = toHexStr(ip);
+    char* asBin = hexStrToBinStr(asHex);
+    printf("%s is %s is %s\n", ip, asHex, asBin);
+    deleteHex(&asHex);
+    free(asBin);
+    asBin = 0;
+
+    /*
     char ip[MAX_BASE + 1];
     char* sanitized = 0;
     int from = 10;
@@ -37,11 +69,11 @@ int testBaseConverter(){
         }
 
         keepGoing = false;
-        /*
+
         printf("Enter yes to continue: ");
         fgets(ip, 3, stdin);
-        keepGoing = strcmp(ip, "yes") == 0; // doesn't work, likely because of newline character*/
-    }
+        keepGoing = strcmp(ip, "yes") == 0; // doesn't work, likely because of newline character
+    }*/
     return 0;
 }
 
@@ -151,6 +183,44 @@ char* convert(char ip[], int fromBase, int toBase){
         // TODO: make sure this does not excede the maximum value. (still need to calculate that)
         //printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
         ret = decimalIntToBase(intValue, toBase);
+    }
+    return ret;
+}
+
+// don't like this, but I have to, as HEX_TO_BIN_TABLE is const
+const char* hexCharToBinStr(char c){
+    int idx = hexIdx(c);
+    if(idx == -1){
+        printf("Warning: Invalid hex character '%c'\n", c);
+        return 0;
+    } else {
+        return HEX_TO_BIN_TABLE[idx];
+    }
+}
+
+char* hexStrToBinStr(char* hexStr){
+    char* ret = 0;
+    // create the number string to return, padded with 0s
+    ret = (char*)malloc(sizeof(char) * (MAX_DIGITS + 1));
+    memset(ret, ALPHABET[0], MAX_DIGITS);
+    ret[MAX_DIGITS] = '\0';
+    // process from right to left
+    int hexStrIdx = HEX_LEN - 1;
+    int binStrIdx = MAX_DIGITS - 1;
+    int hexI; // hex char idx
+    while(hexStrIdx >= 0 && binStrIdx >= 0){
+        hexI = hexIdx(hexStr[hexStrIdx]);
+        if(hexI == -1){
+            printf("Warning: Invalid hex char '%c'\n", hexStr[hexStrIdx]);
+        } else {
+            const char* copyMeOver = HEX_TO_BIN_TABLE[hexI];
+            for(int i = strlen(copyMeOver) - 1; i >= 0; i--){
+                ret[binStrIdx] = copyMeOver[i];
+                binStrIdx--;
+                printf("%s\n", ret);
+            }
+        }
+        hexStrIdx--;
     }
     return ret;
 }
