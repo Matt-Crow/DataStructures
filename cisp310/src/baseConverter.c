@@ -1,14 +1,15 @@
 #include "baseConverter.h"
 #include "hexadecimal.h"
+#include "binary.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<math.h>
 #include<stdbool.h>
 
-const int MAX_DIGITS = 32; // may change this to a parameter to functions later
-const char ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-const int MAX_BASE = sizeof(ALPHABET) / sizeof(char);
+//const int MAX_DIGITS = 32; // may change this to a parameter to functions later
+//const char ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+//const int MAX_BASE = sizeof(ALPHABET) / sizeof(char);
 const char* HEX_TO_BIN_TABLE[] = {
     "0000",
     "0001",
@@ -62,7 +63,7 @@ int testBaseConverter(){
         //scanf("%d", &from);
         printf("%s", "Enter the base to convert to: ");
         scanf("%d", &to);
-        sanitized = sanitize(ip);
+        sanitized = sanitize(ip); // change this to toBinStr or toHexStr, based on what base the user chooses to convert from
         op = convert(sanitized, from, to);
         printf("%s in base %d is %s in base %d\n", sanitized, from, op, to);
         if(sanitized){
@@ -83,38 +84,7 @@ int testBaseConverter(){
     return 0;
 }
 
-char* sanitize(char* src){
-    int validChars = 0;
-    // count valid chars
-    for(int i = 0; src[i] != '\0'; i++){
-        if(intVal(src[i]) != -1){
-            validChars++;
-        }
-    }
-
-    char* ret = (char*)malloc(sizeof(char) * (validChars + 1));
-    // copy valid chars over
-    int newStrIdx = 0;
-    for(int oldStrIdx = 0; src[oldStrIdx] != '\0'; oldStrIdx++){
-        if(intVal(src[oldStrIdx]) != -1){
-            ret[newStrIdx] = src[oldStrIdx];
-            newStrIdx++;
-        }
-    }
-    ret[validChars] = '\0';
-    return ret;
-}
-
-int intVal(char c){
-    int ret = -1;
-    for(int i = 0; i < MAX_BASE && ret == -1; i++){
-        if(ALPHABET[i] == c){
-            ret = i;
-        }
-    }
-    return ret;
-}
-
+/*
 int calcIntValue(char ip[], int fromBase){
     int ret = -1;
     if(fromBase <= 1 || fromBase > MAX_BASE){
@@ -143,7 +113,9 @@ int calcIntValue(char ip[], int fromBase){
     }
     return ret;
 }
+*/
 
+/*
 char* decimalIntToBase(int decimalValue, int toBase){
     char* ret = 0;
     // create the number string to return, padded with 0s
@@ -185,13 +157,13 @@ char* convert(char ip[], int fromBase, int toBase){
     } else {
         // yay, finally some valid input!
         // first, convert the input number string to a decimal integer so we can do division and other opertations
-        int intValue = calcIntValue(ip, fromBase);
+        int intValue = calcIntValue(ip, fromBase); // need to move this somewhere else
         // TODO: make sure this does not excede the maximum value. (still need to calculate that)
         //printf("%s in base %d is %d in base 10\n", ip, fromBase, intValue);
         ret = decimalIntToBase(intValue, toBase);
     }
     return ret;
-}
+}*/
 
 // don't like this, but I have to, as HEX_TO_BIN_TABLE is const
 const char* hexCharToBinStr(char c){
@@ -215,14 +187,11 @@ char binChunkToHexChar(char* chunk){
 }
 
 char* hexStrToBinStr(char* hexStr){
-    char* ret = 0;
-    // create the number string to return, padded with 0s
-    ret = (char*)malloc(sizeof(char) * (MAX_DIGITS + 1));
-    memset(ret, ALPHABET[0], MAX_DIGITS);
-    ret[MAX_DIGITS] = '\0';
+    char* ret = newBinStr();
+
     // process from right to left
     int hexStrIdx = HEX_LEN - 1;
-    int binStrIdx = MAX_DIGITS - 1;
+    int binStrIdx = SYS_ARCH - 1;
     int hexI; // hex char idx
     while(hexStrIdx >= 0 && binStrIdx >= 0){
         hexI = hexIdx(hexStr[hexStrIdx]);
@@ -245,7 +214,7 @@ char* binStrToHexStr(char* binStr){
     char* hexStr = newHex();
     char chunk[5] = {'0', '0', '0', '0', '\0'};
     int hexStrIdx = HEX_LEN - 1;
-    int binStrIdx = MAX_DIGITS - 1;
+    int binStrIdx = SYS_ARCH - 1;
 
     while(hexStrIdx >= 0 && binStrIdx >= 0){
         // gather the chunks in reverse order.

@@ -10,6 +10,8 @@ char* newHex();
 char* toHexStr(char* str);
 int deleteHex(char** hexStr);
 
+int hexStrToInt(char* hexStr);
+
 int testHex();
 
 #endif

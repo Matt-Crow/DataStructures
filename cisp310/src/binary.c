@@ -4,6 +4,10 @@
 #include<stdlib.h>
 #include<string.h>
 
+const int SYS_ARCH = 32; // may change this to a parameter later
+const char BIN_ALPHABET[] = {'0', '1'};
+const int BIN_ALPHABET_SIZE = sizeof(BIN_ALPHABET) / sizeof(char);
+
 int testBinary(){
     int ip1;
     int ip2;
@@ -37,25 +41,97 @@ int testBinary(){
     return 0;
 }
 
+int binCharToInt(char binChar){
+    int ret = -1;
+    for(int i = 0; i < BIN_ALPHABET_SIZE && ret == -1; i++){
+        if(binChar == BIN_ALPHABET[i]){
+            ret = i;
+        }
+    }
+    return ret;
+}
+
+char* newBinStr(){
+    char* ret = (char*)malloc(sizeof(char) * (SYS_ARCH + 1));
+    memset(ret, BIN_ALPHABET[0], SYS_ARCH);
+    ret[SYS_ARCH] = '\0';
+    return ret;
+}
+
+char* toBinStr(char* cString){
+    char* binStr = newBinStr();
+    int cStringIdx = strlen(cString) - 1;
+    int binStrIdx = SYS_ARCH - 1;
+    int binCharIdx = -1;
+    while(cStringIdx >= 0 && binStrIdx >= 0){
+        binCharIdx = binCharToInt(cString[cStringIdx]);
+        if(binCharIdx == -1){
+            printf("Warning: invalid binary character '%c'\n", cString[cStringIdx]);
+        } else {
+            binStr[binStrIdx] = BIN_ALPHABET[binCharIdx];
+            binStrIdx--;
+        }
+        cStringIdx--;
+    }
+    return binStr;
+}
+
+char* intToBinStr(int val){
+    char* ret = newBinStr();
+    int maxDigitValue = 1;
+    for(int i = 0; i < SYS_ARCH; i++){
+        maxDigitValue *= 2;
+    }
+    maxDigitValue /= 2; // The value of the lefternmost bit is either 0 or 2^(SYS_ARCH - 1)
+    int count;
+    while(maxDigitValue > 0){
+        
+    }
+    return ret;
+}
+
+int deleteBinStr(char** binStr){
+    int wasDel = 0;
+    if(binStr && *binStr){ // neither the null pointer, nor a pointer to it
+        free(*binStr);
+        *binStr = 0;
+        wasDel = 1;
+    }
+    return wasDel;
+}
+
+int binStrToInt(char* binStr){
+    int ret = 0;
+    int basePower = 1; // starts at 2^0
+    int intVal = -1;
+    for(int idx = SYS_ARCH - 1; idx >= 0; idx--){
+        intVal = binCharToInt(binStr[idx]);
+        if(intVal == -1){
+            printf("Invalid binary string character: '%c'\n", binStr[idx]);
+        } else {
+            ret += basePower * intVal;
+        }
+        basePower *= 2; // increase power by 1 as we move to the left by 1 bit
+    }
+    return ret;
+}
+
 char* binaryAdd(char* binString1, char* binString2){
-    // probably create function for this later
-    char* ret = (char*)malloc(sizeof(char) * (MAX_DIGITS + 1));
-    memset(ret, ALPHABET[0], MAX_DIGITS);
-    ret[MAX_DIGITS] = '\0';
+    char* ret = newBinStr();
 
     int sumBit = 0;
     int carryBit = 0;
     int val1;
     int val2;
     int sum;
-    for(int i = MAX_DIGITS - 1; i >= 0; i--){
+    for(int i = SYS_ARCH - 1; i >= 0; i--){
         val1 = (binString1[i] == '0') ? 0 : 1;
         val2 = (binString2[i] == '0') ? 0 : 1;
         sum = val1 + val2 + carryBit;
         sumBit = sum % 2;
         carryBit = sum / 2;
         //printf("%c + %c + %d = sum %d, carry %d\n", binString1[i], binString2[i], carryBit, sumBit, carryBit);
-        ret[i] = ALPHABET[sumBit];
+        ret[i] = BIN_ALPHABET[sumBit];
     }
 
     if(carryBit == 1){
