@@ -2,18 +2,6 @@
 #define BINARY
 
 /*
-The system archetecture,
-dictating how many bits
-will be stored in a binary
-string. This is usually
-
-(2^n) * 8 for some integer
-n 0, 1, or 2
-
-*/
-extern const int SYS_ARCH;
-
-/*
 Character array, just '0' and '1'.
 Used to convert ints to chars
 */
@@ -33,6 +21,8 @@ to its integer value, or -1 if
 the given character is invalid
 */
 int binCharToInt(char binChar);
+
+char intToBinChar(int i);
 
 /*
 Creates a new binary string.

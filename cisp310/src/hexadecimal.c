@@ -1,10 +1,13 @@
+#include "base.h"
 #include "hexadecimal.h"
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
 #include<stdio.h>
 
-const int HEX_LEN = 8; // need to calculate this based on max integer and system archetecture
+const int HEX_LEN = 8; // this doesn't work SYS_ARCH / 4; // need to calculate this based on max integer and system archetecture
+// each hex char takes up 4 bits
+
 const char HEX_ALPHABET[] = {
     '0', '1', '2', '3',
     '4', '5', '6', '7',
@@ -15,15 +18,14 @@ const char HEX_ALPHABET[] = {
 const int HEX_ALPHABET_SIZE = sizeof(HEX_ALPHABET) / sizeof(char);
 
 int hexIdx(char c){
-    int ret = -1;
-    c = tolower(c);
-    for(int i = 0; i < HEX_ALPHABET_SIZE && ret == -1; i++){
-        if(c == HEX_ALPHABET[i]){
-            ret = i;
-        }
-    }
-    return ret;
+    return charToInt(c, HEX_ALPHABET, HEX_ALPHABET_SIZE);
 }
+char intToHexChar(int i){
+    return intToChar(i, HEX_ALPHABET, HEX_ALPHABET_SIZE);
+}
+
+
+
 char* newHex(){
     char* ret = (char*)malloc(sizeof(char) * (HEX_LEN + 1));
     memset(ret, HEX_ALPHABET[0], HEX_LEN);

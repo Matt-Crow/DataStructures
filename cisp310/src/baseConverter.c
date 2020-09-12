@@ -1,6 +1,7 @@
 #include "baseConverter.h"
 #include "hexadecimal.h"
 #include "binary.h"
+#include "base.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>

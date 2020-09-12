@@ -1,10 +1,10 @@
+#include "base.h"
 #include "binary.h"
 #include "baseConverter.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
-const int SYS_ARCH = 32; // may change this to a parameter later
 const char BIN_ALPHABET[] = {'0', '1'};
 const int BIN_ALPHABET_SIZE = sizeof(BIN_ALPHABET) / sizeof(char);
 
@@ -42,14 +42,13 @@ int testBinary(){
 }
 
 int binCharToInt(char binChar){
-    int ret = -1;
-    for(int i = 0; i < BIN_ALPHABET_SIZE && ret == -1; i++){
-        if(binChar == BIN_ALPHABET[i]){
-            ret = i;
-        }
-    }
-    return ret;
+    return charToInt(binChar, BIN_ALPHABET, BIN_ALPHABET_SIZE);
 }
+char intToBinChar(int i){
+    return intToChar(i, BIN_ALPHABET, BIN_ALPHABET_SIZE);
+}
+
+
 
 char* newBinStr(){
     char* ret = (char*)malloc(sizeof(char) * (SYS_ARCH + 1));
