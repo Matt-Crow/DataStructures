@@ -5,7 +5,7 @@ SRC = ./src
 BIN = ./bin
 OBJ = ./obj
 
-main: main.o baseConverter.o binary.o hexadecimal.o | $(BIN)
+main: main.o baseConverter.o binary.o hexadecimal.o base.o | $(BIN)
 	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
 
 main.o: $(SRC)/main.c | $(OBJ)
@@ -19,6 +19,9 @@ binary.o: $(SRC)/binary.c | $(OBJ)
 
 hexadecimal.o: $(SRC)/hexadecimal.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/hexadecimal.c -o $(OBJ)/hexadecimal.o -I $(HEADERS)
+
+base.o : $(SRC)/base.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/base.c -o $(OBJ)/base.o -I $(HEADERS)
 
 $(BIN):
 	mkdir $(BIN)

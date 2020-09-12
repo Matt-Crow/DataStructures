@@ -21,8 +21,8 @@ int testBinary(){
     scanf("%d", &ip2);
     printf("%d + %d = %d (in decimal)\n", ip1, ip2, ip1 + ip2);
 
-    binStr1 = decimalIntToBase(ip1, 2);
-    binStr2 = decimalIntToBase(ip2, 2);
+    binStr1 = intToBinStr(ip1);//decimalIntToBase(ip1, 2);
+    binStr2 = intToBinStr(ip2);//decimalIntToBase(ip2, 2);
     result = binaryAdd(binStr1, binStr2);
     printf("%s + %s = %s (in binary)\n", binStr1, binStr2, result);
 
@@ -85,7 +85,7 @@ char* intToBinStr(int val){
     maxDigitValue /= 2; // The value of the lefternmost bit is either 0 or 2^(SYS_ARCH - 1)
     int count;
     while(maxDigitValue > 0){
-        
+
     }
     return ret;
 }
