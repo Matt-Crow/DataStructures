@@ -35,24 +35,12 @@ char* toHexStr(char* str){
     return parseStr(str, &newHex, &hexIdx, &intToHexChar);
 }
 
-
-
-
 int hexStrToInt(char* hexStr){
-    int ret = 0;
-    int basePower = 1; // starts at 16^0
-    int intVal = -1;
-    for(int idx = HEX_LEN - 1; idx >= 0; idx--){
-        intVal = hexIdx(hexStr[idx]);
-        if(intVal == -1){
-            printf("Invalid hexadecimal string character: '%c'\n", hexStr[idx]);
-        } else {
-            ret += basePower * intVal;
-        }
-        basePower *= 16; // increase power by 1 as we move to the left by 1 bit
-    }
-    return ret;
+    return strToInt(hexStr, HEX_ALPHABET_SIZE, &hexIdx);
 }
+
+
+
 
 int testHex(){
     char* strs[] = {

@@ -50,18 +50,17 @@ value is heap allocated.
 */
 char* toBinStr(char* cString);
 
+/*
+Calculates the integer value of
+the given binary string.
+*/
+int binStrToInt(char* binStr);
 
 
 
 
 
 char* intToBinStr(int val);
-
-/*
-Calculates the integer value of
-the given binary string.
-*/
-int binStrToInt(char* binStr);
 
 char* binaryAdd(char* binString1, char* binString2);
 

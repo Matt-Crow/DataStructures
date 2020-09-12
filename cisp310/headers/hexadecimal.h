@@ -13,10 +13,9 @@ int deleteHex(char** hexStr);
 
 char* toHexStr(char* str);
 
-
-
-
 int hexStrToInt(char* hexStr);
+
+
 
 int testHex();
 

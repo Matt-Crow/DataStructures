@@ -59,3 +59,23 @@ char* parseStr(char* str, char* initializer(), int charToIdxFunc(char), char int
     }
     return ret;
 }
+
+// todo: add conversion for signed values
+int strToInt(char* str, int base, int intVal(char)){
+    int ret = 0;
+    int n = 0;
+    int baseToTheN = 1;
+    int alphabetIdx = -1;
+    int start = strlen(str) - 1;
+    for(int idx = start; idx >= 0; idx--){
+        alphabetIdx = intVal(str[idx]);
+        if(alphabetIdx == -1){
+            printf("Warning: invalid character '%c'\n", str[idx]);
+        } else {
+            ret += baseToTheN * alphabetIdx;
+        }
+        n++;
+        baseToTheN *= base;
+    }
+    return ret;
+}

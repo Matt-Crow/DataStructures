@@ -18,5 +18,6 @@ char* newStr(int length, char defaultChar);
 int delStr(char** str);
 
 char* parseStr(char* str, char* initializer(), int charToIdxFunc(char), char intToCharFunc(int));
+int strToInt(char* str, int base, int intVal(char));
 
 #endif

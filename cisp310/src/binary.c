@@ -59,6 +59,10 @@ char* toBinStr(char* cString){
     return parseStr(cString, &newBinStr, &binCharToInt, &intToBinChar);
 }
 
+int binStrToInt(char* binStr){
+    return strToInt(binStr, BIN_ALPHABET_SIZE, &binCharToInt);
+}
+
 
 
 
@@ -76,21 +80,7 @@ char* intToBinStr(int val){
     return ret;
 }
 
-int binStrToInt(char* binStr){
-    int ret = 0;
-    int basePower = 1; // starts at 2^0
-    int intVal = -1;
-    for(int idx = SYS_ARCH - 1; idx >= 0; idx--){
-        intVal = binCharToInt(binStr[idx]);
-        if(intVal == -1){
-            printf("Invalid binary string character: '%c'\n", binStr[idx]);
-        } else {
-            ret += basePower * intVal;
-        }
-        basePower *= 2; // increase power by 1 as we move to the left by 1 bit
-    }
-    return ret;
-}
+
 
 char* binaryAdd(char* binString1, char* binString2){
     char* ret = newBinStr();
