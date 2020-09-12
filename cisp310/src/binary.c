@@ -55,24 +55,12 @@ int deleteBinStr(char** binStr){
     return delStr(binStr);
 }
 
-
 char* toBinStr(char* cString){
-    char* binStr = parseStr(cString, &newBinStr);//newBinStr();
-    int cStringIdx = strlen(cString) - 1;
-    int binStrIdx = SYS_ARCH - 1;
-    int binCharIdx = -1;
-    while(cStringIdx >= 0 && binStrIdx >= 0){
-        binCharIdx = binCharToInt(cString[cStringIdx]);
-        if(binCharIdx == -1){
-            printf("Warning: invalid binary character '%c'\n", cString[cStringIdx]);
-        } else {
-            binStr[binStrIdx] = BIN_ALPHABET[binCharIdx];
-            binStrIdx--;
-        }
-        cStringIdx--;
-    }
-    return binStr;
+    return parseStr(cString, &newBinStr, &binCharToInt, &intToBinChar);
 }
+
+
+
 
 char* intToBinStr(int val){
     char* ret = newBinStr();

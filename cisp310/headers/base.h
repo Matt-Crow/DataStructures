@@ -17,6 +17,6 @@ char intToChar(int decimal, const char* alphabet, int alphabetLength);
 char* newStr(int length, char defaultChar);
 int delStr(char** str);
 
-char* parseStr(char* str, char* initializer());
+char* parseStr(char* str, char* initializer(), int charToIdxFunc(char), char intToCharFunc(int));
 
 #endif

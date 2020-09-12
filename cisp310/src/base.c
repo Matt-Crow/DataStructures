@@ -42,8 +42,20 @@ int delStr(char** str){
     return wasDel;
 }
 
-char* parseStr(char* str, char* initializer()){
+char* parseStr(char* str, char* initializer(), int charToIdxFunc(char), char intToCharFunc(int)){
     char* ret = initializer();
-
+    int strIdx = strlen(str) - 1; // start at last character of str
+    int retIdx = strlen(ret) - 1; // and the end of ret
+    int alphabetIdx = -1;
+    while(strIdx >= 0 && retIdx >= 0){
+        alphabetIdx = charToIdxFunc(str[strIdx]);
+        if(alphabetIdx == -1){
+            printf("Warning: Invalid character '%c'\n", str[strIdx]);
+        } else {
+            ret[retIdx] = intToCharFunc(alphabetIdx);
+            retIdx--;
+        }
+        strIdx--;
+    }
     return ret;
 }

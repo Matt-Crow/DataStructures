@@ -11,8 +11,10 @@ char intToHexChar(int i);
 char* newHex();
 int deleteHex(char** hexStr);
 
-
 char* toHexStr(char* str);
+
+
+
 
 int hexStrToInt(char* hexStr);
 

@@ -39,10 +39,6 @@ was freed.
 */
 int deleteBinStr(char** binStr);
 
-
-
-
-
 /*
 Converts the given cString into
 a binary string, ensuring only
@@ -53,6 +49,11 @@ As per newBinStr, the returned
 value is heap allocated.
 */
 char* toBinStr(char* cString);
+
+
+
+
+
 
 char* intToBinStr(int val);
 

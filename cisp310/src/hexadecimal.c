@@ -31,27 +31,12 @@ int deleteHex(char** hexStr){
     return delStr(hexStr);
 }
 
-
-
 char* toHexStr(char* str){
-    char* ret = parseStr(str, &newHex);//newHex();
-    int rawStrLen = strlen(str);
-    //printf("%s is %d long\n", str, rawStrLen);
-    int rawStrIdx = rawStrLen - 1; // start at the end of the old string
-    int retStrIdx = HEX_LEN - 1; // and at the back of the new string
-    int hexI;
-    while(rawStrIdx >= 0 && retStrIdx >= 0){
-        hexI = hexIdx(str[rawStrIdx]);
-        if(hexI == -1){
-            printf("Warning: Invalid hex character '%c'\n", str[rawStrIdx]);
-        } else {
-            ret[retStrIdx] = HEX_ALPHABET[hexI];
-            retStrIdx--;
-        }
-        rawStrIdx--;
-    }
-    return ret;
+    return parseStr(str, &newHex, &hexIdx, &intToHexChar);
 }
+
+
+
 
 int hexStrToInt(char* hexStr){
     int ret = 0;
