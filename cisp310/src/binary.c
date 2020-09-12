@@ -24,7 +24,7 @@ int testBinary(){
     binStr1 = intToBinStr(ip1);//decimalIntToBase(ip1, 2);
     binStr2 = intToBinStr(ip2);//decimalIntToBase(ip2, 2);
     result = binaryAdd(binStr1, binStr2);
-    printf("%s + %s = %s (in binary)\n", binStr1, binStr2, result);
+    printf("   %s\n + %s\n = %s (in binary)\n", binStr1, binStr2, result);
 
     if(binStr1){
         free(binStr1);
@@ -67,20 +67,8 @@ int binStrToInt(char* binStr){
 
 
 char* intToBinStr(int val){
-    char* ret = newBinStr();
-    int maxDigitValue = 1;
-    for(int i = 0; i < SYS_ARCH; i++){
-        maxDigitValue *= 2;
-    }
-    maxDigitValue /= 2; // The value of the lefternmost bit is either 0 or 2^(SYS_ARCH - 1)
-    int count;
-    while(maxDigitValue > 0){
-        break; // not done
-    }
-    return ret;
+    return intToStr(val, BIN_ALPHABET_SIZE, &newBinStr, &intToBinChar);
 }
-
-
 
 char* binaryAdd(char* binString1, char* binString2){
     char* ret = newBinStr();
@@ -90,13 +78,13 @@ char* binaryAdd(char* binString1, char* binString2){
     int val1;
     int val2;
     int sum;
-    for(int i = SYS_ARCH - 1; i >= 0; i--){
+    for(int i = SYS_ARCH; i >= 0; i--){
         val1 = (binString1[i] == '0') ? 0 : 1;
         val2 = (binString2[i] == '0') ? 0 : 1;
         sum = val1 + val2 + carryBit;
         sumBit = sum % 2;
         carryBit = sum / 2;
-        //printf("%c + %c + %d = sum %d, carry %d\n", binString1[i], binString2[i], carryBit, sumBit, carryBit);
+        printf("%c + %c + %d = sum %d, carry %d\n", binString1[i], binString2[i], carryBit, sumBit, carryBit);
         ret[i] = BIN_ALPHABET[sumBit];
     }
 

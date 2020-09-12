@@ -19,5 +19,6 @@ int delStr(char** str);
 
 char* parseStr(char* str, char* initializer(), int charToIdxFunc(char), char intToCharFunc(int));
 int strToInt(char* str, int base, int intVal(char));
+char* intToStr(int value, int base, char* initializer(), char intToCharFunc(int));
 
 #endif
