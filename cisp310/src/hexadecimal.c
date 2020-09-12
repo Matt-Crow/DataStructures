@@ -24,16 +24,17 @@ char intToHexChar(int i){
     return intToChar(i, HEX_ALPHABET, HEX_ALPHABET_SIZE);
 }
 
-
-
 char* newHex(){
-    char* ret = (char*)malloc(sizeof(char) * (HEX_LEN + 1));
-    memset(ret, HEX_ALPHABET[0], HEX_LEN);
-    ret[HEX_LEN] = '\0';
-    return ret;
+    return newStr(HEX_LEN, HEX_ALPHABET[0]);
 }
+int deleteHex(char** hexStr){
+    return delStr(hexStr);
+}
+
+
+
 char* toHexStr(char* str){
-    char* ret = newHex();
+    char* ret = parseStr(str, &newHex);//newHex();
     int rawStrLen = strlen(str);
     //printf("%s is %d long\n", str, rawStrLen);
     int rawStrIdx = rawStrLen - 1; // start at the end of the old string
@@ -48,14 +49,6 @@ char* toHexStr(char* str){
             retStrIdx--;
         }
         rawStrIdx--;
-    }
-    return ret;
-}
-int deleteHex(char** hexStr){
-    int ret = hexStr && *hexStr; // wasn't passed the null pointer, nor a pointer to it
-    if(ret){
-        free(*hexStr);
-        *hexStr = 0;
     }
     return ret;
 }

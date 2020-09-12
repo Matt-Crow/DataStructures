@@ -14,4 +14,9 @@ extern const int SYS_ARCH;
 int charToInt(char character, const char* alphabet, int alphabetLength);
 char intToChar(int decimal, const char* alphabet, int alphabetLength);
 
+char* newStr(int length, char defaultChar);
+int delStr(char** str);
+
+char* parseStr(char* str, char* initializer());
+
 #endif

@@ -48,17 +48,16 @@ char intToBinChar(int i){
     return intToChar(i, BIN_ALPHABET, BIN_ALPHABET_SIZE);
 }
 
-
-
 char* newBinStr(){
-    char* ret = (char*)malloc(sizeof(char) * (SYS_ARCH + 1));
-    memset(ret, BIN_ALPHABET[0], SYS_ARCH);
-    ret[SYS_ARCH] = '\0';
-    return ret;
+    return newStr(SYS_ARCH, BIN_ALPHABET[0]);
+}
+int deleteBinStr(char** binStr){
+    return delStr(binStr);
 }
 
+
 char* toBinStr(char* cString){
-    char* binStr = newBinStr();
+    char* binStr = parseStr(cString, &newBinStr);//newBinStr();
     int cStringIdx = strlen(cString) - 1;
     int binStrIdx = SYS_ARCH - 1;
     int binCharIdx = -1;
@@ -84,19 +83,9 @@ char* intToBinStr(int val){
     maxDigitValue /= 2; // The value of the lefternmost bit is either 0 or 2^(SYS_ARCH - 1)
     int count;
     while(maxDigitValue > 0){
-
+        break; // not done
     }
     return ret;
-}
-
-int deleteBinStr(char** binStr){
-    int wasDel = 0;
-    if(binStr && *binStr){ // neither the null pointer, nor a pointer to it
-        free(*binStr);
-        *binStr = 0;
-        wasDel = 1;
-    }
-    return wasDel;
 }
 
 int binStrToInt(char* binStr){

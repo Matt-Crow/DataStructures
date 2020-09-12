@@ -31,6 +31,17 @@ heap, and must therefore be
 freed to prevent memory leaks.
 */
 char* newBinStr();
+/*
+Frees the given pointer to a binary
+string, and realigns the pointer to
+null. Returns whether or not anything
+was freed.
+*/
+int deleteBinStr(char** binStr);
+
+
+
+
 
 /*
 Converts the given cString into
@@ -44,14 +55,6 @@ value is heap allocated.
 char* toBinStr(char* cString);
 
 char* intToBinStr(int val);
-
-/*
-Frees the given pointer to a binary
-string, and realigns the pointer to
-null. Returns whether or not anything
-was freed.
-*/
-int deleteBinStr(char** binStr);
 
 /*
 Calculates the integer value of
