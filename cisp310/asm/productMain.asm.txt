@@ -1,0 +1,33 @@
+; general comments
+
+; preprocessor directives
+.586
+.MODEL FLAT
+
+; external files to link with
+
+; stack configuration
+.STACK 4096
+
+; named memory allocation and initialization
+.DATA
+first_signed_integer	BYTE	-107d
+second_signed_integer	BYTE	43d
+product	WORD	0CCh
+
+; names of procedures defined in other *.asm files in the project
+
+; procedure code
+.CODE
+main	PROC
+
+	mov AL, first_signed_integer
+	mov BH, second_signed_integer
+	imul BH
+	mov product, AX
+	
+	mov EAX, 0
+	ret
+main	ENDP
+
+END
