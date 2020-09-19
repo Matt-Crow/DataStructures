@@ -17,14 +17,14 @@ int testBinary(){
 
     printf("%s", "Enter a decimal integer: ");
     scanf("%d", &ip1);
-    //printf("%s", "Now enter another: ");
-    //scanf("%d", &ip2);
-    //printf("%d + %d = %d (in decimal)\n", ip1, ip2, ip1 + ip2);
+    printf("%s", "Now enter another: ");
+    scanf("%d", &ip2);
+    printf("%d - %d = %d (in decimal)\n", ip1, ip2, ip1 - ip2);
 
-    binStr1 = intToBinStr(ip1);//decimalIntToBase(ip1, 2);
-    //binStr2 = intToBinStr(ip2);//decimalIntToBase(ip2, 2);
-    //result = binaryAdd(binStr1, binStr2);
-    //printf("   %s\n + %s\n = %s (in binary)\n", binStr1, binStr2, result);
+    binStr1 = intToBinStr(ip1);
+    binStr2 = intToBinStr(ip2);
+    result = binarySub(binStr1, binStr2);
+    printf("   %s\n - %s\n = %s (in binary)\n", binStr1, binStr2, result);
 
     char* negated = negate(binStr1);
     printf("-%s = %s\n", binStr1, negated);
@@ -70,11 +70,11 @@ char* negate(char* binString){
     char* temp = newBinStr();
     char* one = intToBinStr(1);
     char* ret = 0;
-    printf("Negating %s...\n", binString);
+    //printf("Negating %s...\n", binString);
     for(int i = 0; i < SYS_ARCH; i++){
         //flip all the bits
         temp[i] = (binString[i] == '0') ? '1' : '0';
-        printf("%c Temp is now %s\n", binString[i], temp);
+        //printf("%c Temp is now %s\n", binString[i], temp);
     }
     // add 1
     ret = binaryAdd(temp, one);
@@ -108,5 +108,12 @@ char* binaryAdd(char* binString1, char* binString2){
         printf("%s\n", "Carry bit is 1, so the sum is incorrect: not enough room!");
     }
 
+    return ret;
+}
+
+char* binarySub(char* binString1, char* binString2){
+    char* temp = negate(binString2);
+    char* ret = binaryAdd(binString1, temp);
+    deleteBinStr(&temp);
     return ret;
 }

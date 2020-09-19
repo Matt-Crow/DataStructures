@@ -66,5 +66,6 @@ binary string
 char* negate(char* binString);
 
 char* binaryAdd(char* binString1, char* binString2);
+char* binarySub(char* binString1, char* binString2);
 
 #endif
