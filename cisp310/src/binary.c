@@ -54,16 +54,39 @@ int deleteBinStr(char** binStr){
     return delStr(binStr);
 }
 
+// how to account for negative?
+// this just checks the first character
 char* toBinStr(char* cString){
-    return parseStr(cString, &newBinStr, &binCharToInt, &intToBinChar);
+    char* ret;
+    int isNegative = cString[0] == '-';
+    if(isNegative){
+        char* temp = parseStr(cString, &newBinStr, &binCharToInt, &intToBinChar);
+        ret = negate(temp);
+        deleteBinStr(&temp);
+    } else {
+        ret = parseStr(cString, &newBinStr, &binCharToInt, &intToBinChar);
+    }
+
+    return ret;
 }
 
+
+// need some way of seeing if the user wants this signed vs unsigned
 int binStrToInt(char* binStr){
     return strToInt(binStr, BIN_ALPHABET_SIZE, &binCharToInt);
 }
 
+
 char* intToBinStr(int val){
-    return intToStr(val, BIN_ALPHABET_SIZE, &newBinStr, &intToBinChar);
+    char* ret;
+    if(val < 0){
+        char* temp = intToStr(-val, BIN_ALPHABET_SIZE, &newBinStr, &intToBinChar);
+        ret = negate(temp);
+        deleteBinStr(&temp);
+    } else {
+        ret = intToStr(val, BIN_ALPHABET_SIZE, &newBinStr, &intToBinChar);
+    }
+    return ret;
 }
 
 char* negate(char* binString){

@@ -60,7 +60,9 @@ char* parseStr(char* str, char* initializer(), int charToIdxFunc(char), char int
     return ret;
 }
 
-// todo: add conversion for signed values
+/*
+Note that this does not account for negative values: binary.c accounts for that
+*/
 int strToInt(char* str, int base, int intVal(char)){
     int ret = 0;
     int n = 0;
@@ -80,7 +82,9 @@ int strToInt(char* str, int base, int intVal(char)){
     return ret;
 }
 
-// todo: add support for signed values
+/*
+Note that this does not account for negative values: binary.c accounts for that
+*/
 char* intToStr(int value, int base, char* initializer(), char intToCharFunc(int)){
     char* ret = initializer();
     int n = 0;
