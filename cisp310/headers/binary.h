@@ -56,11 +56,14 @@ the given binary string.
 */
 int binStrToInt(char* binStr);
 
-
-
-
-
 char* intToBinStr(int val);
+
+/*
+Returns a heap-allocated
+two's compliment of the given
+binary string
+*/
+char* negate(char* binString);
 
 char* binaryAdd(char* binString1, char* binString2);
 

@@ -17,27 +17,26 @@ int testBinary(){
 
     printf("%s", "Enter a decimal integer: ");
     scanf("%d", &ip1);
-    printf("%s", "Now enter another: ");
-    scanf("%d", &ip2);
-    printf("%d + %d = %d (in decimal)\n", ip1, ip2, ip1 + ip2);
+    //printf("%s", "Now enter another: ");
+    //scanf("%d", &ip2);
+    //printf("%d + %d = %d (in decimal)\n", ip1, ip2, ip1 + ip2);
 
     binStr1 = intToBinStr(ip1);//decimalIntToBase(ip1, 2);
-    binStr2 = intToBinStr(ip2);//decimalIntToBase(ip2, 2);
-    result = binaryAdd(binStr1, binStr2);
-    printf("   %s\n + %s\n = %s (in binary)\n", binStr1, binStr2, result);
+    //binStr2 = intToBinStr(ip2);//decimalIntToBase(ip2, 2);
+    //result = binaryAdd(binStr1, binStr2);
+    //printf("   %s\n + %s\n = %s (in binary)\n", binStr1, binStr2, result);
 
-    if(binStr1){
-        free(binStr1);
-        binStr1 = 0;
-    }
-    if(binStr2){
-        free(binStr2);
-        binStr2 = 0;
-    }
-    if(result){
-        free(result);
-        result = 0;
-    }
+    char* negated = negate(binStr1);
+    printf("-%s = %s\n", binStr1, negated);
+    char* sum = binaryAdd(binStr1, negated);
+    printf("%s + %s = %s\n", binStr1, negated, sum);
+
+    deleteBinStr(&binStr1);
+    deleteBinStr(&binStr2);
+    deleteBinStr(&result);
+    deleteBinStr(&sum);
+    deleteBinStr(&negated);
+
     return 0;
 }
 
@@ -63,11 +62,28 @@ int binStrToInt(char* binStr){
     return strToInt(binStr, BIN_ALPHABET_SIZE, &binCharToInt);
 }
 
-
-
-
 char* intToBinStr(int val){
     return intToStr(val, BIN_ALPHABET_SIZE, &newBinStr, &intToBinChar);
+}
+
+char* negate(char* binString){
+    char* temp = newBinStr();
+    char* one = intToBinStr(1);
+    char* ret = 0;
+    printf("Negating %s...\n", binString);
+    for(int i = 0; i < SYS_ARCH; i++){
+        //flip all the bits
+        temp[i] = (binString[i] == '0') ? '1' : '0';
+        printf("%c Temp is now %s\n", binString[i], temp);
+    }
+    // add 1
+    ret = binaryAdd(temp, one);
+
+    // free temporary variables
+    deleteBinStr(&temp);
+    deleteBinStr(&one);
+
+    return ret;
 }
 
 char* binaryAdd(char* binString1, char* binString2){
@@ -78,7 +94,7 @@ char* binaryAdd(char* binString1, char* binString2){
     int val1;
     int val2;
     int sum;
-    for(int i = SYS_ARCH; i >= 0; i--){
+    for(int i = SYS_ARCH - 1; i >= 0; i--){
         val1 = (binString1[i] == '0') ? 0 : 1;
         val2 = (binString2[i] == '0') ? 0 : 1;
         sum = val1 + val2 + carryBit;

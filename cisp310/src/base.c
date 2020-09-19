@@ -89,9 +89,9 @@ char* intToStr(int value, int base, char* initializer(), char intToCharFunc(int)
     while(n < digits - 1){
         n++;
         baseToTheN *= base;
-        printf("%d^%d = %ud\n", base, n, baseToTheN);
+        //printf("%d^%d = %ud\n", base, n, baseToTheN);
     }
-    printf("Max is %ud\n", baseToTheN * base - 1); // don't try storing baseToTheN = base^digits: it doesn't work
+    //printf("Max is %ud\n", baseToTheN * base - 1); // don't try storing baseToTheN = base^digits: it doesn't work
 
     if(value > baseToTheN * base - 1){
         printf("Error: value excedes maximum value in base %d (%ud), so I cannot convert it\n", base, baseToTheN * base - 1);
@@ -100,8 +100,9 @@ char* intToStr(int value, int base, char* initializer(), char intToCharFunc(int)
         int div = 0;
         while(n >= 0){
             div = remainder / baseToTheN;
-            printf("%d %d\n", digits, n);
-            ret[digits - n] = intToCharFunc(div);
+            //printf("%d %d\n", digits, n);
+            //printf("%d\n", digits - n - 1);
+            ret[digits - n - 1] = intToCharFunc(div);
             remainder -= div * baseToTheN;
             baseToTheN /= base;
             n--;
