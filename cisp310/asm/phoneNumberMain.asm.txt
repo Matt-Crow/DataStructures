@@ -1,0 +1,53 @@
+; Assignment:
+; Use the template console32 package to complete this lab.
+; Write a complete assembly language program to compute the expression
+; 2(−a + b − 1) + c
+; where
+;   a is the area code of your phone number
+;   b is the first three digits of your phone number
+;   c is the last four digits of your phone number
+; Create a Google Doc, saved as a PDF, that contains the following information:
+;   1. a discussion of your choice of size for this problem. Include all the intermediate calculated values and justify your choice. You must choose the smallest register size possible.
+;   2. A discussion of signed or unsigned integers for this problem.  Justify your choice with data.
+;   3. An image of your main.asm file. Include in the comments the data that is held in each of the registers that you use in the problem (a Register Dictionary).
+;   4. Multiple screen shots of a line-by-line execution of the program. After each calculation show the result as hexadecimal and decimal, and the EFLAGS bit showing the result of the calculation is mathematically correct.
+; Name your PDF whatever you like. Upload it before the due date and time.
+
+
+
+; general comments
+
+; preprocessor directives
+.586
+.MODEL FLAT
+
+; external files to link with
+
+; stack configuration
+.STACK 4096
+
+; named memory allocation and initialization
+.DATA
+a   WORD    916d    ; area code of phone number
+b   WORD    205d    ; first 3 digits of phone number
+c   WORD    0468d   ; last 4 digits of phone number
+result  WORD    0h; ; this will store the result of 2(-a + b - 1) + c
+; All of these should be interpreted as being signed
+
+; names of procedures defined in other *.asm files in the project
+
+; procedure code
+.CODE
+main	PROC
+
+	mov AX, 0d ; store the result in AX...
+    mov BX, 0d ; ... and intermediate values in BX
+
+    ; todo: calculations
+
+	mov AX, 0
+    mov BX, 0
+	ret
+main	ENDP
+
+END
