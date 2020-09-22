@@ -16,6 +16,9 @@
 
 
 ; general comments
+; Register Dictionary
+; AX holds the result as it's being calculated
+; BX is used to hold temporary values (negating a)
 
 ; preprocessor directives
 .586
@@ -43,20 +46,16 @@ main	PROC
 	mov AX, 0d ; store the result in AX...
     mov BX, 0d ; ... and intermediate values in BX
 
-	; copy phone_a to a register before negating to avoid changing its initial value, as this is just good design practice.
+	; copy phone_a to a register before negating to avoid changing its
+	; initial value, as this is just good design practice.
     mov BX, phone_a
 	neg BX
-	add AX, BX ; AX is now -phone_a
-
-	add AX, phone_b ; AX is now -phone_a + phone_b
-
-	dec AX ; AX is now -phone_a + phone_b - 1
-
-	add AX, AX ; AX is now 2(-phone_a + phone_b - 1)
-
-	add AX, phone_c ; AX is now 2(-phone_a + phone_b - 1) + phone_c
-
-	mov result, AX ; result is now 2(-phone_a + phone_b - 1) + phone_c
+	add AX, BX ;          AX is now -phone_a
+	add AX, phone_b ;     AX is now -phone_a + phone_b
+	dec AX ;              AX is now -phone_a + phone_b - 1
+	add AX, AX ;          AX is now 2(-phone_a + phone_b - 1)
+	add AX, phone_c ;     AX is now 2(-phone_a + phone_b - 1) + phone_c
+	mov result, AX ;  result is now 2(-phone_a + phone_b - 1) + phone_c
 
 	mov AX, 0
     mov BX, 0
