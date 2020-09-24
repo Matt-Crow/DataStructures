@@ -1,0 +1,50 @@
+; Write a console32 Assembly Language program to calculate this expression:
+; 2xy / (x + y)
+; where
+;   x and y are word-sized signed integers
+;   The result will be the quotient of the integer division.
+;   Ignore the remainder.
+; Justify the sizes that you choose for this problem.
+; Clearly describe in a Register Dictionary what every register holds as your program executes.
+; Choose literal values for x and y.
+; This problem will require that you carefully plan the calculations and the sizes.
+
+; general comments
+
+; preprocessor directives
+.586
+.MODEL FLAT
+
+; external files to link with
+
+; stack configuration
+.STACK 4096
+
+; named memory allocation and initialization
+.DATA
+_x     WORD    32d
+_y     WORD    64d
+_temp  WORD    0
+result WORD    0
+
+; names of procedures defined in other *.asm files in the project
+
+; procedure code
+.CODE
+main	PROC
+
+	mov AX, _x       ; AX is now x
+    mul _y           ; DX:AX is now xy
+    add DX:AX, DX:AX ; can I do this? DX:AX is now 2xy
+
+    mov _temp, _x    ; temp is now _x
+    add _temp, _y    ; temp is now _x + _y
+    div _temp        ; (DX:AX) / _temp is now stored in DX
+
+    mov result, DX   ; result is now the quotient
+
+	mov EAX, 0
+	ret
+main	ENDP
+
+END
