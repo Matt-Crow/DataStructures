@@ -18,7 +18,6 @@
 ; general comments
 ; Register Dictionary
 ; AX holds the result as it's being calculated
-; BX is used to hold temporary values (negating a)
 
 ; preprocessor directives
 .586
@@ -42,17 +41,13 @@ result  WORD    0h; ; this will store the result of 2(-phone_a + phone_b - 1) + 
 ; procedure code
 .CODE
 main	PROC
-	
 	mov AX, phone_b ; AX is now phone_b
 	sub AX, phone_a ; AX is now -phone_a + phone_b
 	dec AX ;          AX is now -phone_a + phone_b - 1
 	add AX, AX ;      AX is now 2(-phone_a + phone_b - 1)
 	add AX, phone_c ; AX is now 2(-phone_a + phone_b - 1) + phone_c
 	mov result, AX ;  result is now 2(-phone_a + phone_b - 1) + phone_c
-
 	mov EAX, 0
-	
 	ret
 main	ENDP
-
 END
