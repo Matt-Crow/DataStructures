@@ -11,30 +11,23 @@
 
 ; named memory allocation and initialization
 .DATA
-_x         WORD    32d
-_y         WORD    64d
-two        WORD    2d
-numerator  DWORD   0
-two_up_8   WORD    0100h ; might need this to shift DX into a DWORD via mult
-result     WORD    0
+_x          WORD   32d
+_y          WORD   64d
+denominator WORD   0
+result      WORD   0
 
 ; names of procedures defined in other *.asm files in the project
 
 ; procedure code
 .CODE
 main	PROC
-	mov AX, _x         ; AX is now x
-    mul two            ; DX:AX is now 2x
-    ?????              ; numerator is now 2x
-    mov AX, _y
-    cwd                ; EAX is now _y
-    mul numerator      ; EDX:EAX is now 2xy
-
-    mov _temp, _x    ; temp is now _x
-    add _temp, _y    ; temp is now _x + _y
-    div _temp        ; (DX:AX) / _temp is now stored in DX
-
-    mov result, DX   ; result is now the quotient
+	mov AX, _x          ; AX is now x
+    add AX, _x          ; AX is now 2x
+    mul _y              ; DX:AX is now 2xy
+    mov denominator, _x ; denominator is now x
+    add denominator, _y ; denominator is now x + y
+    div denominator     ; (DX:AX) / denominator is now stored in DX
+    mov result, DX      ; result is now the quotient
 
 	mov EAX, 0
 	ret
