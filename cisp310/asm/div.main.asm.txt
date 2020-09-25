@@ -13,7 +13,6 @@
 .DATA
 _x          WORD   32d
 _y          WORD   64d
-denominator WORD   0
 result      WORD   0
 
 ; names of procedures defined in other *.asm files in the project
@@ -21,13 +20,13 @@ result      WORD   0
 ; procedure code
 .CODE
 main	PROC
-	mov AX, _x          ; AX is now x
-    add AX, _x          ; AX is now 2x
-    mul _y              ; DX:AX is now 2xy
-    mov denominator, _x ; denominator is now x
-    add denominator, _y ; denominator is now x + y
-    div denominator     ; (DX:AX) / denominator is now stored in DX
-    mov result, DX      ; result is now the quotient
+	mov AX, _x     ; AX is now x
+    add AX, _x     ; AX is now 2x
+    mul _y         ; DX:AX is now 2xy
+    mov BX, _x     ; BX is now x
+    add BX, _y     ; BX is now x + y
+    div BX         ; (2xy) / (x + y) is now stored in AX
+    mov result, AX ; result is now the quotient
 
 	mov EAX, 0
 	ret
