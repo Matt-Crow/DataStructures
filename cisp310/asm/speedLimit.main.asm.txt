@@ -35,7 +35,7 @@ main	PROC
     add BL, speedMin ; BL is now x + y
     div BL           ; (AH:AL) / BL
 
-	mov speedAvg, BL
+	mov speedAvg, AL
 
 	mov EAX, 0
 	ret
