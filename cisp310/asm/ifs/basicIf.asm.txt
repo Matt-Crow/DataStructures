@@ -1,0 +1,41 @@
+; general comments
+; This is meant to emulate:
+;   if(count > value){
+;       count = 0;
+;   }
+; Where count is in AX,
+; and value is a WORD in named memory
+; both are signed
+
+; preprocessor directives
+.586
+.MODEL FLAT
+
+; external files to link with
+
+; stack configuration
+.STACK 4096
+
+; named memory allocation and initialization
+.DATA
+value WORD 32d
+
+; names of procedures defined in other *.asm files in the project
+
+; procedure code
+.CODE
+main	PROC
+
+	mov AX, 64d
+
+    cmp AX, value
+    jle endIf
+    mov AX, 0 ; the body of the original if
+    endIf:
+    ; do nothing
+
+	mov EAX, 0
+	ret
+main	ENDP
+
+END

@@ -8,37 +8,28 @@
 ; preprocessor directives
 .586
 .MODEL FLAT
-
 ; external files to link with
-
 ; stack configuration
 .STACK 4096
-
 ; named memory allocation and initialization
 .DATA
 speedMin BYTE 30d
-speedMax BYTE 85d
+speedMax BYTE 50d
 speedAvg BYTE 0d
-
 ; names of procedures defined in other *.asm files in the project
-
 ; procedure code
 .CODE
 main	PROC
-
-	mov AH, speedMax
+    mov AH, speedMax
     mov AL, speedMin
     mul AH           ; AX is now xy
     add AX, AX       ; AX is now 2xy
-
-	mov BL, speedMax
+    mov BL, speedMax
     add BL, speedMin ; BL is now x + y
     div BL           ; (AH:AL) / BL
-
-	mov speedAvg, AL
-
-	mov EAX, 0
-	ret
+    mov speedAvg, AL
+    mov EAX, 0
+    ret
 main	ENDP
 
 END
