@@ -36,7 +36,8 @@ main	PROC
     mov CX, 0
 
     cmp BX, 500d
-    jae elseBlock
+    jb ifBlock
+    jmp elseBlock
     ifBlock:
         mov AX, count
         mul two

@@ -36,11 +36,12 @@ main	PROC
 
     cmp EBX, _c
     je yesBlock
-    noBlock:
-        mov AL, 'N'
-        jmp endBlock
+    jmp noBlock
     yesBlock:
         mov AL, 'Y'
+        jmp endBlock
+    noBlock:
+        mov AL, 'N'
         jmp endBlock
     endBlock:
         ; done
