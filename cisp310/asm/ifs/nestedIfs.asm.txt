@@ -34,7 +34,7 @@ otherCount BYTE 0
 .CODE
 main	PROC
 
-	mov AL 'm'
+	mov AL, 'm'
 
     checkLowerCaseLower:
         cmp AL, 'z'

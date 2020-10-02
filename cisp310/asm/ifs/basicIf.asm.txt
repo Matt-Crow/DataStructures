@@ -18,7 +18,7 @@
 
 ; named memory allocation and initialization
 .DATA
-value WORD 32d
+value WORD -132d
 
 ; names of procedures defined in other *.asm files in the project
 
@@ -30,11 +30,11 @@ main	PROC
 
     cmp AX, value
     jg ifBlock
-    jmp endIf ; skips over this line if AX > value
+    jmp endIfBlock ; skips over this line if AX > value
     ifBlock:
         mov AX, 0 ; the body of the original if
-    jmp endIf
-    endIf:
+    jmp endIfBlock
+    endIfBlock:
     ; do nothing
 
 	mov EAX, 0
