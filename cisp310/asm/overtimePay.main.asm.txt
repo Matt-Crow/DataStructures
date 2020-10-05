@@ -1,0 +1,49 @@
+; general comments
+; Register Dictionary:
+;     AL contains the effective hours someone is paid for
+;     AH contains the number of hours beyond 40.
+;       Later, it will hold the product of paid hours and pay rate
+
+; preprocessor directives
+.586
+.MODEL FLAT
+
+; external files to link with
+
+; stack configuration
+.STACK 4096
+
+; named memory allocation and initialization
+.DATA
+weeklyHours	BYTE 47d
+payPerHour  BYTE 33d
+grossPay    WORD 0 d
+
+; names of procedures defined in other *.asm files in the project
+
+; procedure code
+.CODE
+main	PROC
+
+	mov AL, weeklyHours
+	cmp AL, 40d
+    ja doubleCountBeyond40
+    jmp doneComputingHours
+
+    doubleCountBeyond40:
+        mov AH, AL
+        sub AH, 40 ; AH now contains weeklyHours - 40 (hours beyon 40)
+        add AL, AH ; AL is now weeklyHours + (weeklyHours - 40) = 2(weeklyHours) - 40
+        ; double counts hours over 40 hours
+        jmp doneComputingHours
+
+    doneComputingHours:
+        ; by this point, AL contains the effective hours they've worked
+        mul payPerHour ; payPerHour is BYTE sized, so this computes payPerHour * AL, and stores in AX
+        mov grossPay, AX
+
+	mov EAX, 0
+	ret
+main	ENDP
+
+END

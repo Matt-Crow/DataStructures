@@ -33,7 +33,7 @@ main	PROC
     jmp endIfBlock ; skips over this line if AX > value
     ifBlock:
         mov AX, 0 ; the body of the original if
-    jmp endIfBlock
+    	jmp endIfBlock
     endIfBlock:
     ; do nothing
 
