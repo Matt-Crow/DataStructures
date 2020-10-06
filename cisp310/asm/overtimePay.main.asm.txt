@@ -18,7 +18,7 @@
 .DATA
 weeklyHours	BYTE 47d
 payPerHour  BYTE 33d
-grossPay    WORD 0 d
+grossPay    WORD 0d
 
 ; names of procedures defined in other *.asm files in the project
 
