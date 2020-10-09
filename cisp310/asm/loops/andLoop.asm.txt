@@ -1,0 +1,51 @@
+; general comments
+;    sum references a named memory doubleword
+;    count is in ECX
+;
+;    count := 0
+;    sum := 500
+;    while ((count <= 60) and (sum > 200))
+;        subtract count from sum
+;        add 5 to count
+;    end while
+
+; preprocessor directives
+.586
+.MODEL FLAT
+
+; external files to link with
+
+; stack configuration
+.STACK 4096
+
+; named memory allocation and initialization
+.DATA
+sum	     DWORD 500d
+countMax DWORD 60d
+sumMin   DWORD 200d
+
+; names of procedures defined in other *.asm files in the project
+
+; procedure code
+.CODE
+main	PROC
+	mov ECX, 0d
+
+    checkLoopCondition: ; need this in case it shouldn't enter the loop at all
+        cmp EXC, countMax
+        ja endOfLoop
+        cmp sum, sumMin
+        jbe endOfLoop
+        jmp startOfWhileLoop
+    startOfWhileLoop:
+        add sum, ECX
+        add ECX, 5
+        jmp checkLoopCondition
+
+    endOfLoop:
+        ; done looping
+	mov EAX, 0
+	ret
+main	ENDP
+
+END
