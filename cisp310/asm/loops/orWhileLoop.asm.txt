@@ -30,12 +30,13 @@ minCount DWORD 0d
 .CODE
 main	PROC
 	mov ECX, 100d
+    mov EBX, limit
 
     checkLoopCondition: ; need this in case it shouldn't enter the loop at all
-        cmp sum, limit
-        jb startOfWhileLoop
+        cmp sum, EBX
+        jl startOfWhileLoop
         cmp ECX, minCount
-        jae startOfWhileLoop
+        jge startOfWhileLoop ; ECX can be negative, so I must use signed check
         jmp endOfLoop
     startOfWhileLoop:
         add sum, ECX

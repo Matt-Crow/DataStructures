@@ -33,10 +33,11 @@ main	PROC
         jb startOfWhileLoop ; should it be jbe?
         jmp endOfLoop
     startOfWhileLoop:
-        mov AL, 2d
+        mov EAX, 2d         ; Need to clear first 16 bits of A register before multiplying... 
         mul CL              ; AX is now 2 * count
         dec AX              ; AX is now 2 * count - 1
-        add sum, AX
+        add sum, EAX        ; ... as sum must be a DWORD, but I need to add AX
+        inc CL
         jmp checkLoopCondition
 
     endOfLoop:

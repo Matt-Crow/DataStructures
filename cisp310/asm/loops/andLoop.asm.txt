@@ -30,15 +30,16 @@ sumMin   DWORD 200d
 .CODE
 main	PROC
 	mov ECX, 0d
+    mov EBX, sumMin     ; can't do cmp with two named memory locations, so I need this
 
     checkLoopCondition: ; need this in case it shouldn't enter the loop at all
-        cmp EXC, countMax
+        cmp ECX, countMax
         ja endOfLoop
-        cmp sum, sumMin
+        cmp sum, EBX
         jbe endOfLoop
         jmp startOfWhileLoop
     startOfWhileLoop:
-        add sum, ECX
+        sub sum, ECX
         add ECX, 5
         jmp checkLoopCondition
 

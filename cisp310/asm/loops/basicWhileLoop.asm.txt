@@ -29,14 +29,16 @@ limit DWORD 1000d
 .CODE
 main	PROC
 	mov ECX, 1d
+    mov EBX, limit
 
     checkLoopCondition:
-        cmp sum, limit
+        cmp sum, EBX
         jb startOfWhileLoop
         jmp endOfLoop
     startOfWhileLoop:
         add sum, ECX
         inc ECX
+        jmp checkLoopCondition
     endOfLoop:
         ; done looping
 
