@@ -15,7 +15,7 @@
 ;   CX holds
 ;       the minimum factor to include in factorial calculations
 ;       temporary values for setting my resultIsValid flag
-;   DX holds the high bits of the numerator for division (0)
+;   DX holds the high bits of the numerator for division (1)
 
 ; preprocessor directives
 .586
