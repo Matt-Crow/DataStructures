@@ -4,6 +4,16 @@
 ;     n! / (k!(n-k)!)
 ;     where 0 <= k < n
 
+
+
+
+; Idea: let some named memory location be a flag for which factorial I'm calculating (n!/k! or (n-k)!)
+; Have a "function" block of code which computes factorial from AX to BX, then jumps based on the location flag
+; set AX and BX before jumping to the function, move "return value" out of AX afterwards
+
+
+
+
 ; preprocessor directives
 .586
 .MODEL FLAT
