@@ -8,13 +8,14 @@
 ;   AX holds
 ;       temporary values for extending to WORDs
 ;       the current product of the factorial calculations
-;       the numerator for division (n!/k!) (extended using cwd)
+;       the low bits of the numerator for division (n!/k!)
 ;   BX holds
 ;       the current factor in computing factorials
 ;       the denominator for division ((n - k)!)
 ;   CX holds
 ;       the minimum factor to include in factorial calculations
 ;       temporary values for setting my resultIsValid flag
+;   DX holds the high bits of the numerator for division (0)
 
 ; preprocessor directives
 .586
@@ -39,18 +40,11 @@ resultIsValid BYTE 0d ; a flag showing whether or not the result is valid
 ; procedure code
 .CODE
 main	PROC
-
     calcNFactOverKFact:
-        ; current product is in AX,
-        ; current factor is in BX
-        ; minimum factor is in CX (k + 1)
-        mov AL, n_
-        cbw
-        mov BX, AX ; these 3 instructions extend n_ to a WORD in BX
-
-        mov AL, k_
-        cbw
-        mov CX, AX
+        mov BX, 0
+        mov BL, n_ ; extend n_ to a WORD in BX
+        mov CX, 0
+        mov CL, k_
         inc CX ; CX now contains k + 1
 
         mov AX, 1d
@@ -73,17 +67,13 @@ main	PROC
     ; done with computing n!/k!
 
     calcNMinusKFact:
-        ; current product is in AX,
-        ; current factor is in BX,
-        ; minimum factor is in CX (1)
-        mov AL, n_
-        sub AL, k_
-        cbw
-        mov BX, AX ; BX now contains (n - k)
+        mov BX, 0
+        mov BL, n_
+        sub BL, k_ ; BX now contains (n - k)
         mov CX, 1d
 
         mov AX, 1d
-        checkNMinusKFactLoop: ; WHILE BX >= CX
+        checkNMinusKFactLoop: ; WHILE BX >= CX (1)
             cmp BX, CX
             jae multiplyNextFactorMinus
             jmp doneWithNMinusKFact
@@ -100,8 +90,8 @@ main	PROC
 
     divideSection:
         mov AX, numerator
+        mov DX, 0 ; would have overflowed if DX is non-zero, but zero it out to be safe
         mov BX, denominator
-        cwd
         div BX ; ensures the result will be WORD sized
         mov nChooseK, AX
 
