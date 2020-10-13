@@ -1,0 +1,62 @@
+; general comments
+;
+; Computes:
+;     n! / (k!(n-k)!)
+;     where 0 <= k < n
+
+; preprocessor directives
+.586
+.MODEL FLAT
+
+; external files to link with
+
+; stack configuration
+.STACK 4096
+
+; named memory allocation and initialization
+.DATA
+n_       BYTE 5d
+k_       BYTE 3d
+nChooseK WORD 0d
+
+; names of procedures defined in other *.asm files in the project
+
+; procedure code
+.CODE
+main	PROC
+
+    calcNFactOverKFact:
+        ; current product is in AX,
+        ; current factor is in BX
+        ; minimum factor is in CX (k + 1)
+        mov AL, n_
+        cbw
+        mov BX, AX ; these 3 instructions extend n_ to a WORD in BX
+
+        mov AL, k_
+        cbw
+        mov CX, AX
+        inc CX ; CX now contains k + 1
+
+        mov AX, 1d  ; set AX to 1, so that way it catches 0!
+        checkNFactOverKFactLoop: WHILE BX >= CX (WHILE current factor >= k + 1)
+            cmp BX, CX
+            jae multiplyNextFactor
+            jmp doneWithNFactOverKFact
+        multiplyNextFactor:
+            mul BX ; multiply AX by the current factor
+            jc overflowOccurred ; jumps if the product is greater than AX can hold
+            dec BX ; advance BH to the next factor
+            jmp checkNFactOverKFactLoop
+        doneWithNFactOverKFact:
+            ; next, need to compute (n-k)!
+
+        overflowOccurred:
+            ; cannot compute
+
+
+	mov EAX, 0
+	ret
+main	ENDP
+
+END
