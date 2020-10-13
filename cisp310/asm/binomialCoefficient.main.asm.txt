@@ -3,16 +3,18 @@
 ; Computes:
 ;     n! / (k!(n-k)!)
 ;     where 0 <= k < n
-
-
-
-
-; Idea: let some named memory location be a flag for which factorial I'm calculating (n!/k! or (n-k)!)
-; Have a "function" block of code which computes factorial from AX to BX, then jumps based on the location flag
-; set AX and BX before jumping to the function, move "return value" out of AX afterwards
-
-
-
+;
+; Register Dictionary:
+;   AX holds
+;       temporary values for extending to WORDs
+;       the current product of the factorial calculations
+;       the numerator for division (n!/k!) (extended using cwd)
+;   BX holds
+;       the current factor in computing factorials
+;       the denominator for division ((n - k)!)
+;   CX holds
+;       the minimum factor to include in factorial calculations
+;       temporary values for setting my resultIsValid flag
 
 ; preprocessor directives
 .586
@@ -25,11 +27,12 @@
 
 ; named memory allocation and initialization
 .DATA
-n_          BYTE 5d
-k_          BYTE 3d
-numerator   WORD 0d
-denominator WORD 0d
-nChooseK    WORD 0d
+n_            BYTE 5d
+k_            BYTE 3d
+numerator     WORD 0d
+denominator   WORD 0d
+nChooseK      WORD 0d
+resultIsValid BYTE 0d ; a flag showing whether or not the result is valid
 
 ; names of procedures defined in other *.asm files in the project
 
@@ -50,23 +53,24 @@ main	PROC
         mov CX, AX
         inc CX ; CX now contains k + 1
 
-        mov AX, 1d  ; set AX to 1, so that way it catches 0!
-        checkNFactOverKFactLoop: WHILE BX >= CX (WHILE current factor >= k + 1)
+        mov AX, 1d
+        checkNFactOverKFactLoop: ; WHILE BX >= CX (WHILE current factor >= k + 1)
             cmp BX, CX
             jae multiplyNextFactor
             jmp doneWithNFactOverKFact
         multiplyNextFactor:
             mul BX ; multiply AX by the current factor
-            jc overflowOccurred ; jumps if the product is greater than AX can hold
+            jc overflowOccurred
+            ; jumps if the product is greater than AX can hold
+            ; label is near the bottom of this file
             dec BX ; advance BH to the next factor
             jmp checkNFactOverKFactLoop
-        doneWithNFactOverKFact:
-            ; next, need to compute (n-k)!
-            mov numerator, AX
-            jmp calcNMinusKFact
-        overflowOccurred:
-            ; cannot compute
-            jmp endProgram
+        ; END WHILE
+
+    doneWithNFactOverKFact:
+        mov numerator, AX
+        jmp calcNMinusKFact
+    ; done with computing n!/k!
 
     calcNMinusKFact:
         ; current product is in AX,
@@ -78,21 +82,21 @@ main	PROC
         mov BX, AX ; BX now contains (n - k)
         mov CX, 1d
 
-        checkNMinusKFactLoop: WHILE BX >= CX
+        mov AX, 1d
+        checkNMinusKFactLoop: ; WHILE BX >= CX
             cmp BX, CX
             jae multiplyNextFactorMinus
             jmp doneWithNMinusKFact
         multiplyNextFactorMinus:
             mul BX
-            jc nMinusKFactOverflowed
+            jc overflowOccurred
             dec BX
             jmp checkNMinusKFactLoop
-        doneWithNMinusKFact:
-            mov denominator, AX
-            jmp divideSection
-        nMinusKFactOverflowed:
-            ; cannot compute
-            jmp endProgram
+        ; END WHILE
+
+    doneWithNMinusKFact:
+        mov denominator, AX
+        jmp divideSection
 
     divideSection:
         mov AX, numerator
@@ -100,6 +104,17 @@ main	PROC
         cwd
         div BX ; ensures the result will be WORD sized
         mov nChooseK, AX
+
+        mov CL, 1d
+        mov resultIsValid, CL ; report that the result is valid
+
+        jmp endProgram
+
+    overflowOccurred:
+        ; cannot compute
+        mov CL, 0d
+        mov resultIsValid, CL ; report that the result is not valid
+        jmp endProgram
 
     endProgram:
         ; done
