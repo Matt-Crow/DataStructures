@@ -7,7 +7,7 @@
 
 typedef struct HashArray {
     int capacity;
-    int** contents; // array of pointers to the values stored
+    int** contents; // array of values stored. Null pointer indicates nothing stored there
 } HashArray;
 
 typedef struct SearchResult {
@@ -20,7 +20,10 @@ typedef struct SearchResult {
 
 
 HashArray* newHashArray(int capacity);
-SearchResult* newSearchResult(int searchedFor, bool found, int foundAt, int collisions);
+SearchResult* newSearchResult(int searchedFor, bool isFound, int foundAt, int collisions);
+
+void deleteHashArray(HashArray** deleteThis);
+void deleteSearchResult(SearchResult** deleteThis);
 
 SearchResult* putInHashArray(HashArray* intoHere, int val);
 SearchResult* getFromHashArray(HashArray* fromHere, int val);
