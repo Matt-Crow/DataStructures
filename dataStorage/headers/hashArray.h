@@ -32,6 +32,7 @@ SearchResult* qpForEmpty(HashArray* probeThis, int startIdx);
 SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor);
 SearchResult* lpForEmpty(HashArray* probeThis, int startIdx);
 void printHashArray(HashArray* printMe);
+void printSearchResult(SearchResult* printMe);
 
 int testHashArray();
 

@@ -52,16 +52,18 @@ void deleteSearchResult(SearchResult** deleteThis){
 SearchResult* putInHashArray(HashArray* intoHere, int val){
     SearchResult* whereItWasInserted = 0;
     if(intoHere){
-        whereItWasInserted = lpForEmpty(intoHere, val);
+        int numSearchStrategies = 2;
+        SearchResult* (*searchStrategies[])(HashArray*, int) = {&lpForEmpty, &qpForEmpty};
+        for(int i = 0; i < numSearchStrategies && !whereItWasInserted; i++){
+            whereItWasInserted = searchStrategies[i](intoHere, val);
+            if(whereItWasInserted && !whereItWasInserted->isFound){
+                deleteSearchResult(&whereItWasInserted);
+            }
+        }
+
         if(whereItWasInserted && whereItWasInserted->isFound){
             intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
             *(intoHere->contents[whereItWasInserted->foundAt]) = val;
-        } else {
-            whereItWasInserted = qpForEmpty(intoHere, val);
-            if(whereItWasInserted && whereItWasInserted->isFound){
-                intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
-                *(intoHere->contents[whereItWasInserted->foundAt]) = val;
-            }
         }
     }
     return whereItWasInserted;
@@ -93,6 +95,9 @@ SearchResult* qpForEmpty(HashArray* probeThis, int startIdx){
     return ret;
 }
 SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor){
+    return 0;
+}
+SearchResult* lpForEmpty(HashArray* probeThis, int startIdx){
     SearchResult* ret = 0;
 
     if(probeThis){
@@ -112,9 +117,8 @@ SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor){
 
     return ret;
 }
-SearchResult* lpForEmpty(HashArray* probeThis, int startIdx){
-    return 0;
-}
+
+
 void printHashArray(HashArray* printMe){
     if(printMe){
         printf("%s", "Contents of Hash Array:\n");
@@ -129,7 +133,6 @@ void printHashArray(HashArray* printMe){
         }
     }
 }
-
 void printSearchResult(SearchResult* printMe){
     if(printMe){
         printf("%s", "Search Result:\n");
