@@ -26,14 +26,29 @@ SearchResult* newSearchResult(int searchedFor, bool isFound, int foundAt, int co
 }
 
 void deleteHashArray(HashArray** deleteThis){
-
+    if(deleteThis && *deleteThis){ // not null pointer or pointer to null pointer
+        free((*deleteThis)->contents); // TODO: free int*'s
+        free(*deleteThis);
+        *deleteThis = 0;
+    }
 }
 void deleteSearchResult(SearchResult** deleteThis){
-
+    if(deleteThis && *deleteThis){
+        free(*deleteThis);
+        *deleteThis = 0;
+    }
 }
 
 SearchResult* putInHashArray(HashArray* intoHere, int val){
-    return 0;
+    SearchResult* whereItWasInserted = 0;
+    if(intoHere){
+        whereItWasInserted = qpForEmpty(intoHere, 0);
+        if(whereItWasInserted && whereItWasInserted->isFound){
+            intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
+            *(intoHere->contents[whereItWasInserted->foundAt]) = val;
+        }
+    }
+    return whereItWasInserted;
 }
 SearchResult* getFromHashArray(HashArray* fromHere, int val){
     return 0;
@@ -42,7 +57,24 @@ SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor){
     return 0;
 }
 SearchResult* qpForEmpty(HashArray* probeThis, int startIdx){
-    return 0;
+    SearchResult* ret = 0;
+
+    if(probeThis){
+        ret = newSearchResult(0, false, -1, 0);
+        int newIdx = 0;
+        for(int offset = 1; !(ret->isFound) && offset <= 3; offset++){
+            // index to check
+            newIdx = (startIdx + offset * offset) % probeThis->capacity;
+            if(probeThis->contents[newIdx] == 0){ // null pointer means nothing there
+                ret->foundAt = newIdx;
+                ret->isFound = true;
+            } else {
+                ret->collisions++;
+            }
+        }
+    }
+
+    return ret;
 }
 SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor){
     return 0;
@@ -63,7 +95,8 @@ int testHashArray(){
         printf("%s", "Choose an option:\n");
         printf("%s", "1: Allocate a new Hash Array\n");
         printf("%s", "2: Free the Hash Array\n");
-        printf("%s", "-1: Quit");
+        printf("%s", "3: Insert into the Hash Array\n");
+        printf("%s", "-1: Quit\n");
         scanf("%d", &ip);
         switch(ip){
             case 1:
@@ -82,6 +115,16 @@ int testHashArray(){
                     printf("%s", "The hash array was deleted\n");
                 } else {
                     printf("%s", "No hash array is allocated, so nothing is deleted\n");
+                }
+                break;
+            case 3:
+                if(ha){
+                    printf("%s", "Enter value to insert: ");
+                    scanf("%d", &ip);
+                    putInHashArray(ha, ip);
+                    ip = 3;
+                } else {
+                    printf("%s", "No hash array is allocated, so I cannot insert.\n");
                 }
                 break;
         }
