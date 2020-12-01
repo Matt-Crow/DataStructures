@@ -5,7 +5,7 @@ SRC = ./src
 BIN = ./bin
 OBJ = ./obj
 
-main: main.o stack.o queue.o linkedList.o tree.o | $(BIN)
+main: main.o stack.o queue.o linkedList.o tree.o hashArray.o | $(BIN)
 	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
 
 main.o: $(SRC)/main.c | $(OBJ)
@@ -22,6 +22,9 @@ linkedList.o: $(SRC)/linkedList.c | $(OBJ)
 
 tree.o: $(SRC)/tree.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/tree.c -o $(OBJ)/tree.o -I $(HEADERS)
+
+hashArray.o: $(SRC)/hashArray.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/hashArray.c -o $(OBJ)/hashArray.o -I $(HEADERS)
 
 
 $(BIN):

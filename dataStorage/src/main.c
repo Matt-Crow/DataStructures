@@ -3,6 +3,7 @@
 #include "queue.h"
 #include "linkedList.h"
 #include "tree.h"
+#include "hashArray.h"
 
 int main(){
     int ip = 0;
@@ -11,6 +12,7 @@ int main(){
         printf("%s", "2: test queue\n");
         printf("%s", "3: test linked list\n");
         printf("%s", "4: test binary tree\n");
+        printf("%s", "5: test hash array\n");
         printf("%s", "-1: Quit\n");
         printf("%s", "Please choose an option: ");
         scanf("%d", &ip);
@@ -26,6 +28,9 @@ int main(){
                 break;
             case 4:
                 testBinaryTree();
+                break;
+            case 5:
+                testHashArray();
                 break;
         }
     } while(ip != -1);
