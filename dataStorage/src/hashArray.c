@@ -42,7 +42,7 @@ void deleteSearchResult(SearchResult** deleteThis){
 SearchResult* putInHashArray(HashArray* intoHere, int val){
     SearchResult* whereItWasInserted = 0;
     if(intoHere){
-        whereItWasInserted = qpForEmpty(intoHere, 0);
+        whereItWasInserted = qpForEmpty(intoHere, val);
         if(whereItWasInserted && whereItWasInserted->isFound){
             intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
             *(intoHere->contents[whereItWasInserted->foundAt]) = val;
@@ -83,22 +83,51 @@ SearchResult* lpForEmpty(HashArray* probeThis, int startIdx){
     return 0;
 }
 void printHashArray(HashArray* printMe){
+    if(printMe){
+        printf("%s", "Contents of Hash Array:\n");
+        int* ptr = 0;
+        for(int i = 0; i < printMe->capacity; i++){
+            ptr = printMe->contents[i];
+            if(ptr){
+                printf("%d: %d\n", i, *ptr);
+            } else {
+                printf("%d: NULL\n", i);
+            }
+        }
+    }
+}
 
+void printSearchResult(SearchResult* printMe){
+    if(printMe){
+        printf("%s", "Search Result:\n");
+        printf("Searched for %d.\n", printMe->searchedFor);
+        if(printMe->isFound){
+            printf("It was found at index %d.\n", printMe->foundAt);
+        } else {
+            printf("%s", "It was not found.\n");
+        }
+        printf("The search collided %d times.\n", printMe->collisions);
+    }
 }
 
 int testHashArray(){
     HashArray* ha = 0;
+    SearchResult* sr = 0;
     int ip = 0;
 
     do {
         printf("%s", "HASH ARRAY\n");
         printf("%s", "Choose an option:\n");
+        printf("%s", "0: Print the Hash Array\n");
         printf("%s", "1: Allocate a new Hash Array\n");
         printf("%s", "2: Free the Hash Array\n");
         printf("%s", "3: Insert into the Hash Array\n");
         printf("%s", "-1: Quit\n");
         scanf("%d", &ip);
         switch(ip){
+            case 0:
+                printHashArray(ha);
+                break;
             case 1:
                 if(ha){
                     printf("%s","Cannot allocate: one already exists\n");
@@ -121,7 +150,9 @@ int testHashArray(){
                 if(ha){
                     printf("%s", "Enter value to insert: ");
                     scanf("%d", &ip);
-                    putInHashArray(ha, ip);
+                    sr = putInHashArray(ha, ip);
+                    printSearchResult(sr);
+                    deleteSearchResult(&sr);
                     ip = 3;
                 } else {
                     printf("%s", "No hash array is allocated, so I cannot insert.\n");
@@ -131,6 +162,7 @@ int testHashArray(){
     } while(ip != -1);
 
     deleteHashArray(&ha);
+    deleteSearchResult(&sr);
 
     return 0;
 }
