@@ -27,7 +27,17 @@ SearchResult* newSearchResult(int searchedFor, bool isFound, int foundAt, int co
 
 void deleteHashArray(HashArray** deleteThis){
     if(deleteThis && *deleteThis){ // not null pointer or pointer to null pointer
-        free((*deleteThis)->contents); // TODO: free int*'s
+        // free contents pointers
+        int* ptr = 0;
+        for(int i = 0; i < (*deleteThis)->capacity; i++){
+            ptr = (*deleteThis)->contents[i];
+            if(ptr){
+                printf("Deleting %d\n", *ptr);
+                free(ptr);
+                ptr = 0;
+            }
+        }
+        free((*deleteThis)->contents);
         free(*deleteThis);
         *deleteThis = 0;
     }
@@ -42,10 +52,16 @@ void deleteSearchResult(SearchResult** deleteThis){
 SearchResult* putInHashArray(HashArray* intoHere, int val){
     SearchResult* whereItWasInserted = 0;
     if(intoHere){
-        whereItWasInserted = qpForEmpty(intoHere, val);
+        whereItWasInserted = lpForEmpty(intoHere, val);
         if(whereItWasInserted && whereItWasInserted->isFound){
             intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
             *(intoHere->contents[whereItWasInserted->foundAt]) = val;
+        } else {
+            whereItWasInserted = qpForEmpty(intoHere, val);
+            if(whereItWasInserted && whereItWasInserted->isFound){
+                intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
+                *(intoHere->contents[whereItWasInserted->foundAt]) = val;
+            }
         }
     }
     return whereItWasInserted;
@@ -77,7 +93,24 @@ SearchResult* qpForEmpty(HashArray* probeThis, int startIdx){
     return ret;
 }
 SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor){
-    return 0;
+    SearchResult* ret = 0;
+
+    if(probeThis){
+        ret = newSearchResult(0, false, -1, 0);
+        int newIdx = 0;
+        for(int offset = 0; !(ret->isFound) && offset < probeThis->capacity; offset++){
+            // index to check
+            newIdx = (startIdx + offset) % probeThis->capacity;
+            if(probeThis->contents[newIdx] == 0){ // null pointer means nothing there
+                ret->foundAt = newIdx;
+                ret->isFound = true;
+            } else {
+                ret->collisions++;
+            }
+        }
+    }
+
+    return ret;
 }
 SearchResult* lpForEmpty(HashArray* probeThis, int startIdx){
     return 0;
