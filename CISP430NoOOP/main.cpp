@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Heap.h"
-#include "./include/HashArray.h"
 
 int useAvlTree();
 int useFindPath();
@@ -19,6 +18,5 @@ int main()
     //Heap<int>::test();
     //useString();
     //usePostfix();
-    //HashArray::test();
     return 0;
 }
