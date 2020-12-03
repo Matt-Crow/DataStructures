@@ -34,12 +34,13 @@ HashArray* newHashArray(int capacity){
     return ret;
 }
 
-SearchResult* newSearchResult(int searchedFor, bool isFound, int foundAt, int collisions){
+// private to this file
+SearchResult* newSearchResult(int searchedFor){
     SearchResult* ret = (SearchResult*)malloc(sizeof(SearchResult));
     ret->searchedFor = searchedFor;
-    ret->isFound = isFound;
-    ret->foundAt = foundAt;
-    ret->collisions = collisions;
+    ret->isFound = false;
+    ret->foundAt = -1;
+    ret->collisions = 0;
     return ret;
 }
 
@@ -67,40 +68,33 @@ void deleteSearchResult(SearchResult** deleteThis){
     }
 }
 
-SearchResult* putInHashArray(HashArray* intoHere, int val){
-    SearchResult* whereItWasInserted = 0;
-    if(intoHere){
+SearchResult* hashingImpl(HashArray* forThis, int valueToHash, CheckIfFoundFunction checker){
+    SearchResult* result = 0;
+    if(forThis){
+        //result = newSearchResult(valueToHash);
         int numSearchStrategies = 4;
         SearchResult* (*searchStrategies[])(HashArray*, int, int, CheckIfFoundFunction) = {&singleHash, &doubleHash, &linearProbe, &quadraticProbe};
-        for(int i = 0; i < numSearchStrategies && !whereItWasInserted; i++){
-            whereItWasInserted = searchStrategies[i](intoHere, val, 0, &isEmpty);
-            if(whereItWasInserted && !whereItWasInserted->isFound){
-                deleteSearchResult(&whereItWasInserted);
+        for(int i = 0; i < numSearchStrategies && !result; i++){
+            // change this
+            result = searchStrategies[i](forThis, valueToHash, valueToHash, &isEmpty);
+            if(result && !result->isFound){
+                deleteSearchResult(&result);
             }
         }
+    }
+    return result;
+}
 
-        if(whereItWasInserted && whereItWasInserted->isFound){
-            intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
-            *(intoHere->contents[whereItWasInserted->foundAt]) = val;
-        }
+SearchResult* putInHashArray(HashArray* intoHere, int val){
+    SearchResult* whereItWasInserted = hashingImpl(intoHere, val, &isEmpty);
+    if(whereItWasInserted && whereItWasInserted->isFound){
+        intoHere->contents[whereItWasInserted->foundAt] = (int*)malloc(sizeof(int));
+        *(intoHere->contents[whereItWasInserted->foundAt]) = val;
     }
     return whereItWasInserted;
 }
 SearchResult* getFromHashArray(HashArray* fromHere, int val){
-    SearchResult* whereItWasFound = 0;
-    if(fromHere){
-        int numSearchStrategies = 4;
-        SearchResult* (*searchStrategies[])(HashArray*, int, int, CheckIfFoundFunction) = {&singleHash, &doubleHash, &linearProbe, &quadraticProbe};
-        for(int i = 0; i < numSearchStrategies && !whereItWasFound; i++){
-            whereItWasFound = searchStrategies[i](fromHere, val % fromHere->capacity, val, &containsValue);
-            if(whereItWasFound && !whereItWasFound->isFound){
-                deleteSearchResult(&whereItWasFound);
-            }
-        }
-        if(whereItWasFound && whereItWasFound->isFound){
-            // found
-        }
-    }
+    SearchResult* whereItWasFound = hashingImpl(fromHere, val, &containsValue);
     return whereItWasFound;
 }
 
@@ -114,7 +108,7 @@ bool containsValue(HashArray* checkThis, int idx, int value){
 SearchResult* singleHash(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
     SearchResult* ret = 0;
     if(probeThis){
-        ret = newSearchResult(searchFor, false, -1, 0);
+        ret = newSearchResult(searchFor);
         int newIdx = startIdx % probeThis->capacity;
         if(checkIfFound(probeThis, newIdx, searchFor)){
             ret->foundAt = newIdx;
@@ -129,7 +123,7 @@ SearchResult* singleHash(HashArray* probeThis, int startIdx, int searchFor, Chec
 SearchResult* doubleHash(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
     SearchResult* ret = 0;
     if(probeThis){
-        ret = newSearchResult(searchFor, false, -1, 0);
+        ret = newSearchResult(searchFor);
         int p = prevPrime(probeThis->capacity);
         int newIdx = p - searchFor % p;
         if(checkIfFound(probeThis, newIdx, searchFor)){
@@ -146,7 +140,7 @@ SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor, 
     SearchResult* ret = 0;
 
     if(probeThis){
-        ret = newSearchResult(searchFor, false, -1, 0);
+        ret = newSearchResult(searchFor);
         int newIdx = 0;
         for(int offset = 1; !(ret->isFound) && offset <= 3; offset++){
             // index to check
@@ -167,7 +161,7 @@ SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor, Che
     SearchResult* ret = 0;
 
     if(probeThis){
-        ret = newSearchResult(searchFor, false, -1, 0);
+        ret = newSearchResult(searchFor);
         int newIdx = 0;
         for(int offset = 0; !(ret->isFound) && offset < probeThis->capacity; offset++){
             // index to check

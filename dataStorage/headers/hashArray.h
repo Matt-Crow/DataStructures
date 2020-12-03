@@ -20,7 +20,7 @@ typedef struct SearchResult {
 typedef bool (*CheckIfFoundFunction)(HashArray*, int, int);
 
 HashArray* newHashArray(int capacity);
-SearchResult* newSearchResult(int searchedFor, bool isFound, int foundAt, int collisions);
+//SearchResult* newSearchResult(int searchedFor, bool isFound, int foundAt, int collisions);
 
 void deleteHashArray(HashArray** deleteThis);
 void deleteSearchResult(SearchResult** deleteThis);
