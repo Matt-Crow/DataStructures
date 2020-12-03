@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "heap.h"
 
-bool leftIsBigger(int a, int b){
-    return a > b;
+bool parentIsBigger(int parent, int child){
+    return parent > child;
 }
-bool rightIsBigger(int a, int b){
-    return a < b;
+bool childIsBigger(int parent, int child){
+    return parent < child;
 }
 Heap* newHeap(int capacity, bool (*comparitor)(int, int)){
     Heap* ret = (Heap*)malloc(sizeof(Heap));
@@ -17,10 +17,10 @@ Heap* newHeap(int capacity, bool (*comparitor)(int, int)){
     return ret;
 }
 Heap* newMinHeap(int capacity){
-    return newHeap(capacity, leftIsBigger); // might be swapped
+    return newHeap(capacity, parentIsBigger); // might be swapped
 }
 Heap* newMaxHeap(int capacity){
-    return newHeap(capacity, rightIsBigger);
+    return newHeap(capacity, childIsBigger);
 }
 
 void deleteHeap(Heap** deleteMe){
@@ -32,17 +32,51 @@ void deleteHeap(Heap** deleteMe){
 }
 
 bool siftUp(Heap* heap, int value){
-    return false;
+    bool canSiftUp = heap->firstEmptyIdx < heap->capacity;
+    if(canSiftUp){
+        // start by putting the new value at the end of the heap
+        heap->values[heap->firstEmptyIdx] = value;
+        (heap->firstEmptyIdx)++;
+
+        // identify indeces
+        int childIdx = heap->firstEmptyIdx - 1; // since I incremented
+        int parentIdx = (childIdx - 1) / 2;
+        int temp;
+        // swap until the child is in place
+        while(parentIdx >= 0 && childIdx != 0 && heap->comparitor(heap->values[parentIdx], heap->values[childIdx])){
+            temp = heap->values[childIdx];
+            heap->values[childIdx] = heap->values[parentIdx];
+            heap->values[parentIdx] = temp;
+            temp = 0;
+            childIdx = parentIdx;
+            parentIdx = (childIdx - 1) / 2;
+        }
+    }
+    return canSiftUp;
 }
 bool isHeapEmpty(Heap* heap){
-    return false;
+    return heap->firstEmptyIdx == 0;
 }
 int siftDown(Heap* heap){
     return 0;
 }
 
 void printHeap(Heap* heap){
-
+    int row = 0;
+    int col = 0;
+    int rowWidth = 1;
+    printf("%s", "Heap:\n");
+    for(int i = 0; i < heap->firstEmptyIdx; i++){
+        printf("%d ", heap->values[i]);
+        col++;
+        if(col >= rowWidth){
+            // next row
+            printf("%s", "\n");
+            rowWidth *= 2;
+            col = 0;
+            row++;
+        }
+    }
 }
 
 int testHeap(){

@@ -7,7 +7,7 @@ typedef struct Heap {
     int capacity;
     int firstEmptyIdx;
     int* values;
-    bool (*comparitor)(int, int);
+    bool (*comparitor)(int, int); // when this should swap
 } Heap;
 
 Heap* newMinHeap(int capacity);
