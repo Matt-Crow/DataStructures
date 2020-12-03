@@ -17,7 +17,7 @@ typedef struct SearchResult {
     int collisions;
 } SearchResult;
 
-
+typedef bool (*CheckIfFoundFunction)(HashArray*, int, int);
 
 HashArray* newHashArray(int capacity);
 SearchResult* newSearchResult(int searchedFor, bool isFound, int foundAt, int collisions);
@@ -31,11 +31,9 @@ SearchResult* getFromHashArray(HashArray* fromHere, int val);
 bool isEmpty(HashArray* checkThis, int idx, int dummyParameter);
 bool containsValue(HashArray* checkThis, int idx, int value);
 
-SearchResult* qpNew(HashArray* probeThis, int startIdx, int searchFor, bool (*checkIfFound)(HashArray*, int, int));
-SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor);
-SearchResult* qpForEmpty(HashArray* probeThis, int startIdx);
-SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor);
-SearchResult* lpForEmpty(HashArray* probeThis, int startIdx);
+SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound);
+SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound);
+
 void printHashArray(HashArray* printMe);
 void printSearchResult(SearchResult* printMe);
 

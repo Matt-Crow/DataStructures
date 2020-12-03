@@ -53,9 +53,9 @@ SearchResult* putInHashArray(HashArray* intoHere, int val){
     SearchResult* whereItWasInserted = 0;
     if(intoHere){
         int numSearchStrategies = 2;
-        SearchResult* (*searchStrategies[])(HashArray*, int) = {&lpForEmpty, &qpForEmpty};
+        SearchResult* (*searchStrategies[])(HashArray*, int, int, CheckIfFoundFunction) = {&linearProbe, &quadraticProbe};
         for(int i = 0; i < numSearchStrategies && !whereItWasInserted; i++){
-            whereItWasInserted = searchStrategies[i](intoHere, val);
+            whereItWasInserted = searchStrategies[i](intoHere, val, 0, &isEmpty);
             if(whereItWasInserted && !whereItWasInserted->isFound){
                 deleteSearchResult(&whereItWasInserted);
             }
@@ -80,7 +80,7 @@ bool containsValue(HashArray* checkThis, int idx, int value){
 }
 
 
-SearchResult* qpNew(HashArray* probeThis, int startIdx, int searchFor, bool (*checkIfFound)(HashArray*, int, int)){
+SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
     SearchResult* ret = 0;
 
     if(probeThis){
@@ -101,28 +101,16 @@ SearchResult* qpNew(HashArray* probeThis, int startIdx, int searchFor, bool (*ch
     return ret;
 }
 
-SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor){
-    return qpNew(probeThis, startIdx, searchFor, &containsValue);
-}
-SearchResult* qpForEmpty(HashArray* probeThis, int startIdx){
-    return qpNew(probeThis, startIdx, 0, &isEmpty);
-}
-
-
-
-SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor){
-    return 0;
-}
-SearchResult* lpForEmpty(HashArray* probeThis, int startIdx){
+SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
     SearchResult* ret = 0;
 
     if(probeThis){
-        ret = newSearchResult(0, false, -1, 0);
+        ret = newSearchResult(searchFor, false, -1, 0);
         int newIdx = 0;
         for(int offset = 0; !(ret->isFound) && offset < probeThis->capacity; offset++){
             // index to check
             newIdx = (startIdx + offset) % probeThis->capacity;
-            if(probeThis->contents[newIdx] == 0){ // null pointer means nothing there
+            if(checkIfFound(probeThis, newIdx, searchFor)){
                 ret->foundAt = newIdx;
                 ret->isFound = true;
             } else {
