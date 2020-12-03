@@ -68,18 +68,84 @@ void deleteSearchResult(SearchResult** deleteThis){
     }
 }
 
+bool isEmpty(HashArray* checkThis, int idx, int dummyParameter){
+    return checkThis && !(checkThis->contents[idx]);
+}
+bool containsValue(HashArray* checkThis, int idx, int value){
+    return checkThis && checkThis->contents[idx] && *(checkThis->contents[idx]) == value;
+}
+
+void singleHash(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
+    int searchFor = previousResult->searchedFor;
+    if(probeThis){
+        int newIdx = searchFor % probeThis->capacity;
+        if(checkIfFound(probeThis, newIdx, searchFor)){
+            previousResult->foundAt = newIdx;
+            previousResult->isFound = true;
+        } else {
+            previousResult->collisions++;
+        }
+    }
+}
+
+void doubleHash(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
+    if(probeThis){
+        int searchFor = previousResult->searchedFor;
+        int p = prevPrime(probeThis->capacity);
+        int newIdx = p - searchFor % p;
+        if(checkIfFound(probeThis, newIdx, searchFor)){
+            previousResult->foundAt = newIdx;
+            previousResult->isFound = true;
+        } else {
+            previousResult->collisions++;
+        }
+    }
+}
+
+void quadraticProbe(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
+    if(probeThis){
+        int searchFor = previousResult->searchedFor;
+        int startIdx = searchFor % probeThis->capacity;
+        int newIdx = 0;
+        for(int offset = 1; !(previousResult->isFound) && offset <= 3; offset++){
+            // index to check
+            newIdx = (startIdx + offset * offset) % probeThis->capacity;
+            if(checkIfFound(probeThis, newIdx, searchFor)){
+                previousResult->foundAt = newIdx;
+                previousResult->isFound = true;
+            } else {
+                previousResult->collisions++;
+            }
+        }
+    }
+}
+
+void linearProbe(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
+    if(probeThis){
+        int searchFor = previousResult->searchedFor;
+        int startIdx = searchFor % probeThis->capacity;
+        int newIdx = 0;
+        for(int offset = 0; !(previousResult->isFound) && offset < probeThis->capacity; offset++){
+            // index to check
+            newIdx = (startIdx + offset) % probeThis->capacity;
+            if(checkIfFound(probeThis, newIdx, searchFor)){
+                previousResult->foundAt = newIdx;
+                previousResult->isFound = true;
+            } else {
+                previousResult->collisions++;
+            }
+        }
+    }
+}
+
 SearchResult* hashingImpl(HashArray* forThis, int valueToHash, CheckIfFoundFunction checker){
     SearchResult* result = 0;
     if(forThis){
-        //result = newSearchResult(valueToHash);
+        result = newSearchResult(valueToHash);
         int numSearchStrategies = 4;
-        SearchResult* (*searchStrategies[])(HashArray*, int, int, CheckIfFoundFunction) = {&singleHash, &doubleHash, &linearProbe, &quadraticProbe};
-        for(int i = 0; i < numSearchStrategies && !result; i++){
-            // change this
-            result = searchStrategies[i](forThis, valueToHash, valueToHash, &isEmpty);
-            if(result && !result->isFound){
-                deleteSearchResult(&result);
-            }
+        void (*searchStrategies[])(HashArray*, SearchResult*, CheckIfFoundFunction) = {&singleHash, &doubleHash, &linearProbe, &quadraticProbe};
+        for(int i = 0; i < numSearchStrategies && !result->isFound; i++){
+            searchStrategies[i](forThis, result, &isEmpty);
         }
     }
     return result;
@@ -97,87 +163,6 @@ SearchResult* getFromHashArray(HashArray* fromHere, int val){
     SearchResult* whereItWasFound = hashingImpl(fromHere, val, &containsValue);
     return whereItWasFound;
 }
-
-bool isEmpty(HashArray* checkThis, int idx, int dummyParameter){
-    return checkThis && !(checkThis->contents[idx]);
-}
-bool containsValue(HashArray* checkThis, int idx, int value){
-    return checkThis && checkThis->contents[idx] && *(checkThis->contents[idx]) == value;
-}
-
-SearchResult* singleHash(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
-    SearchResult* ret = 0;
-    if(probeThis){
-        ret = newSearchResult(searchFor);
-        int newIdx = startIdx % probeThis->capacity;
-        if(checkIfFound(probeThis, newIdx, searchFor)){
-            ret->foundAt = newIdx;
-            ret->isFound = true;
-        } else {
-            ret->collisions++;
-        }
-    }
-    return ret;
-}
-
-SearchResult* doubleHash(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
-    SearchResult* ret = 0;
-    if(probeThis){
-        ret = newSearchResult(searchFor);
-        int p = prevPrime(probeThis->capacity);
-        int newIdx = p - searchFor % p;
-        if(checkIfFound(probeThis, newIdx, searchFor)){
-            ret->foundAt = newIdx;
-            ret->isFound = true;
-        } else {
-            ret->collisions++;
-        }
-    }
-    return ret;
-}
-
-SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
-    SearchResult* ret = 0;
-
-    if(probeThis){
-        ret = newSearchResult(searchFor);
-        int newIdx = 0;
-        for(int offset = 1; !(ret->isFound) && offset <= 3; offset++){
-            // index to check
-            newIdx = (startIdx + offset * offset) % probeThis->capacity;
-            if(checkIfFound(probeThis, newIdx, searchFor)){
-                ret->foundAt = newIdx;
-                ret->isFound = true;
-            } else {
-                ret->collisions++;
-            }
-        }
-    }
-
-    return ret;
-}
-
-SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
-    SearchResult* ret = 0;
-
-    if(probeThis){
-        ret = newSearchResult(searchFor);
-        int newIdx = 0;
-        for(int offset = 0; !(ret->isFound) && offset < probeThis->capacity; offset++){
-            // index to check
-            newIdx = (startIdx + offset) % probeThis->capacity;
-            if(checkIfFound(probeThis, newIdx, searchFor)){
-                ret->foundAt = newIdx;
-                ret->isFound = true;
-            } else {
-                ret->collisions++;
-            }
-        }
-    }
-
-    return ret;
-}
-
 
 void printHashArray(HashArray* printMe){
     if(printMe){
