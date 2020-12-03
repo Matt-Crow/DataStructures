@@ -27,6 +27,11 @@ void deleteSearchResult(SearchResult** deleteThis);
 
 SearchResult* putInHashArray(HashArray* intoHere, int val);
 SearchResult* getFromHashArray(HashArray* fromHere, int val);
+
+bool isEmpty(HashArray* checkThis, int idx, int dummyParameter);
+bool containsValue(HashArray* checkThis, int idx, int value);
+
+SearchResult* qpNew(HashArray* probeThis, int startIdx, int searchFor, bool (*checkIfFound)(HashArray*, int, int));
 SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor);
 SearchResult* qpForEmpty(HashArray* probeThis, int startIdx);
 SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor);

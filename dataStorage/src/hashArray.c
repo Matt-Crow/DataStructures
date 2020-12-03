@@ -71,19 +71,25 @@ SearchResult* putInHashArray(HashArray* intoHere, int val){
 SearchResult* getFromHashArray(HashArray* fromHere, int val){
     return 0;
 }
-SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor){
-    return 0;
+
+bool isEmpty(HashArray* checkThis, int idx, int dummyParameter){
+    return checkThis && !(checkThis->contents[idx]);
 }
-SearchResult* qpForEmpty(HashArray* probeThis, int startIdx){
+bool containsValue(HashArray* checkThis, int idx, int value){
+    return checkThis && checkThis->contents[idx] && *(checkThis->contents[idx]) == value;
+}
+
+
+SearchResult* qpNew(HashArray* probeThis, int startIdx, int searchFor, bool (*checkIfFound)(HashArray*, int, int)){
     SearchResult* ret = 0;
 
     if(probeThis){
-        ret = newSearchResult(0, false, -1, 0);
+        ret = newSearchResult(searchFor, false, -1, 0);
         int newIdx = 0;
         for(int offset = 1; !(ret->isFound) && offset <= 3; offset++){
             // index to check
             newIdx = (startIdx + offset * offset) % probeThis->capacity;
-            if(probeThis->contents[newIdx] == 0){ // null pointer means nothing there
+            if(checkIfFound(probeThis, newIdx, searchFor)){
                 ret->foundAt = newIdx;
                 ret->isFound = true;
             } else {
@@ -94,6 +100,16 @@ SearchResult* qpForEmpty(HashArray* probeThis, int startIdx){
 
     return ret;
 }
+
+SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor){
+    return qpNew(probeThis, startIdx, searchFor, &containsValue);
+}
+SearchResult* qpForEmpty(HashArray* probeThis, int startIdx){
+    return qpNew(probeThis, startIdx, 0, &isEmpty);
+}
+
+
+
 SearchResult* linearProbe(HashArray* probeThis, int startIdx, int searchFor){
     return 0;
 }
