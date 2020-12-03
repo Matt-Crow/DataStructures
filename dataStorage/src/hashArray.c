@@ -75,6 +75,13 @@ bool containsValue(HashArray* checkThis, int idx, int value){
     return checkThis && checkThis->contents[idx] && *(checkThis->contents[idx]) == value;
 }
 
+/*
+Hashing Strategies:
+    Note that all of these change the contents of previousResult.
+    You must change hashingImpl to add new strategies
+*/
+
+
 void singleHash(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
     int searchFor = previousResult->searchedFor;
     if(probeThis){
@@ -87,7 +94,6 @@ void singleHash(HashArray* probeThis, SearchResult* previousResult, CheckIfFound
         }
     }
 }
-
 void doubleHash(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
     if(probeThis){
         int searchFor = previousResult->searchedFor;
@@ -101,7 +107,6 @@ void doubleHash(HashArray* probeThis, SearchResult* previousResult, CheckIfFound
         }
     }
 }
-
 void quadraticProbe(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
     if(probeThis){
         int searchFor = previousResult->searchedFor;
@@ -119,7 +124,6 @@ void quadraticProbe(HashArray* probeThis, SearchResult* previousResult, CheckIfF
         }
     }
 }
-
 void linearProbe(HashArray* probeThis, SearchResult* previousResult, CheckIfFoundFunction checkIfFound){
     if(probeThis){
         int searchFor = previousResult->searchedFor;
@@ -138,6 +142,8 @@ void linearProbe(HashArray* probeThis, SearchResult* previousResult, CheckIfFoun
     }
 }
 
+
+
 SearchResult* hashingImpl(HashArray* forThis, int valueToHash, CheckIfFoundFunction checker){
     SearchResult* result = 0;
     if(forThis){
@@ -145,11 +151,12 @@ SearchResult* hashingImpl(HashArray* forThis, int valueToHash, CheckIfFoundFunct
         int numSearchStrategies = 4;
         void (*searchStrategies[])(HashArray*, SearchResult*, CheckIfFoundFunction) = {&singleHash, &doubleHash, &linearProbe, &quadraticProbe};
         for(int i = 0; i < numSearchStrategies && !result->isFound; i++){
-            searchStrategies[i](forThis, result, &isEmpty);
+            searchStrategies[i](forThis, result, checker);
         }
     }
     return result;
 }
+
 
 SearchResult* putInHashArray(HashArray* intoHere, int val){
     SearchResult* whereItWasInserted = hashingImpl(intoHere, val, &isEmpty);
@@ -159,10 +166,14 @@ SearchResult* putInHashArray(HashArray* intoHere, int val){
     }
     return whereItWasInserted;
 }
+
+
 SearchResult* getFromHashArray(HashArray* fromHere, int val){
     SearchResult* whereItWasFound = hashingImpl(fromHere, val, &containsValue);
     return whereItWasFound;
 }
+
+
 
 void printHashArray(HashArray* printMe){
     if(printMe){
