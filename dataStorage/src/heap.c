@@ -17,6 +17,7 @@ Heap* newHeap(int capacity, bool (*comparitor)(int, int)){
     return ret;
 }
 Heap* newMinHeap(int capacity){
+    //                       should swap child if parent is bigger
     return newHeap(capacity, parentIsBigger); // might be swapped
 }
 Heap* newMaxHeap(int capacity){
@@ -58,7 +59,43 @@ bool isHeapEmpty(Heap* heap){
     return heap->firstEmptyIdx == 0;
 }
 int siftDown(Heap* heap){
-    return 0;
+    int ret = 0;
+    if(!isHeapEmpty(heap)){
+        ret = heap->values[0]; // return the topmost element
+        (heap->firstEmptyIdx)--;
+        heap->values[0] = heap->values[heap->firstEmptyIdx]; // overwrite first element with the last
+        // a heap is tree-like, so I access children like so
+        int parentIdx = 0;
+        int leftIdx = 2 * parentIdx + 1;
+        int rightIdx = 2 * parentIdx + 2;
+        int temp = 0;
+        // swap until the parent is in the proper place
+        while(
+            (leftIdx < heap->firstEmptyIdx && heap->comparitor(heap->values[parentIdx], heap->values[leftIdx]))
+         || (rightIdx < heap->firstEmptyIdx && heap->comparitor(heap->values[parentIdx], heap->values[rightIdx]))
+        ){
+            // now know at least one of them should swap
+            // these might be reversed
+            if(heap->comparitor(heap->values[rightIdx], heap->values[leftIdx])){
+                // parent should swap with left
+                temp = heap->values[leftIdx];
+                heap->values[leftIdx] = heap->values[parentIdx];
+                heap->values[parentIdx] = temp;
+                parentIdx = leftIdx;
+                temp = 0;
+            } else {
+                // swap with right
+                temp = heap->values[rightIdx];
+                heap->values[rightIdx] = heap->values[parentIdx];
+                heap->values[parentIdx] = temp;
+                parentIdx = rightIdx;
+                temp = 0;
+            }
+            leftIdx = 2 * parentIdx + 1;
+            rightIdx = 2 * parentIdx + 2;
+        }
+    }
+    return ret;
 }
 
 void printHeap(Heap* heap){
