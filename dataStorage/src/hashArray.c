@@ -3,6 +3,24 @@
 #include <string.h>
 #include "hashArray.h"
 
+bool isPrime(int num){
+    bool ret = true;
+    ret = !(num%2 == 0); //get rid of evens
+    //doesn't enter loop with 1, but defaults to true
+    for(int i = 3; ret && i < num; i+=2){
+        ret = !(num%i == 0);
+    }
+    return ret;
+}
+
+int prevPrime(int num){
+    int ret = num - 1;
+    while(ret > 1 && !isPrime(ret)){
+        ret--;
+    }
+    return ret;
+}
+
 HashArray* newHashArray(int capacity){
     HashArray* ret = 0;
     if(capacity < 0){
@@ -52,8 +70,8 @@ void deleteSearchResult(SearchResult** deleteThis){
 SearchResult* putInHashArray(HashArray* intoHere, int val){
     SearchResult* whereItWasInserted = 0;
     if(intoHere){
-        int numSearchStrategies = 2;
-        SearchResult* (*searchStrategies[])(HashArray*, int, int, CheckIfFoundFunction) = {&linearProbe, &quadraticProbe};
+        int numSearchStrategies = 4;
+        SearchResult* (*searchStrategies[])(HashArray*, int, int, CheckIfFoundFunction) = {&singleHash, &doubleHash, &linearProbe, &quadraticProbe};
         for(int i = 0; i < numSearchStrategies && !whereItWasInserted; i++){
             whereItWasInserted = searchStrategies[i](intoHere, val, 0, &isEmpty);
             if(whereItWasInserted && !whereItWasInserted->isFound){
@@ -69,7 +87,21 @@ SearchResult* putInHashArray(HashArray* intoHere, int val){
     return whereItWasInserted;
 }
 SearchResult* getFromHashArray(HashArray* fromHere, int val){
-    return 0;
+    SearchResult* whereItWasFound = 0;
+    if(fromHere){
+        int numSearchStrategies = 4;
+        SearchResult* (*searchStrategies[])(HashArray*, int, int, CheckIfFoundFunction) = {&singleHash, &doubleHash, &linearProbe, &quadraticProbe};
+        for(int i = 0; i < numSearchStrategies && !whereItWasFound; i++){
+            whereItWasFound = searchStrategies[i](fromHere, val % fromHere->capacity, val, &containsValue);
+            if(whereItWasFound && !whereItWasFound->isFound){
+                deleteSearchResult(&whereItWasFound);
+            }
+        }
+        if(whereItWasFound && whereItWasFound->isFound){
+            // found
+        }
+    }
+    return whereItWasFound;
 }
 
 bool isEmpty(HashArray* checkThis, int idx, int dummyParameter){
@@ -79,6 +111,36 @@ bool containsValue(HashArray* checkThis, int idx, int value){
     return checkThis && checkThis->contents[idx] && *(checkThis->contents[idx]) == value;
 }
 
+SearchResult* singleHash(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
+    SearchResult* ret = 0;
+    if(probeThis){
+        ret = newSearchResult(searchFor, false, -1, 0);
+        int newIdx = startIdx % probeThis->capacity;
+        if(checkIfFound(probeThis, newIdx, searchFor)){
+            ret->foundAt = newIdx;
+            ret->isFound = true;
+        } else {
+            ret->collisions++;
+        }
+    }
+    return ret;
+}
+
+SearchResult* doubleHash(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
+    SearchResult* ret = 0;
+    if(probeThis){
+        ret = newSearchResult(searchFor, false, -1, 0);
+        int p = prevPrime(probeThis->capacity);
+        int newIdx = p - searchFor % p;
+        if(checkIfFound(probeThis, newIdx, searchFor)){
+            ret->foundAt = newIdx;
+            ret->isFound = true;
+        } else {
+            ret->collisions++;
+        }
+    }
+    return ret;
+}
 
 SearchResult* quadraticProbe(HashArray* probeThis, int startIdx, int searchFor, CheckIfFoundFunction checkIfFound){
     SearchResult* ret = 0;
@@ -162,6 +224,7 @@ int testHashArray(){
         printf("%s", "1: Allocate a new Hash Array\n");
         printf("%s", "2: Free the Hash Array\n");
         printf("%s", "3: Insert into the Hash Array\n");
+        printf("%s", "4: Search for a value in the Hash Array\n");
         printf("%s", "-1: Quit\n");
         scanf("%d", &ip);
         switch(ip){
@@ -196,6 +259,18 @@ int testHashArray(){
                     ip = 3;
                 } else {
                     printf("%s", "No hash array is allocated, so I cannot insert.\n");
+                }
+                break;
+            case 4:
+                if(ha){
+                    printf("%s", "Enter value to search for: ");
+                    scanf("%d", &ip);
+                    sr = getFromHashArray(ha, ip);
+                    printSearchResult(sr);
+                    deleteSearchResult(&sr);
+                    ip = 4;
+                } else {
+                    printf("%s", "No hash array is allocated, so I cannot search.\n");
                 }
                 break;
         }
