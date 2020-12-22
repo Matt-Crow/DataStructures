@@ -8,19 +8,19 @@
 #include "heap.h"
 
 int main(){
-    MenuOption* options[] = {
-        newMenuOption("test stack", testStack),
-        newMenuOption("test queue", testQueue),
-        newMenuOption("test linked list", testLinkedList),
-        newMenuOption("test binary tree", testBinaryTree),
-        newMenuOption("test hash array", testHashArray),
-        newMenuOption("test heap", testHeap)
+    IntMenuOption* options[] = {
+        newIntMenuOption("test stack", testStack),
+        newIntMenuOption("test queue", testQueue),
+        newIntMenuOption("test linked list", testLinkedList),
+        newIntMenuOption("test binary tree", testBinaryTree),
+        newIntMenuOption("test hash array", testHashArray),
+        newIntMenuOption("test heap", testHeap)
     };
-    int numOptions = sizeof(options) / sizeof(MenuOption*);
+    int numOptions = sizeof(options) / sizeof(IntMenuOption*);
 
-    doMenu(options, numOptions);
+    doIntMenu(options, numOptions);
 
     for(int i = 0; i < numOptions; i++){
-        freeMenuOption(&(options[i]));
+        freeIntMenuOption(&(options[i]));
     }
 }
