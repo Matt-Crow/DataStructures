@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "core.h"
 #include "stack.h"
 #include "queue.h"
 #include "linkedList.h"
@@ -7,6 +8,12 @@
 #include "heap.h"
 
 int main(){
+
+    MenuOption* options[] = {
+        newMenuOption("test stack", testStack)
+    };
+    doMenu(options, 1);
+
     int ip = 0;
     do{
         printf("%s", "1: test stack\n");
