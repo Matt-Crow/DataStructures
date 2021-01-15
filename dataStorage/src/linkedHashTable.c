@@ -38,8 +38,9 @@ bool freeLinkedHashTableNode(LinkedHashTableNode** node){
     return freed;
 }
 
-int hash(char* str, int tableCapacity){
-    int theHash = 0;
+unsigned hash(char* str, int tableCapacity){
+    unsigned theHash = 0;
+    // needs to be unsigned to prevent rolling over to negative
     for(int i = 0; str[i] != '\0'; i++){
         theHash = str[i] + 31 * theHash;
     }
@@ -75,7 +76,8 @@ bool freeLinkedHashTable(LinkedHashTable** table){
 }
 
 void putIntoHashTable(LinkedHashTable* table, char* value){
-    int hashCode = hash(value, table->capacity);
+    unsigned hashCode = hash(value, table->capacity);
+    printf("hash is %u\n", hashCode);
     LinkedHashTableNode* newNode = newLinkedHashTableNode(value);
     newNode->next = table->values[hashCode];
     table->values[hashCode] = newNode;
@@ -83,7 +85,7 @@ void putIntoHashTable(LinkedHashTable* table, char* value){
 
 bool isInHashTable(LinkedHashTable* table, char* value){
     bool found = false;
-    int hashCode = hash(value, table->capacity);
+    unsigned hashCode = hash(value, table->capacity);
     LinkedHashTableNode* curr = table->values[hashCode];
     while(curr && !found){
         if(strcmp(curr->value, value) == 0){
@@ -103,6 +105,20 @@ void getNextLine(char* intoHere, int maxChars){
     }
 }
 
+void printLinkedHashTable(LinkedHashTable* table){
+    printf("%s", "Linked Hash Table:\n");
+    for(int i = 0; i < table->capacity; i++){
+        printf("* %d: ", i);
+        for(LinkedHashTableNode* curr = table->values[i]; curr != 0; curr = curr->next){
+            printf("\"%s\"", curr->value);
+            if(curr->next){
+                printf("%s", " => ");
+            }
+        }
+        printf("%s", "\n");
+    }
+}
+
 int testLinkedHashTable(){
     LinkedHashTable* table = newLinkedHashTable(4);
     int maxIpSize = 100;
@@ -110,12 +126,16 @@ int testLinkedHashTable(){
     int option = -1;
     do {
         printf("%s", "=== Linked Hash Table ===\n");
-        printf("%s", "1: Put into the Hash Table\n");
-        printf("%s", "2: Check if in the Hash Table\n");
+        printf("%s", "0: Print the linked hash table\n");
+        printf("%s", "1: Put into the linked hash table\n");
+        printf("%s", "2: Check if in the linked hash table\n");
         printf("%s", "-1: Quit\n");
         printf("%s", "Choose an option: ");
         scanf("%d", &option);
         switch (option) {
+            case 0:
+                printLinkedHashTable(table);
+                break;
             case 1:
                 fgets(ip, maxIpSize, stdin); // clear stdin first
                 printf("%s", "Enter value to insert: ");

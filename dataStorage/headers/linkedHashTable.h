@@ -15,6 +15,7 @@ LinkedHashTable* newLinkedHashTable(int capacity);
 bool freeLinkedHashTable(LinkedHashTable** table);
 void putIntoHashTable(LinkedHashTable* table, char* value);
 bool isInHashTable(LinkedHashTable* table, char* value);
+void printLinkedHashTable(LinkedHashTable* table);
 
 int testLinkedHashTable();
 
