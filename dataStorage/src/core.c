@@ -2,6 +2,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+
+
+
 MenuOption* newMenuOption(char msg[], Runnable runIfSelected){
     MenuOption* ret = (MenuOption*)malloc(sizeof(MenuOption));
     ret->msg = msg;

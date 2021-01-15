@@ -6,6 +6,7 @@
 #include "tree.h"
 #include "hashArray.h"
 #include "heap.h"
+#include "linkedHashTable.h"
 
 int main(){
     IntMenuOption* options[] = {
@@ -14,7 +15,8 @@ int main(){
         newIntMenuOption("test linked list", testLinkedList),
         newIntMenuOption("test binary tree", testBinaryTree),
         newIntMenuOption("test hash array", testHashArray),
-        newIntMenuOption("test heap", testHeap)
+        newIntMenuOption("test heap", testHeap),
+        newIntMenuOption("test linked hash table", testLinkedHashTable)
     };
     int numOptions = sizeof(options) / sizeof(IntMenuOption*);
 

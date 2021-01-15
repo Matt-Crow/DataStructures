@@ -5,7 +5,7 @@ SRC = ./src
 BIN = ./bin
 OBJ = ./obj
 
-main: main.o stack.o queue.o linkedList.o tree.o hashArray.o heap.o core.o | $(BIN)
+main: main.o stack.o queue.o linkedList.o tree.o hashArray.o heap.o linkedHashTable.o core.o | $(BIN)
 	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
 
 core.o: $(SRC)/main.c | $(OBJ)
@@ -31,6 +31,9 @@ hashArray.o: $(SRC)/hashArray.c | $(OBJ)
 
 heap.o: $(SRC)/heap.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/heap.c -o $(OBJ)/heap.o -I $(HEADERS)
+
+linkedHashTable.o: $(SRC)/linkedHashTable.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/linkedHashTable.c -o $(OBJ)/linkedHashTable.o -I $(HEADERS)
 
 $(BIN):
 	mkdir $(BIN)
