@@ -1,6 +1,8 @@
 #ifndef LINKED_HASH_TABLE
 #define LINKED_HASH_TABLE
 
+#include<stdbool.h>
+
 /*
 LinkedHashTable is defined in linkedHashTable.c
 Notice how this allows me to reference this data structure from any file that
@@ -10,6 +12,9 @@ implementation details.
 typedef struct LinkedHashTable LinkedHashTable;
 
 LinkedHashTable* newLinkedHashTable(int capacity);
+bool freeLinkedHashTable(LinkedHashTable** table);
+void putIntoHashTable(LinkedHashTable* table, char* value);
+bool isInHashTable(LinkedHashTable* table, char* value);
 
 int testLinkedHashTable();
 
