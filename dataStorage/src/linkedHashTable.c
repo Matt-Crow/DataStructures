@@ -19,8 +19,8 @@ typedef struct LinkedHashTable {
 LinkedHashTableNode* newLinkedHashTableNode(char* value){
     LinkedHashTableNode* ret = (LinkedHashTableNode*)malloc(sizeof(LinkedHashTableNode));
     ret->next = 0;
-    ret->value = (char*)malloc(sizeof(char) * (strlen(value) + 1));
-    strcpy(ret->value, value);
+    ret->value = strdup(value);//(char*)malloc(sizeof(char) * (strlen(value) + 1));
+    //strcpy(ret->value, value);
     return ret;
 }
 
@@ -82,7 +82,25 @@ void putIntoHashTable(LinkedHashTable* table, char* value){
 }
 
 bool isInHashTable(LinkedHashTable* table, char* value){
-    return false;
+    bool found = false;
+    int hashCode = hash(value, table->capacity);
+    LinkedHashTableNode* curr = table->values[hashCode];
+    while(curr && !found){
+        if(strcmp(curr->value, value) == 0){
+            found = true;
+        } else {
+            curr = curr->next;
+        }
+    }
+    return found;
+}
+
+void getNextLine(char* intoHere, int maxChars){
+    fgets(intoHere, maxChars, stdin);
+    char* nlChar = strstr(intoHere, "\n");
+    if(nlChar){
+        nlChar[0] = '\0'; // replace newline character
+    }
 }
 
 int testLinkedHashTable(){
@@ -93,6 +111,7 @@ int testLinkedHashTable(){
     do {
         printf("%s", "=== Linked Hash Table ===\n");
         printf("%s", "1: Put into the Hash Table\n");
+        printf("%s", "2: Check if in the Hash Table\n");
         printf("%s", "-1: Quit\n");
         printf("%s", "Choose an option: ");
         scanf("%d", &option);
@@ -100,12 +119,19 @@ int testLinkedHashTable(){
             case 1:
                 fgets(ip, maxIpSize, stdin); // clear stdin first
                 printf("%s", "Enter value to insert: ");
-                fgets(ip, maxIpSize, stdin);
-                char* nlChar = strstr(ip, "\n");
-                if(nlChar){
-                    nlChar[0] = '\0'; // replace newline character
-                }
+                getNextLine(ip, maxIpSize);
                 putIntoHashTable(table, ip);
+                break;
+            case 2:
+                fgets(ip, maxIpSize, stdin); // clear stdin first
+                printf("%s", "Enter value to search for: ");
+                getNextLine(ip, maxIpSize);
+                bool found = isInHashTable(table, ip);
+                if(found){
+                    printf("\"%s\" is in the hash table\n", ip);
+                } else {
+                    printf("\"%s\" is not in the hash table\n", ip);
+                }
                 break;
         }
     } while(option != -1);
