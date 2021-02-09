@@ -3,9 +3,18 @@
 
 #include<stdbool.h>
 
+/*
+Advantages:
+- log(n) searching
+
+Terms:
+- Depth:  number of edges in path from root to a given node (depth of root is 0)
+- Height: number of edges in path from a node to the furthest leaf node (height of a leaf is 0)
+*/
+
 typedef struct BinaryTree{
     int value;
-    struct BinaryTree* left;
+    struct BinaryTree* left; // use a list of trees for non-binary trees, or can store just first child and next sibling to save space
     struct BinaryTree* right;
 } BinaryTree;
 
