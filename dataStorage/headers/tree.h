@@ -14,7 +14,7 @@ Terms:
 
 typedef struct BinaryTree{
     int value;
-    struct BinaryTree* left; // use a list of trees for non-binary trees, or can store just first child and next sibling to save space
+    struct BinaryTree* left; // use a list of trees for non-binary trees
     struct BinaryTree* right;
 } BinaryTree;
 
@@ -36,6 +36,8 @@ BinaryTree* fromUnsoredArrayIdx(int* a, int len, int idx);
 BinaryTree* fromUnsoredArray(int* a, int len);
 
 void inOrder(BinaryTree* root);
+void preOrder(BinaryTree* root);
+void postOrder(BinaryTree* root);
 
 int testBinaryTree();
 

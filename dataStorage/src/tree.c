@@ -188,6 +188,20 @@ void inOrder(BinaryTree* root){
         inOrder(root->right);
     }
 }
+void preOrder(BinaryTree* root){
+    if(root){
+        printf("%i ", root->value);
+        preOrder(root->left);
+        postOrder(root->right);
+    }
+}
+void postOrder(BinaryTree* root){
+    if(root){
+        preOrder(root->left);
+        postOrder(root->right);
+        printf("%i ", root->value);
+    }
+}
 
 int testBinaryTree(){
     BinaryTree* root = 0;
@@ -198,12 +212,14 @@ int testBinaryTree(){
     do {
         printf("%s", "Choose an option:\n");
         printf("%s", "0: Print the binary tree in order\n");
-        printf("%s", "1: Insert into the binary tree\n");
-        printf("%s", "2: Delete the binary tree\n");
-        printf("%s", "3: Convert the binary tree to an array\n");
-        printf("%s", "4: Convert [1, 2, 3, 4, 5, 6, 7] to a binary tree\n");
-        printf("%s", "5: Convert [5, 1, 3, 2, 4] to a binary tree\n");
-        printf("%s", "6: Delete from the binary tree\n");
+        printf("%s", "1: Print the binary tree pre-order\n");
+        printf("%s", "2: Print the binary tree post-order\n");
+        printf("%s", "3: Insert into the binary tree\n");
+        printf("%s", "4: Delete the binary tree\n");
+        printf("%s", "5: Convert the binary tree to an array\n");
+        printf("%s", "6: Convert [1, 2, 3, 4, 5, 6, 7] to a binary tree\n");
+        printf("%s", "7: Convert [5, 1, 3, 2, 4] to a binary tree\n");
+        printf("%s", "8: Delete from the binary tree\n");
         printf("%s", "-1: Quit\n");
         scanf("%d", &ip);
 
@@ -213,6 +229,14 @@ int testBinaryTree(){
                 printf("%s", "\n");
                 break;
             case 1:
+                preOrder(root);
+                printf("%s", "\n");
+                break;
+            case 2:
+                postOrder(root);
+                printf("%s", "\n");
+                break;
+            case 3:
                 printf("%s", "enter a value to insert: ");
                 scanf("%d", &ip);
                 success = insertIntoTree(&root, ip);
@@ -223,11 +247,11 @@ int testBinaryTree(){
                 }
                 ip = 1;
                 break;
-            case 2:
+            case 4:
                 deleteBinaryTree(&root);
                 root = 0;
                 break;
-            case 3:
+            case 5:
                 a = toArray(root);
                 ip = getArraySize(root);
                 printf("%s", "[");
@@ -244,7 +268,7 @@ int testBinaryTree(){
                 }
                 ip = 3;
                 break;
-            case 4: {
+            case 6: {
                 int arr[] = {1, 2, 3, 4, 5, 6, 7};
                 temp = fromSortedArray(arr, 7);
                 inOrder(temp);
@@ -253,7 +277,7 @@ int testBinaryTree(){
                 temp = 0;
                 break;
             }
-            case 5: {
+            case 7: {
                 int arr[] = {5, 1, 3, 2, 4};
                 temp = fromUnsoredArray(arr, 5);
                 inOrder(temp);
@@ -262,7 +286,7 @@ int testBinaryTree(){
                 temp = 0;
                 break;
             }
-            case 6:
+            case 8:
                 printf("%s", "enter a value to delete: ");
                 scanf("%d", &ip);
                 success = deleteFromTree(&root, ip);
