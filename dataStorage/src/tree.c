@@ -100,7 +100,7 @@ bool deleteFromTree(BinaryTree** root, int val){
 }
 
 int getHeight(BinaryTree* root){
-    int ret = -1;
+    int ret = -1; // height of null is -1
     if(root){
         int left = getHeight(root->left);
         int right = getHeight(root->right);

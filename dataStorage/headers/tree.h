@@ -9,7 +9,7 @@ Advantages:
 
 Terms:
 - Depth:  number of edges in path from root to a given node (depth of root is 0)
-- Height: number of edges in path from a node to the furthest leaf node (height of a leaf is 0)
+- Height: number of edges in path from a node to the furthest leaf node (height of a leaf is 0). Height of null is -1.
 */
 
 typedef struct BinaryTree{
