@@ -25,6 +25,22 @@ void deleteBinaryTree(BinaryTree** root){
     }
 }
 
+bool isInTree(BinaryTree* root, int val){
+    bool found = false;
+    BinaryTree* curr = root;
+    while(curr && !found){
+        if(curr->value > val){
+            curr = curr->left;
+        } else if(curr->value < val){
+            curr = curr->right;
+        } else {
+            found = true;
+        }
+    }
+    curr = 0;
+    return found;
+}
+
 bool insertIntoTree(BinaryTree** root, int val){
     bool inserted = false;
     if(root){
@@ -220,6 +236,7 @@ int testBinaryTree(){
         printf("%s", "6: Convert [1, 2, 3, 4, 5, 6, 7] to a binary tree\n");
         printf("%s", "7: Convert [5, 1, 3, 2, 4] to a binary tree\n");
         printf("%s", "8: Delete from the binary tree\n");
+        printf("%s", "9: Search the binary tree\n");
         printf("%s", "-1: Quit\n");
         scanf("%d", &ip);
 
@@ -295,8 +312,20 @@ int testBinaryTree(){
                 } else {
                     printf("%i is not in the tree.\n", ip);
                 }
-                ip = 6;
+                ip = 8;
                 break;
+            case 9: {
+                printf("%s", "enter a value to search for: ");
+                scanf("%d", &ip);
+                success = isInTree(root, ip);
+                if(success){
+                    printf("%i is in the tree.\n", ip);
+                } else {
+                    printf("%i is not in the tree.\n", ip);
+                }
+                ip = 9;
+                break;
+            }
         }
     } while(ip != -1);
 
