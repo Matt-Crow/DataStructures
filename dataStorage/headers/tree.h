@@ -32,6 +32,7 @@ bool isInTree(BinaryTree* root, int val);
 bool insertIntoTree(BinaryTree** root, int val);
 bool deleteFromTree(BinaryTree** root, int val);
 
+// Height is at best log base 2 of the number of nodes in the tree
 int getHeight(BinaryTree* root);
 
 int getArraySize(BinaryTree* root);
