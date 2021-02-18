@@ -41,6 +41,19 @@ bool isInTree(BinaryTree* root, int val){
     return found;
 }
 
+// untested
+BinaryTree* locateInTree(BinaryTree* root, int val){
+    BinaryTree* curr = root;
+    while(curr && curr->value != val){
+        if(curr->value > val){
+            curr = curr->left;
+        } else {
+            curr = curr->right;
+        }
+    } // breaks when curr is in the place val should exist or contains val
+    return curr;
+}
+
 bool insertIntoTree(BinaryTree** root, int val){
     bool inserted = false;
     if(root){
@@ -61,6 +74,40 @@ bool insertIntoTree(BinaryTree** root, int val){
     }
     return inserted;
 }
+
+// untested
+bool insertIter(BinaryTree** root, int val){
+    bool inserted = false;
+    if(root){ // can't do anything with null pointer
+        BinaryTree** insertHere = root;
+        while(*insertHere && (*insertHere)->value != val){
+            if((*insertHere)->value > val){
+                insertHere = &((*insertHere)->left);
+            } else if((*insertHere)->value < val){
+                insertHere = &((*insertHere)->right);
+            }
+        } // breaks when *insertHere is null or holds val
+        if(*insertHere){
+            // already exists
+        } else {
+            inserted = true;
+            *insertHere = newBinaryTree(val);
+        }
+    }
+    return inserted;
+}
+// untested
+BinaryTree* fromClassInsert(BinaryTree* root, int val){
+    if(!root){
+        return newBinaryTree(val);
+    } else if(root->value > val){
+        root->left = fromClassInsert(root->left, val);
+    } else if(root->value < val){
+        root->right = fromClassInsert(root->right, val);
+    }
+    return root;
+}
+
 bool deleteFromTree(BinaryTree** root, int val){
     bool deleted = false;
     if(root && *root){
