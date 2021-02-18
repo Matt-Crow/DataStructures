@@ -25,4 +25,6 @@ int main(){
     for(int i = 0; i < numOptions; i++){
         freeIntMenuOption(&(options[i]));
     }
+
+    return 0;
 }
