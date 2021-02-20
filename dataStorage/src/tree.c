@@ -96,17 +96,6 @@ bool insertIter(BinaryTree** root, int val){
     }
     return inserted;
 }
-// untested
-BinaryTree* fromClassInsert(BinaryTree* root, int val){
-    if(!root){
-        return newBinaryTree(val);
-    } else if(root->value > val){
-        root->left = fromClassInsert(root->left, val);
-    } else if(root->value < val){
-        root->right = fromClassInsert(root->right, val);
-    }
-    return root;
-}
 
 bool deleteFromTree(BinaryTree** root, int val){
     bool deleted = false;
@@ -160,46 +149,6 @@ bool deleteFromTree(BinaryTree** root, int val){
         }
     }
     return deleted;
-}
-
-// returns the new root
-BinaryTree* fromClassDelete(BinaryTree* root, int val){
-    if(!root){
-        // will just return 0, as shown at the end
-    } else if(root->value > val){
-        root->left = fromClassDelete(root->left, val);
-    } else if(root->value < val){
-        root->right = fromClassDelete(root->right, val);
-    } else if(!(root->left || root->right)){ // found value from here down
-        // no children
-        deleteBinaryTree(&root);
-    } else if(root->left && right->right){
-        // 2 children
-        // find smallest value in right subtree
-        // or can do largest value in left subtree
-        BinaryTree* swapMe = root->right;
-        while(swapMe->left){
-            swapMe = swapMe->left;
-        }
-        root->value = swapMe->value;
-        root->right = fromClassDelete(root->right, swapMe->value);
-    } else if(root->left){
-        // 1 child
-        BinaryTree* temp = root;
-        root = root->left;
-        temp->left = 0;
-        deleteBinaryTree(temp);
-        // replaces root with its left child
-    } else {
-        // just right child
-        BinaryTree* temp = root;
-        root = root->right;
-        temp->right = 0;
-        deleteBinaryTree(temp);
-        // replaces root with its right child
-    }
-
-    return root;
 }
 
 int getHeight(BinaryTree* root){
