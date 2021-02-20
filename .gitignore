@@ -3,3 +3,9 @@
 *.docx
 *.stackdump
 dataStorage/bin/main
+/JavaDataStructures/.nb-gradle/
+**/.gradle
+*.class
+**/build/*
+!**/build/libs
+!**/build/docs
