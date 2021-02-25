@@ -40,9 +40,9 @@ public class BinarySearchTreeNode<T extends Comparable> {
     public static void main(String[] args){
         args = new String[]{"a", "b", "c", "d", "e", "f", "g"};
         BinarySearchTreeNode<String> root = null;
-        BinarySearchTreeHelper<String> helper = new BinarySearchTreeHelper<>();
+        BinarySearchTreeHelper<String, BinarySearchTreeNode<String>> helper = new BinarySearchTreeHelper<>();
         for(String arg : args){
-            root = helper.insertAVL(root, arg);
+            root = helper.insert(root, arg);
             System.out.println();
             if(root != null){
                 root.inOrder(System.out::println);

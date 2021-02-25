@@ -5,20 +5,21 @@ package dataStructures.binarySearchTree;
  * @author Matt
  * @param <T>
  */
-public class BinarySearchTreeHelper<T extends Comparable> {
-    public final int getHeight(BinarySearchTreeNode<T> root){
+public class BinarySearchTreeHelper<T extends Comparable, TreeType extends BinarySearchTreeNode<T>> {
+    public final int getHeight(TreeType root){
         int ret = -1;
         if(root != null){
-            ret = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+            ret = Math.max(getHeight((TreeType) root.left), getHeight((TreeType) root.right)) + 1;
         }
         return ret;
     }
     
     // returns the new root
-    public final BinarySearchTreeNode<T> insert(BinarySearchTreeNode<T> root, T value){
-        BinarySearchTreeNode<T> ret = root;
+    public final TreeType insert(TreeType root, T value){
+        TreeType ret = root;
         if(root == null){
-            ret = new BinarySearchTreeNode<>(value);
+            // not work
+            ret = new BinarySearchTreeNode<T>(value);
         } else if(root.value.compareTo(value) > 0){
             // need to go left
             root.left = insert(root.left, value);
@@ -32,113 +33,17 @@ public class BinarySearchTreeHelper<T extends Comparable> {
         return ret;
     }
     
-    /**
-     * AVL tree: the heights of each node's subtrees differ by at most 1.
-     * Keeps time complexity of tree operations closer to O(log(n))
-     * rather than O(n)
-     * 
-     * Should cache height to avoid recalculating multiple times
-     * 
-     * @param root
-     * @param value
-     * @return 
-     */
-    public final BinarySearchTreeNode<T> insertAVL(BinarySearchTreeNode<T> root, T value){
-        BinarySearchTreeNode<T> newRoot = root;
-        if(root == null){
-            newRoot = new BinarySearchTreeNode<>(value);
-        } else if(root.value.compareTo(value) > 0){
-            root.left = insertAVL(root.left, value);
-        } else if(root.value.compareTo(value) < 0){
-            root.right = insertAVL(root.right, value);
-        } else {
-            // duplicate value, do nothing
-        }
-        
-        newRoot = rebalance(newRoot);
-        
-        return newRoot;
-    }
-    
-    public final int getBalance(BinarySearchTreeNode<T> root){
-        int left = -1;
-        int right = -1;
-        if(root != null){
-            left = getHeight(root.left);
-            right = getHeight(root.right);
-        }
-        return left - right;
-    }
-    
-    public final BinarySearchTreeNode<T> rebalance(BinarySearchTreeNode<T> root){
-        BinarySearchTreeNode<T> newRoot = root;
-        if(root != null){
-            int balance = getHeight(root.left) - getHeight(root.right);
-            // todo: inner rotates
-            if(balance > 1){
-                newRoot = rightRotate(root);
-            } else if(balance < -1){
-                newRoot = leftRotate(root);
-            }
-        }
-        return newRoot;
-    }
-    
-    public final BinarySearchTreeNode<T> leftRotate(BinarySearchTreeNode<T> root){
-        BinarySearchTreeNode<T> newRoot = root;
-        if(root != null){
-            newRoot = root.right;
-            root.right = newRoot.left;
-            newRoot.left = root;
-            // todo update height of root
-            // todo update height of newRoot
-        }
-        return newRoot;
-    }
-    
-    /**
-     *      (4)
-     *    /     \
-     *  (2)     (6)
-     * /  \     / \
-     *(1) (3) (5) (7) 
-     * 
-     * to
-     * 
-     *      (2)
-     *    /     \
-     *  (1)     (4)
-     *          / \
-     *        (3) (6)
-     *            / \
-     *          (5) (7)
-     * 
-     * @param root
-     * @return 
-     */
-    public final BinarySearchTreeNode<T> rightRotate(BinarySearchTreeNode<T> root){
-        BinarySearchTreeNode<T> newRoot = root;
-        if(root != null){
-            newRoot = root.left;
-            root.left = newRoot.right;
-            newRoot.right = root;
-            // todo update height of root
-            // todo update height of newRoot
-        }
-        return newRoot;
-    }
-    
     // returns the new root
-    public final BinarySearchTreeNode<T> delete(BinarySearchTreeNode<T> root, T value){
-        BinarySearchTreeNode<T> ret = root;
+    public final TreeType delete(TreeType root, T value){
+        TreeType ret = root;
         if(root == null){
             // do nothing
         } else if(root.value.compareTo(value) > 0){
             // go left
-            root.left = delete(root.left, value);
+            root.left = delete((TreeType) root.left, value);
         } else if(root.value.compareTo(value) < 0){
             // go right
-            root.right = delete(root.right, value);
+            root.right = delete((TreeType) root.right, value);
         } else if(root.left == null && root.right == null){
             /*
             By now, we know the root contains the value to delete
@@ -156,12 +61,12 @@ public class BinarySearchTreeHelper<T extends Comparable> {
             */
             BinarySearchTreeNode<T> swapMe = root.right.findMin();
             ret.value = swapMe.value;
-            root.right = delete(root.right, swapMe.value);
+            root.right = delete((TreeType) root.right, swapMe.value);
         } else if(root.left != null){
             // replace root with its left child
-            ret = root.left;
+            ret = (TreeType) root.left;
         } else if(root.right != null){
-            ret = root.right;
+            ret = (TreeType) root.right;
         } else {
             throw new RuntimeException();
         }
