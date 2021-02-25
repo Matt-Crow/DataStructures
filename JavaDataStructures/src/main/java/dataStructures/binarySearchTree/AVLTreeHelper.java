@@ -49,8 +49,14 @@ public class AVLTreeHelper<T extends Comparable> extends BinarySearchTreeHelper<
             int balance = getHeight(root.left) - getHeight(root.right);
             // todo: inner rotates
             if(balance > 1){
+                if(getBalance(root.left) == -1){
+                    root.left = leftRotate((AVLTreeNode<T>) root.left);
+                }
                 newRoot = rightRotate(root);
             } else if(balance < -1){
+                if(getBalance(root.right) == 1){
+                    root.right = rightRotate((AVLTreeNode<T>) root.right);
+                }
                 newRoot = leftRotate(root);
             }
         }
@@ -99,5 +105,10 @@ public class AVLTreeHelper<T extends Comparable> extends BinarySearchTreeHelper<
             // todo update height of newRoot
         }
         return newRoot;
+    }
+    
+    @Override
+    protected BinarySearchTreeNode<T> createNew(T val){
+        return new AVLTreeNode<>(val);
     }
 }

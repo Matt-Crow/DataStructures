@@ -12,7 +12,8 @@ public class AVLTreeNode<T extends Comparable> extends BinarySearchTreeNode<T> {
     }
     
     public final int getHeight(){
-        return height;
+        throw new UnsupportedOperationException();
+        //return height;
     }
     
     public final void setHeight(int height){
@@ -30,6 +31,7 @@ public class AVLTreeNode<T extends Comparable> extends BinarySearchTreeNode<T> {
                 root.inOrder(System.out::println);
             }
         }
+        System.out.println("Height is " + helper.getHeight(root));
         for(String arg : args){
             root = helper.delete(root, arg);
             System.out.println();

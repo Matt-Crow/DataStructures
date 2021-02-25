@@ -6,10 +6,10 @@ package dataStructures.binarySearchTree;
  * @param <T>
  */
 public class BinarySearchTreeHelper<T extends Comparable, TreeType extends BinarySearchTreeNode<T>> {
-    public final int getHeight(TreeType root){
+    public final int getHeight(BinarySearchTreeNode<?> root){
         int ret = -1;
         if(root != null){
-            ret = Math.max(getHeight((TreeType) root.left), getHeight((TreeType) root.right)) + 1;
+            ret = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
         }
         return ret;
     }
@@ -19,13 +19,13 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
         TreeType ret = root;
         if(root == null){
             // not work
-            ret = new BinarySearchTreeNode<T>(value);
+            ret = (TreeType) createNew(value);
         } else if(root.value.compareTo(value) > 0){
             // need to go left
-            root.left = insert(root.left, value);
+            root.left = insert((TreeType) root.left, value);
         } else if(root.value.compareTo(value) < 0){
             // go right
-            root.right = insert(root.right, value);
+            root.right = insert((TreeType) root.right, value);
         } else {
             // value already exists, so do nothing
         }
@@ -71,5 +71,9 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
             throw new RuntimeException();
         }
         return ret;
+    }
+    
+    protected BinarySearchTreeNode<T> createNew(T val){
+        return new BinarySearchTreeNode<>(val);
     }
 }
