@@ -27,17 +27,13 @@ public class AVLTreeNode<T extends Comparable> extends BinarySearchTreeNode<T> {
         for(String arg : args){
             root = helper.insertAVL(root, arg);
             System.out.println();
-            if(root != null){
-                root.inOrder(System.out::println);
-            }
+            helper.inOrder(root, System.out::println);
         }
         System.out.println("Height is " + helper.getHeight(root));
         for(String arg : args){
             root = helper.delete(root, arg);
             System.out.println();
-            if(root != null){
-                root.inOrder(System.out::println);
-            }
+            helper.inOrder(root, System.out::println);
         }
     }
 }

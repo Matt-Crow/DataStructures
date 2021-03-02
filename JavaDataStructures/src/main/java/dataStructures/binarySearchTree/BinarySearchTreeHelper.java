@@ -1,11 +1,23 @@
 package dataStructures.binarySearchTree;
 
+import java.util.function.Consumer;
+
 /**
  * Move static parameterized methods out of BSTN
  * @author Matt
  * @param <T>
  */
 public class BinarySearchTreeHelper<T extends Comparable, TreeType extends BinarySearchTreeNode<T>> {
+    
+    public final void inOrder(BinarySearchTreeNode<T> root, Consumer<T> operation){
+        if(root != null){
+            inOrder(root.left, operation);
+            operation.accept(root.value);
+            inOrder(root.right, operation);
+            
+        }
+    }
+    
     public final int getHeight(BinarySearchTreeNode<?> root){
         int ret = -1;
         if(root != null){

@@ -1,7 +1,5 @@
 package dataStructures.binarySearchTree;
 
-import java.util.function.Consumer;
-
 /**
  * Psuedo static methods in BinarySearchTreeHelper
  * 
@@ -19,16 +17,6 @@ public class BinarySearchTreeNode<T extends Comparable> {
         right = null;
     }
     
-    public final void inOrder(Consumer<T> operation){
-        if(left != null){
-            left.inOrder(operation);
-        }
-        operation.accept(value);
-        if(right != null){
-            right.inOrder(operation);
-        }
-    }
-    
     public final BinarySearchTreeNode<T> findMin(){
         BinarySearchTreeNode<T> ret = this;
         if(ret.left != null){
@@ -44,16 +32,12 @@ public class BinarySearchTreeNode<T extends Comparable> {
         for(String arg : args){
             root = helper.insert(root, arg);
             System.out.println();
-            if(root != null){
-                root.inOrder(System.out::println);
-            }
+            helper.inOrder(root, System.out::println);
         }
         for(String arg : args){
             root = helper.delete(root, arg);
             System.out.println();
-            if(root != null){
-                root.inOrder(System.out::println);
-            }
+            helper.inOrder(root, System.out::println);
         }
     }
 }
