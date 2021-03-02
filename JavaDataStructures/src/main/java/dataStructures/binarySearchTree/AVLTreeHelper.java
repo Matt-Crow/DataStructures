@@ -22,13 +22,13 @@ public class AVLTreeHelper<T extends Comparable> extends BinarySearchTreeHelper<
             newRoot = new AVLTreeNode<>(value);
         } else if(root.value.compareTo(value) > 0){
             root.left = insertAVL((AVLTreeNode<T>) root.left, value);
+            newRoot = rebalance(newRoot);
         } else if(root.value.compareTo(value) < 0){
             root.right = insertAVL((AVLTreeNode<T>) root.right, value);
+            newRoot = rebalance(newRoot);
         } else {
             // duplicate value, do nothing
         }
-        
-        newRoot = rebalance(newRoot);
         
         return newRoot;
     }
@@ -43,20 +43,32 @@ public class AVLTreeHelper<T extends Comparable> extends BinarySearchTreeHelper<
         return left - right;
     }
     
+    /**
+     * In class, the professor had us identify 2 "k nodes":
+     * - first k node is the imbalanced node
+     * - second k node is the next node in the path to the last inserted node
+     * - if the last inserted value is between the two k nodes, double rotate
+     * - else, single rotation
+     * - if double rotation, third k node is the node after k-2 in the path to
+     *   the last inserted node
+     * 
+     * @param root
+     * @return 
+     */
     public final AVLTreeNode<T> rebalance(AVLTreeNode<T> root){
         AVLTreeNode<T> newRoot = root;
         if(root != null){
             int balance = getHeight(root.left) - getHeight(root.right);
-            if(balance > 1){
-                if(getBalance(root.left) == -1){
-                    root.left = leftRotate((AVLTreeNode<T>) root.left);
+            if(balance > 1){ // left heavy
+                if(getBalance(root.left) < 0){ // left heavy inner 
+                    root.left = leftRotate((AVLTreeNode<T>) root.left); // rotate child
                 }
-                newRoot = rightRotate(root);
-            } else if(balance < -1){
-                if(getBalance(root.right) == 1){
-                    root.right = rightRotate((AVLTreeNode<T>) root.right);
+                newRoot = rightRotate(root); // rotate parent
+            } else if(balance < -1){ // right heavy
+                if(getBalance(root.right) > 0){ // right heavy outer
+                    root.right = rightRotate((AVLTreeNode<T>) root.right); // rotate child
                 }
-                newRoot = leftRotate(root);
+                newRoot = leftRotate(root); // rotate parent
             }
         }
         return newRoot;

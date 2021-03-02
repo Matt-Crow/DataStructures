@@ -14,7 +14,6 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
             inOrder(root.left, operation);
             operation.accept(root.value);
             inOrder(root.right, operation);
-            
         }
     }
     
