@@ -30,6 +30,44 @@ public class AVLTreeHelper<T extends Comparable> extends BinarySearchTreeHelper<
             // duplicate value, do nothing
         }
         
+        // update height of root
+        
+        return newRoot;
+    }
+    
+    public final AVLTreeNode<T> deleteAVL(AVLTreeNode<T> root, T value){
+        AVLTreeNode<T> newRoot = root;
+        if(root == null){
+            // do nothing
+        } else if(root.value.compareTo(value) > 0){
+            root.left = deleteAVL((AVLTreeNode<T>) root.left, value); 
+        } else if(root.value.compareTo(value) < 0){
+            root.right = deleteAVL((AVLTreeNode<T>) root.right, value);
+        } else if(root.left == null && root.right == null){
+            // found, so delete
+            newRoot = null;
+        } else if(root.left != null && root.right != null){
+            // two children
+            /*
+            Two children.
+            Replace this root with either:
+            1. the smallest node from its right subtree
+            or
+            2. the largest node from its left subtree
+            */
+            AVLTreeNode<T> swapMe = (AVLTreeNode<T>) root.left.findMax();
+            newRoot.value = swapMe.value;
+            newRoot.left = deleteAVL((AVLTreeNode<T>) root.left, value);
+        } else if(root.left != null){
+            // replace root with its left child
+            newRoot = (AVLTreeNode<T>) root.left;
+        } else if(root.right != null){
+            newRoot = (AVLTreeNode<T>) root.right;
+        } else {
+            throw new RuntimeException();
+        }
+        newRoot = rebalance(newRoot);
+        
         return newRoot;
     }
     

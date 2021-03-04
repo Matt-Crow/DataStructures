@@ -25,6 +25,14 @@ public class BinarySearchTreeNode<T extends Comparable> {
         return ret;
     }
     
+    public final BinarySearchTreeNode<T> findMax(){
+        BinarySearchTreeNode<T> ret = this;
+        if(ret.right != null){
+            ret = ret.right.findMax();
+        }
+        return ret;
+    }
+    
     public static void main(String[] args){
         args = new String[]{"a", "b", "c", "d", "e", "f", "g"};
         BinarySearchTreeNode<String> root = null;
