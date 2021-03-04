@@ -67,7 +67,7 @@ public class AVLTreeHelper<T extends Comparable> extends BinarySearchTreeHelper<
             throw new RuntimeException();
         }
         newRoot = rebalance(newRoot);
-        
+        // need to update heights somewhere
         return newRoot;
     }
     
