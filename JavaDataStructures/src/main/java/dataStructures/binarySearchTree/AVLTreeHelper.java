@@ -157,7 +157,7 @@ public class AVLTreeHelper<T extends Comparable> extends BinarySearchTreeHelper<
     }
     
     @Override
-    protected BinarySearchTreeNode<T> createNew(T val){
+    protected AVLTreeNode<T> createNew(T val){
         return new AVLTreeNode<>(val);
     }
 }

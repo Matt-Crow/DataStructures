@@ -10,6 +10,10 @@ public class RedBlackTreeHelper<T extends Comparable> extends BinarySearchTreeHe
     public final RedBlackTreeNode<T> insert(RedBlackTreeNode<T> root, T value){
         RedBlackTreeNode<T> newRoot = super.insert(root, value);
         if(newRoot != null){
+            // first check for red left child with red right child or mirror
+            //  and rotate outward
+            // second check for red left child with red left child or mirror
+            //  and rotate ???
             if(!((RedBlackTreeNode<T>)(newRoot.left)).isBlack){
                 // todo: if root has a red child with a red child,
                 // rotate and swap colors between root and old child
@@ -24,6 +28,10 @@ public class RedBlackTreeHelper<T extends Comparable> extends BinarySearchTreeHe
         }
         return newRoot;
     }
+    
+    /*
+    Rotation: swap colors of the two rotated nodes
+    */
     
     /**
      * Children and parents swap colors.
