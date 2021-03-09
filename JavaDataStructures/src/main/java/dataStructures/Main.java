@@ -2,6 +2,7 @@ package dataStructures;
 
 import dataStructures.binarySearchTree.AVLTreeNode;
 import dataStructures.binarySearchTree.BinarySearchTreeNode;
+import dataStructures.binarySearchTree.RedBlackTreeHelper;
 
 
 public class Main {
@@ -10,6 +11,7 @@ public class Main {
      */
     public static void main(String[] args) {
         //BinarySearchTreeNode.main(args);
-        AVLTreeNode.main(args);
+        //AVLTreeNode.main(args);
+        RedBlackTreeHelper.main(args);
     }
 }

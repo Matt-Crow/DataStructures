@@ -26,7 +26,7 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
     }
     
     // returns the new root
-    public final TreeType insert(TreeType root, T value){
+    public TreeType insert(TreeType root, T value){
         TreeType ret = root;
         if(root == null){
             // not work
@@ -84,7 +84,7 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
         return ret;
     }
     
-    protected BinarySearchTreeNode<T> createNew(T val){
-        return new BinarySearchTreeNode<>(val);
+    protected TreeType createNew(T val){
+        return (TreeType)new BinarySearchTreeNode<>(val);
     }
 }
