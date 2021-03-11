@@ -10,18 +10,18 @@ package dataStructures.binarySearchTree;
  * 
  * 5. Black Balanced Condition:
  *    every path from the root to a null node must have exact same number of black
- *    nodes (color of null is irrelevant)
+ *    nodes (color of null is black)
  * 
  * @author Matt
  */
-public class RedBlackTreeNode<T extends Comparable> extends BinarySearchTreeNode<T> {
+public class RedBlackTreeNode extends BinarySearchTreeNode {
     /*
     True: node is black
     False: node is red
     */
     protected boolean isBlack;
     
-    public RedBlackTreeNode(T value, boolean isBlack) {
+    public RedBlackTreeNode(int value, boolean isBlack) {
         super(value);
         this.isBlack = isBlack;
     }

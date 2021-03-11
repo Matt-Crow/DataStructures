@@ -4,9 +4,9 @@ package dataStructures.binarySearchTree;
  *
  * @author Matt
  */
-public class AVLTreeNode<T extends Comparable> extends BinarySearchTreeNode<T> {
+public class AVLTreeNode extends BinarySearchTreeNode {
     private int height;
-    public AVLTreeNode(T value) {
+    public AVLTreeNode(int value) {
         super(value);
         height = 0;
     }
@@ -21,18 +21,17 @@ public class AVLTreeNode<T extends Comparable> extends BinarySearchTreeNode<T> {
     }
     
     public static void main(String[] args){
-        args = new String[]{"a", "b", "c", "d", "e", "f", "g"};
-        AVLTreeNode<String> root = null;
-        AVLTreeHelper<String> helper = new AVLTreeHelper<>();
-        for(String arg : args){
-            root = helper.insertAVL(root, arg);
+        AVLTreeNode root = null;
+        AVLTreeHelper helper = new AVLTreeHelper();
+        for(int i = 0; i < 10; i++){
+            root = helper.insertAVL(root, i);
             System.out.println();
             helper.inOrder(root, System.out::println);
             System.out.println("Height is " + helper.getHeight(root));
         }
         System.out.println("Height is " + helper.getHeight(root));
-        for(String arg : args){
-            root = helper.deleteAVL(root, arg);
+        for(int i = 0; i < 10; i++){
+            root = helper.deleteAVL(root, i);
             System.out.println();
             helper.inOrder(root, System.out::println);
             System.out.println("Height is " + helper.getHeight(root));

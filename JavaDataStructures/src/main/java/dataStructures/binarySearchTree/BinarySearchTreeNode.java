@@ -4,46 +4,44 @@ package dataStructures.binarySearchTree;
  * Psuedo static methods in BinarySearchTreeHelper
  * 
  * @author Matt
- * @param <T>
  */
-public class BinarySearchTreeNode<T extends Comparable> {
-    protected T value;
-    protected BinarySearchTreeNode<T> left;
-    protected BinarySearchTreeNode<T> right;
+public class BinarySearchTreeNode {
+    protected int value;
+    protected BinarySearchTreeNode left;
+    protected BinarySearchTreeNode right;
     
-    public BinarySearchTreeNode(T value){
+    public BinarySearchTreeNode(int value){
         this.value = value;
         left = null;
         right = null;
     }
     
-    public final BinarySearchTreeNode<T> findMin(){
-        BinarySearchTreeNode<T> ret = this;
+    public static final BinarySearchTreeNode findMin(BinarySearchTreeNode root){
+        BinarySearchTreeNode ret = root;
         if(ret.left != null){
-            ret = ret.left.findMin();
+            ret = findMin(ret.left);
         }
         return ret;
     }
     
-    public final BinarySearchTreeNode<T> findMax(){
-        BinarySearchTreeNode<T> ret = this;
+    public static final BinarySearchTreeNode findMax(BinarySearchTreeNode root){
+        BinarySearchTreeNode ret = root;
         if(ret.right != null){
-            ret = ret.right.findMax();
+            ret = findMax(ret.right);
         }
         return ret;
     }
     
     public static void main(String[] args){
-        args = new String[]{"a", "b", "c", "d", "e", "f", "g"};
-        BinarySearchTreeNode<String> root = null;
-        BinarySearchTreeHelper<String, BinarySearchTreeNode<String>> helper = new BinarySearchTreeHelper<>();
-        for(String arg : args){
-            root = helper.insert(root, arg);
+        BinarySearchTreeNode root = null;
+        BinarySearchTreeHelper<BinarySearchTreeNode> helper = new BinarySearchTreeHelper<>();
+        for(int i = 0; i < 10; i++){
+            root = helper.insert(root, i);
             System.out.println();
             helper.inOrder(root, System.out::println);
         }
-        for(String arg : args){
-            root = helper.delete(root, arg);
+        for(int i = 0; i < 10; i++){
+            root = helper.delete(root, i);
             System.out.println();
             helper.inOrder(root, System.out::println);
         }

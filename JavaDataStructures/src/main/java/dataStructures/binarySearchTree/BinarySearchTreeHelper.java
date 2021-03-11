@@ -7,9 +7,9 @@ import java.util.function.Consumer;
  * @author Matt
  * @param <T>
  */
-public class BinarySearchTreeHelper<T extends Comparable, TreeType extends BinarySearchTreeNode<T>> {
+public class BinarySearchTreeHelper<TreeType extends BinarySearchTreeNode> {
     
-    public final void inOrder(BinarySearchTreeNode<T> root, Consumer<T> operation){
+    public final void inOrder(BinarySearchTreeNode root, Consumer<Integer> operation){
         if(root != null){
             inOrder(root.left, operation);
             operation.accept(root.value);
@@ -17,7 +17,7 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
         }
     }
     
-    public final int getHeight(BinarySearchTreeNode<?> root){
+    public final int getHeight(BinarySearchTreeNode root){
         int ret = -1;
         if(root != null){
             ret = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
@@ -26,15 +26,15 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
     }
     
     // returns the new root
-    public TreeType insert(TreeType root, T value){
+    public TreeType insert(TreeType root, int value){
         TreeType ret = root;
         if(root == null){
             // not work
             ret = (TreeType) createNew(value);
-        } else if(root.value.compareTo(value) > 0){
+        } else if(root.value > value){
             // need to go left
             root.left = insert((TreeType) root.left, value);
-        } else if(root.value.compareTo(value) < 0){
+        } else if(root.value < value){
             // go right
             root.right = insert((TreeType) root.right, value);
         } else {
@@ -45,14 +45,14 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
     }
     
     // returns the new root
-    public final TreeType delete(TreeType root, T value){
+    public final TreeType delete(TreeType root, int value){
         TreeType ret = root;
         if(root == null){
             // do nothing
-        } else if(root.value.compareTo(value) > 0){
+        } else if(root.value > value){
             // go left
             root.left = delete((TreeType) root.left, value);
-        } else if(root.value.compareTo(value) < 0){
+        } else if(root.value < value){
             // go right
             root.right = delete((TreeType) root.right, value);
         } else if(root.left == null && root.right == null){
@@ -70,7 +70,7 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
             or
             2. the largest node from its left subtree
             */
-            BinarySearchTreeNode<T> swapMe = root.right.findMin();
+            BinarySearchTreeNode swapMe = BinarySearchTreeNode.findMin(root.right);
             ret.value = swapMe.value;
             root.right = delete((TreeType) root.right, swapMe.value);
         } else if(root.left != null){
@@ -84,7 +84,7 @@ public class BinarySearchTreeHelper<T extends Comparable, TreeType extends Binar
         return ret;
     }
     
-    protected TreeType createNew(T val){
-        return (TreeType)new BinarySearchTreeNode<>(val);
+    protected TreeType createNew(int val){
+        return (TreeType)new BinarySearchTreeNode(val);
     }
 }
