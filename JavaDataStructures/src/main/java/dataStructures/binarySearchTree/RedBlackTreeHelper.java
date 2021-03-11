@@ -2,6 +2,11 @@ package dataStructures.binarySearchTree;
 
 /**
  * todo main root is black
+ * 
+ * RBTree delete is extra credit
+ * 
+ * need to test
+ * 
  * @author Matt
  */
 public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>{
@@ -20,10 +25,7 @@ public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>
             // duplicate, do nothing
         }
         
-        // left is black, right is red
-        if(isBlack((RedBlackTreeNode) root.left) && !isBlack((RedBlackTreeNode) root.right)){
-            newRoot = rotateLeft(newRoot);
-        }
+        
         
         // error case #2: check for two outer red descendants
         // will short-circuit evaluate if left is null
@@ -31,6 +33,11 @@ public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>
             newRoot = rotateRight(newRoot);
         }
         if(!isBlack((RedBlackTreeNode) root.right) && !isBlack((RedBlackTreeNode) root.right.right)){
+            newRoot = rotateLeft(newRoot);
+        }
+        
+        // left is black, right is red
+        if(isBlack((RedBlackTreeNode) root.left) && !isBlack((RedBlackTreeNode) root.right)){
             newRoot = rotateLeft(newRoot);
         }
         
@@ -106,8 +113,8 @@ public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>
     public final void flipColor(RedBlackTreeNode root){
         if(root != null){
             root.isBlack = !root.isBlack;
-            ((RedBlackTreeNode)root.left).isBlack = !((RedBlackTreeNode)root.left).isBlack;
-            ((RedBlackTreeNode)root.right).isBlack = !((RedBlackTreeNode)root.right).isBlack;          
+            ((RedBlackTreeNode)root.left).isBlack = !isBlack((RedBlackTreeNode)root.left);
+            ((RedBlackTreeNode)root.right).isBlack = !isBlack((RedBlackTreeNode)root.right);          
         }
     }
     
@@ -124,12 +131,6 @@ public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>
         RedBlackTreeHelper helper = new RedBlackTreeHelper();
         for(int i = 0; i < 10; i++){
             tree = helper.insert(tree, i);
-            helper.inOrder(tree, System.out::println);
-            System.out.println();
-        }
-        
-        for(int i = 0; i < 10; i++){
-            tree = helper.delete(tree, i);
             helper.inOrder(tree, System.out::println);
             System.out.println();
         }

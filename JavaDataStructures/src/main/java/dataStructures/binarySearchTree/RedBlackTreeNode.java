@@ -12,7 +12,10 @@ package dataStructures.binarySearchTree;
  *    every path from the root to a null node must have exact same number of black
  *    nodes (color of null is black)
  * 
- * @author Matt
+ * 4 & 5 guarantee that the longest path in the left subtree is at most twice as
+ * long as the longest path in the right subtree
+ * 
+ * @author Matt Crow
  */
 public class RedBlackTreeNode extends BinarySearchTreeNode {
     /*
