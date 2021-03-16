@@ -13,6 +13,8 @@ package dataStructures.notOnMidterm;
  * - CPU scheduling
  * - internet traffic scheduling
  * 
+ * Can use AVL or Red-Black trees as Priority Queue
+ * 
  * @author Matt Crow
  */
 public interface PriorityQueue {

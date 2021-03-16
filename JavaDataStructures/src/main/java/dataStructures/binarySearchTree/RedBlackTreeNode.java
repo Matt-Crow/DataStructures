@@ -13,7 +13,11 @@ package dataStructures.binarySearchTree;
  *    nodes (color of null is black)
  * 
  * 4 & 5 guarantee that the longest path in the left subtree is at most twice as
- * long as the longest path in the right subtree
+ * long as the longest path in the right subtree. More relaxed on balance condition
+ * than AVL
+ * 
+ * 
+ * Need to test
  * 
  * @author Matt Crow
  */
