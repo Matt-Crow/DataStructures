@@ -9,9 +9,7 @@ package dataStructures.binarySearchTree;
  * 
  * @author Matt
  */
-public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>{
-    
-    @Override
+public class RedBlackTreeHelper {
     public final RedBlackTreeNode insert(RedBlackTreeNode root, int value){
         RedBlackTreeNode newRoot = root;
         
@@ -29,21 +27,21 @@ public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>
         
         // error case #2: check for two outer red descendants
         // will short-circuit evaluate if left is null
-        if(!isBlack((RedBlackTreeNode) root.left) && !isBlack((RedBlackTreeNode) root.left.left)){
+        if(!isBlack((RedBlackTreeNode) newRoot.left) && !isBlack((RedBlackTreeNode) newRoot.left.left)){
             newRoot = rotateRight(newRoot);
         }
-        if(!isBlack((RedBlackTreeNode) root.right) && !isBlack((RedBlackTreeNode) root.right.right)){
+        if(!isBlack((RedBlackTreeNode) newRoot.right) && !isBlack((RedBlackTreeNode) newRoot.right.right)){
             newRoot = rotateLeft(newRoot);
         }
         
         // left is black, right is red
-        if(isBlack((RedBlackTreeNode) root.left) && !isBlack((RedBlackTreeNode) root.right)){
+        if(isBlack((RedBlackTreeNode) newRoot.left) && !isBlack((RedBlackTreeNode) newRoot.right)){
             newRoot = rotateLeft(newRoot);
         }
         
         // error case #3: check for two red children
-        if(!isBlack((RedBlackTreeNode) root.left) && !isBlack((RedBlackTreeNode) root.right)){
-            flipColor(root);
+        if(!isBlack((RedBlackTreeNode) newRoot.left) && !isBlack((RedBlackTreeNode) newRoot.right)){
+            flipColor(newRoot);
         }
         
         
@@ -121,7 +119,6 @@ public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>
     
     
     // new nodes must be red at the start
-    @Override
     protected RedBlackTreeNode createNew(int value){
         return new RedBlackTreeNode(value, false);
     }
@@ -131,7 +128,7 @@ public class RedBlackTreeHelper extends BinarySearchTreeHelper<RedBlackTreeNode>
         RedBlackTreeHelper helper = new RedBlackTreeHelper();
         for(int i = 0; i < 10; i++){
             tree = helper.insert(tree, i);
-            helper.inOrder(tree, System.out::println);
+            RedBlackTreeNode.inOrder(tree, System.out::println);
             System.out.println();
         }
     }

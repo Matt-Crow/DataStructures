@@ -26,15 +26,15 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         for(int i = 0; i < 10; i++){
             root = helper.insertAVL(root, i);
             System.out.println();
-            helper.inOrder(root, System.out::println);
-            System.out.println("Height is " + helper.getHeight(root));
+            inOrder(root, System.out::println);
+            System.out.println("Height is " + getHeight(root));
         }
-        System.out.println("Height is " + helper.getHeight(root));
+        System.out.println("Height is " + getHeight(root));
         for(int i = 0; i < 10; i++){
             root = helper.deleteAVL(root, i);
             System.out.println();
-            helper.inOrder(root, System.out::println);
-            System.out.println("Height is " + helper.getHeight(root));
+            inOrder(root, System.out::println);
+            System.out.println("Height is " + getHeight(root));
         }
     }
 }

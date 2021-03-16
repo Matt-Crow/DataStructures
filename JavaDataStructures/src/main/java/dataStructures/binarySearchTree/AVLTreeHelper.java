@@ -4,7 +4,7 @@ package dataStructures.binarySearchTree;
  *
  * @author Matt
  */
-public class AVLTreeHelper extends BinarySearchTreeHelper<AVLTreeNode> {
+public class AVLTreeHelper {
     /**
      * AVL tree: the heights of each node's subtrees differ by at most 1.
      * Keeps time complexity of tree operations closer to O(log(n))
@@ -75,8 +75,9 @@ public class AVLTreeHelper extends BinarySearchTreeHelper<AVLTreeNode> {
         int left = -1;
         int right = -1;
         if(root != null){
-            left = getHeight(root.left);
-            right = getHeight(root.right);
+            // todo: change to cached heights
+            left = RedBlackTreeNode.getHeight(root.left);
+            right = RedBlackTreeNode.getHeight(root.right);
         }
         return left - right;
     }
@@ -96,7 +97,7 @@ public class AVLTreeHelper extends BinarySearchTreeHelper<AVLTreeNode> {
     public final AVLTreeNode rebalance(AVLTreeNode root){
         AVLTreeNode newRoot = root;
         if(root != null){
-            int balance = getHeight(root.left) - getHeight(root.right);
+            int balance = RedBlackTreeNode.getHeight(root.left) - RedBlackTreeNode.getHeight(root.right);
             if(balance > 1){ // left heavy
                 if(getBalance(root.left) < 0){ // left heavy inner 
                     root.left = leftRotate((AVLTreeNode) root.left); // rotate child
@@ -156,7 +157,6 @@ public class AVLTreeHelper extends BinarySearchTreeHelper<AVLTreeNode> {
         return newRoot;
     }
     
-    @Override
     protected AVLTreeNode createNew(int val){
         return new AVLTreeNode(val);
     }
