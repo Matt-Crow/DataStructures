@@ -11,13 +11,21 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         height = 0;
     }
     
-    public final int getHeight(){
-        throw new UnsupportedOperationException();
-        //return height;
+    public static final int getHeight(AVLTreeNode root){
+        int ret = -1;
+        if(root != null){
+            ret = root.height;
+        }
+        return ret;
     }
     
-    public final void setHeight(int height){
-        this.height = height;
+    public static final void updateHeight(AVLTreeNode root){
+        if(root != null){
+            root.height = Math.max(
+                getHeight(root.left), 
+                getHeight(root.right)
+            ) + 1;
+        }
     }
     
     /**
@@ -44,8 +52,6 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         } else {
             // duplicate value, do nothing
         }
-        
-        // update height of root
         
         return newRoot;
     }
@@ -82,7 +88,7 @@ public class AVLTreeNode extends BinarySearchTreeNode {
             throw new RuntimeException();
         }
         newRoot = rebalance(newRoot);
-        // need to update heights somewhere
+        
         return newRoot;
     }
     
@@ -90,9 +96,8 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         int left = -1;
         int right = -1;
         if(root != null){
-            // todo: change to cached heights
-            left = RedBlackTreeNode.getHeight(root.left);
-            right = RedBlackTreeNode.getHeight(root.right);
+            left = getHeight(root.left);
+            right = getHeight(root.right);
         }
         return left - right;
     }
@@ -112,7 +117,8 @@ public class AVLTreeNode extends BinarySearchTreeNode {
     public static final AVLTreeNode rebalance(AVLTreeNode root){
         AVLTreeNode newRoot = root;
         if(root != null){
-            int balance = RedBlackTreeNode.getHeight(root.left) - RedBlackTreeNode.getHeight(root.right);
+            updateHeight(root);
+            int balance = getHeight(root.left) - getHeight(root.right);
             if(balance > 1){ // left heavy
                 if(getBalance(root.left) < 0){ // left heavy inner 
                     root.left = leftRotate((AVLTreeNode) root.left); // rotate child
@@ -134,8 +140,8 @@ public class AVLTreeNode extends BinarySearchTreeNode {
             newRoot = (AVLTreeNode) root.right;
             root.right = newRoot.left;
             newRoot.left = root;
-            // todo update height of root
-            // todo update height of newRoot
+            updateHeight(root);
+            updateHeight(newRoot);
         }
         return newRoot;
     }
@@ -166,8 +172,8 @@ public class AVLTreeNode extends BinarySearchTreeNode {
             newRoot = (AVLTreeNode) root.left;
             root.left = newRoot.right;
             newRoot.right = root;
-            // todo update height of root
-            // todo update height of newRoot
+            updateHeight(root);
+            updateHeight(newRoot);
         }
         return newRoot;
     }
