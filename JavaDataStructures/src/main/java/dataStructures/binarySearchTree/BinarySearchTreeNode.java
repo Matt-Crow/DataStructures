@@ -35,19 +35,19 @@ public class BinarySearchTreeNode {
     }
     
     public static final BinarySearchTreeNode findMin(BinarySearchTreeNode root){
-        BinarySearchTreeNode ret = root;
-        if(ret.left != null){
-            ret = findMin(ret.left);
+        BinarySearchTreeNode lefternmost = root;
+        if(lefternmost.left != null){
+            lefternmost = findMin(lefternmost.left);
         }
-        return ret;
+        return lefternmost;
     }
     
     public static final BinarySearchTreeNode findMax(BinarySearchTreeNode root){
-        BinarySearchTreeNode ret = root;
-        if(ret.right != null){
-            ret = findMax(ret.right);
+        BinarySearchTreeNode rightmost = root;
+        if(rightmost.right != null){
+            rightmost = findMax(rightmost.right);
         }
-        return ret;
+        return rightmost;
     }
     
     

@@ -6,11 +6,18 @@ package dataStructures.binarySearchTree;
  */
 public class AVLTreeNode extends BinarySearchTreeNode {
     private int height;
+    
     public AVLTreeNode(int value) {
         super(value);
         height = 0;
     }
     
+    /**
+     * Retrieves cached height for initialized nodes,
+     * and -1 for null pointers
+     * @param root the node to get the height of
+     * @return the node's height
+    */
     public static final int getHeight(AVLTreeNode root){
         int ret = -1;
         if(root != null){
@@ -19,6 +26,14 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         return ret;
     }
     
+    /**
+     * Uses the cached heights of root's children to compute
+     * and cache its own height. Note this means we must traverse
+     * upwards from leaves to update heights properly. This method
+     * is non-recursive to save time
+     * 
+     * @param root the node to update the height of.
+     */
     public static final void updateHeight(AVLTreeNode root){
         if(root != null){
             root.height = Math.max(
@@ -26,6 +41,14 @@ public class AVLTreeNode extends BinarySearchTreeNode {
                 getHeight(root.right)
             ) + 1;
         }
+    }
+    
+    public static final int getBalance(BinarySearchTreeNode root){
+        int balance = 0;
+        if(root != null){
+            balance = getHeight(root.left) - getHeight(root.right);
+        }
+        return balance;
     }
     
     /**
@@ -56,14 +79,14 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         return newRoot;
     }
     
-    public static final AVLTreeNode deleteAVL(AVLTreeNode root, int value){
+    public static final AVLTreeNode removeAVL(AVLTreeNode root, int value){
         AVLTreeNode newRoot = root;
         if(root == null){
             // do nothing
         } else if(root.value > value){
-            root.left = deleteAVL((AVLTreeNode) root.left, value); 
+            root.left = removeAVL((AVLTreeNode) root.left, value); 
         } else if(root.value < value){
-            root.right = deleteAVL((AVLTreeNode) root.right, value);
+            root.right = removeAVL((AVLTreeNode) root.right, value);
         } else if(root.left == null && root.right == null){
             // found, so delete
             newRoot = null;
@@ -78,7 +101,7 @@ public class AVLTreeNode extends BinarySearchTreeNode {
             */
             AVLTreeNode swapMe = (AVLTreeNode) BinarySearchTreeNode.findMax(root.left);
             newRoot.value = swapMe.value;
-            newRoot.left = deleteAVL((AVLTreeNode) root.left, value);
+            newRoot.left = removeAVL((AVLTreeNode) root.left, value);
         } else if(root.left != null){
             // replace root with its left child
             newRoot = (AVLTreeNode) root.left;
@@ -90,16 +113,6 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         newRoot = rebalance(newRoot);
         
         return newRoot;
-    }
-    
-    public static final int getBalance(BinarySearchTreeNode root){
-        int left = -1;
-        int right = -1;
-        if(root != null){
-            left = getHeight(root.left);
-            right = getHeight(root.right);
-        }
-        return left - right;
     }
     
     /**
@@ -117,8 +130,10 @@ public class AVLTreeNode extends BinarySearchTreeNode {
     public static final AVLTreeNode rebalance(AVLTreeNode root){
         AVLTreeNode newRoot = root;
         if(root != null){
-            updateHeight(root);
-            int balance = getHeight(root.left) - getHeight(root.right);
+            updateHeight(root); // it's height may have changed by 1
+            // the height of its children have already been updated,
+            // as the recursion travels upward. 
+            int balance = getBalance(root);
             if(balance > 1){ // left heavy
                 if(getBalance(root.left) < 0){ // left heavy inner 
                     root.left = leftRotate((AVLTreeNode) root.left); // rotate child
@@ -134,14 +149,30 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         return newRoot;
     }
     
+    /**
+         (4)
+        /   \
+      (2)    (6)
+     /  \    /  \
+    (1) (3) (5) (7)
+
+    leftRotate((4)):
+            (6)
+           /   \
+         (4)   (7)
+        /   \
+      (2)   (5)
+     /   \
+    (1)  (3)
+    */
     public static final AVLTreeNode leftRotate(AVLTreeNode root){
         AVLTreeNode newRoot = root;
         if(root != null){
             newRoot = (AVLTreeNode) root.right;
             root.right = newRoot.left;
             newRoot.left = root;
-            updateHeight(root);
-            updateHeight(newRoot);
+            updateHeight(root); // must be in this order,
+            updateHeight(newRoot); // as root is below newRoot
         }
         return newRoot;
     }
@@ -188,7 +219,7 @@ public class AVLTreeNode extends BinarySearchTreeNode {
         }
         System.out.println("Height is " + getHeight(root));
         for(int i = 0; i < 10; i++){
-            root = deleteAVL(root, i);
+            root = removeAVL(root, i);
             System.out.println();
             inOrder(root, System.out::println);
             System.out.println("Height is " + getHeight(root));
