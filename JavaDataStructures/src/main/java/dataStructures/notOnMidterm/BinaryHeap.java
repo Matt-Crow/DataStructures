@@ -6,22 +6,43 @@ import java.util.ArrayList;
  * A Binary Heap is an implementation of Priority Queue,
  * consumes far less memory than a Binary Search Tree
  * 
- * Visually, looks like a Complete Tree:
+ * Structure Property: Visually, looks like a Complete Tree:
  *       (1)
  *     /     \
  *   (2)     (3)
  *   / \    /
  * (4) (5) (6)
  * 
+ * Heap Order Property:
+ * 
+ *  min heap: (default)
+ *      the priority of a node's children will be no less than its own
+ *      (x)
+ *     /   \
+ *   (x)  (x+n)
+ * 
+ *  max heap:
+ *      the priority of a node's children will be no greater than its own
+ *      (x)
+ *     /   \
+ *   (x)  (x-n)
+ * 
  * @author Matt
  */
 public class BinaryHeap implements PriorityQueue {
     private final ArrayList<Prioritizable> contents;
     private int nextEmptyIdx;
+    private final boolean isMinHeap;
     
-    public BinaryHeap(){
+    /**
+     * 
+     * @param isMinHeap : if true, this will dequeue lower numerical priorities
+     * first. If false, dequeues higher numerical priorities first
+     */
+    public BinaryHeap(boolean isMinHeap){
         contents = new ArrayList<>();
         nextEmptyIdx = 0;
+        this.isMinHeap = isMinHeap;
     }
     
     public final boolean isEmpty(){
@@ -68,8 +89,8 @@ public class BinaryHeap implements PriorityQueue {
     
     @Override
     public void add(Prioritizable newObj) {
-        contents.ensureCapacity(nextEmptyIdx + 1);
-        contents.set(nextEmptyIdx, newObj);
+        contents.ensureCapacity(nextEmptyIdx);
+        contents.add(nextEmptyIdx, newObj);
         nextEmptyIdx++;
         // todo: sift up   
     }
@@ -87,7 +108,7 @@ public class BinaryHeap implements PriorityQueue {
     }
     
     public static void main(String[] args){
-        BinaryHeap heap = new BinaryHeap();
+        BinaryHeap heap = new BinaryHeap(true);
         for(int i = 0; i < 10; i++){
             heap.add(new PrioritizableInteger(i));
         }

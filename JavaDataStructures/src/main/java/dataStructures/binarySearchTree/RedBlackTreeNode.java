@@ -46,7 +46,16 @@ public class RedBlackTreeNode extends BinarySearchTreeNode {
             // duplicate, do nothing
         }
         
-        
+        // each check will change its problem to the next one
+
+        // first check for red left child with red right child or mirror
+        // and rotate outward
+        if(!isBlack((RedBlackTreeNode)newRoot.left) && !isBlack((RedBlackTreeNode)newRoot.left.right)){
+            newRoot.left = rotateLeft((RedBlackTreeNode)newRoot.left);
+        }
+        if(!isBlack((RedBlackTreeNode)newRoot.right) && !isBlack((RedBlackTreeNode)newRoot.right.left)){
+            newRoot.right = rotateRight((RedBlackTreeNode)newRoot.right);
+        }
         
         // error case #2: check for two outer red descendants
         // will short-circuit evaluate if left is null
@@ -67,21 +76,6 @@ public class RedBlackTreeNode extends BinarySearchTreeNode {
             flipColor(newRoot);
         }
         
-        
-        
-        
-        
-        // each check will change its problem to the next one
-
-        // first check for red left child with red right child or mirror
-        //  and rotate outward
-
-        // second check for red left child with red left child or mirror
-        //  and rotate inward
-
-        // third check for two red children
-        // and flip colors between parent and children
-        
         return newRoot;
     }
     
@@ -92,10 +86,6 @@ public class RedBlackTreeNode extends BinarySearchTreeNode {
         }
         return ret;
     }
-    
-    /*
-    TODO Rotation: swap colors of the two rotated nodes
-    */
     
     private static RedBlackTreeNode rotateLeft(RedBlackTreeNode root){
         RedBlackTreeNode newRoot = root;
