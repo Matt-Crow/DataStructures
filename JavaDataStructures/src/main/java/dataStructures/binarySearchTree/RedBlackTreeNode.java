@@ -129,11 +129,22 @@ public class RedBlackTreeNode extends BinarySearchTreeNode {
         }
     }
     
+    public static final String print(RedBlackTreeNode root){
+        return String.format(
+            "RBNode#%d l: %d, r: %d (%s)", 
+            (root == null) ? 0 : root.value,
+            (root == null || root.left == null) ? 0 : root.left.value,
+            (root == null || root.right == null) ? 0 : root.right.value,
+            (isBlack(root) ? "BLA" : "RED")
+        );
+    }
+    
     public static void main(String[] args){
         RedBlackTreeNode tree = null;
         for(int i = 0; i < 10; i++){
             tree = insert(tree, i);
-            RedBlackTreeNode.inOrder(tree, System.out::println);
+            tree.isBlack = true; // set absolute root to black
+            RedBlackTreeNode.inOrder(tree, System.out::print);
             System.out.println();
         }
     }
