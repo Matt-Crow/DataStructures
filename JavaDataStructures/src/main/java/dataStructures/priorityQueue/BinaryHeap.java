@@ -96,6 +96,19 @@ public class BinaryHeap implements PriorityQueue {
         contents.set(idx2, temp);
     }
     
+    private boolean shouldSwap(int parentIdx, int childIdx){
+        return (isMinHeap && getValue(parentIdx) > getValue(childIdx))
+            || (!isMinHeap && getValue(parentIdx) < getValue(childIdx)); 
+    }
+    
+    /**
+     * Inserts the given object in the first empty index of the heap,
+     * then repeatedly swaps it with it's parent until it is in its proper place.
+     * 
+     * O(log(n))
+     * 
+     * @param newObj the new object to sift up
+     */
     @Override
     public void add(Prioritizable newObj) {
         contents.ensureCapacity(nextEmptyIdx);
@@ -103,16 +116,19 @@ public class BinaryHeap implements PriorityQueue {
         nextEmptyIdx++;
         int currIdx = nextEmptyIdx - 1;
         //System.out.println(this);
-        while(hasParent(currIdx) && (
-            (isMinHeap && getParentValue(currIdx) > getValue(currIdx))
-            || (!isMinHeap && getParentValue(currIdx) < getValue(currIdx))
-        )){
+        while(hasParent(currIdx) && shouldSwap(parentIdx(currIdx), currIdx)){
             swap(currIdx, parentIdx(currIdx));
             currIdx = parentIdx(currIdx);
             //System.out.println(this);
         }
     }
 
+    /**
+     * Removes the first value in the heap, replaces it with the last value in
+     * the heap, and swaps that new first value into place.
+     * 
+     * @return the highest priority object in the heap 
+     */
     @Override
     public Prioritizable dequeueHighestPriority() {
         Prioritizable ret = null;
@@ -120,7 +136,42 @@ public class BinaryHeap implements PriorityQueue {
             ret = contents.get(0);
             contents.set(0, contents.get(nextEmptyIdx - 1)); // last becomes first
             nextEmptyIdx--;
-            // todo: sift down
+            // todo: clean up
+            int currIdx = 0;
+            while(
+                (hasLeftChild(currIdx) && shouldSwap(currIdx, leftChildIdx(currIdx)))
+                || (hasRightChild(currIdx) && shouldSwap(currIdx, rightChildIdx(currIdx)))
+            ){
+                if(isMinHeap){
+                    if(hasLeftChild(currIdx) && hasRightChild(currIdx) && getLeftValue(currIdx) > getRightValue(currIdx)){
+                        swap(currIdx, rightChildIdx(currIdx));
+                        currIdx = rightChildIdx(currIdx);
+                    } else if(hasLeftChild(currIdx) && hasRightChild(currIdx)){
+                        swap(currIdx, leftChildIdx(currIdx));
+                        currIdx = leftChildIdx(currIdx);
+                    } else if(hasLeftChild(currIdx)){
+                        swap(currIdx, leftChildIdx(currIdx));
+                        currIdx = leftChildIdx(currIdx);
+                    } else { // just right child
+                        swap(currIdx, rightChildIdx(currIdx));
+                        currIdx = rightChildIdx(currIdx);
+                    }
+                } else {
+                    if(hasLeftChild(currIdx) && hasRightChild(currIdx) && getLeftValue(currIdx) < getRightValue(currIdx)){
+                        swap(currIdx, rightChildIdx(currIdx));
+                        currIdx = rightChildIdx(currIdx);
+                    } else if(hasLeftChild(currIdx) && hasRightChild(currIdx)){
+                        swap(currIdx, leftChildIdx(currIdx));
+                        currIdx = leftChildIdx(currIdx);
+                    } else if(hasLeftChild(currIdx)){
+                        swap(currIdx, leftChildIdx(currIdx));
+                        currIdx = leftChildIdx(currIdx);
+                    } else { // just right child
+                        swap(currIdx, rightChildIdx(currIdx));
+                        currIdx = rightChildIdx(currIdx);
+                    }
+                }
+            }
         }
         return ret;
     }
@@ -153,7 +204,8 @@ public class BinaryHeap implements PriorityQueue {
         }
         
         while(!heap.isEmpty()){
-            System.out.println(heap.dequeueHighestPriority());
+            System.out.printf("Dequeued %s\n", heap.dequeueHighestPriority().toString());
+            System.out.println(heap);
         }
     }
 
