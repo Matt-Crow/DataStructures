@@ -51,7 +51,7 @@ public class BinaryHeap implements PriorityQueue {
     
     private boolean hasParent(int idx){
         int pIdx = parentIdx(idx);
-        return 0 >= pIdx && pIdx < nextEmptyIdx;
+        return 0 <= pIdx && pIdx < nextEmptyIdx;
     }
     
     private boolean hasLeftChild(int idx){
@@ -78,6 +78,10 @@ public class BinaryHeap implements PriorityQueue {
         return contents.get(idx).getPriority();
     }
     
+    private int getParentValue(int idx){
+        return getValue(parentIdx(idx));
+    }
+    
     private int getLeftValue(int idx){
         return getValue(leftChildIdx(idx));
     }
@@ -86,13 +90,27 @@ public class BinaryHeap implements PriorityQueue {
         return getValue(rightChildIdx(idx));
     }
     
+    private void swap(int idx1, int idx2){
+        Prioritizable temp = contents.get(idx1);
+        contents.set(idx1, contents.get(idx2));
+        contents.set(idx2, temp);
+    }
     
     @Override
     public void add(Prioritizable newObj) {
         contents.ensureCapacity(nextEmptyIdx);
         contents.add(nextEmptyIdx, newObj);
         nextEmptyIdx++;
-        // todo: sift up   
+        int currIdx = nextEmptyIdx - 1;
+        //System.out.println(this);
+        while(hasParent(currIdx) && (
+            (isMinHeap && getParentValue(currIdx) > getValue(currIdx))
+            || (!isMinHeap && getParentValue(currIdx) < getValue(currIdx))
+        )){
+            swap(currIdx, parentIdx(currIdx));
+            currIdx = parentIdx(currIdx);
+            //System.out.println(this);
+        }
     }
 
     @Override
@@ -107,10 +125,31 @@ public class BinaryHeap implements PriorityQueue {
         return ret;
     }
     
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        int currWidth = 0;
+        int maxWidth = 1;
+        for(int i = 0; i < this.nextEmptyIdx; i++){
+            sb.append(Integer.toString(getValue(i)));
+            currWidth++;
+            if(currWidth == maxWidth){
+                maxWidth *= 2;
+                currWidth = 0;
+                sb.append("\n");
+            } else if(i < this.nextEmptyIdx - 1){
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
+    
     public static void main(String[] args){
         BinaryHeap heap = new BinaryHeap(true);
-        for(int i = 0; i < 10; i++){
+        for(int i = 10; i > 0; i--){
             heap.add(new PrioritizableInteger(i));
+            System.out.printf("Inserted %d:\n", i);
+            System.out.println(heap);
         }
         
         while(!heap.isEmpty()){
