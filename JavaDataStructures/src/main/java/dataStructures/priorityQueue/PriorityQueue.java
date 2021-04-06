@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataStructures.notOnMidterm;
+package dataStructures.priorityQueue;
 
 /**
  * A Priority Queue stores many objects, each of which have a priority. Should

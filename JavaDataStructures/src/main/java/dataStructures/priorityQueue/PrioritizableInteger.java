@@ -1,4 +1,4 @@
-package dataStructures.notOnMidterm;
+package dataStructures.priorityQueue;
 
 /**
  *
