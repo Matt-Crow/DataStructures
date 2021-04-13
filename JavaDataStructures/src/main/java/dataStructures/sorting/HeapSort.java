@@ -10,6 +10,8 @@ import java.util.Random;
  * - take an array, and convert it into a heap (nlogn)
  * - use deleteMin or deleteMax to sort (nlogn)
  * 
+ * Very space efficient
+ * 
  * @author Matt
  */
 public class HeapSort {
@@ -41,8 +43,8 @@ public class HeapSort {
         a, c, b |
         b, c | a
         c | b, a
-        | c, b, a <== hey look, sorted backwards!
-        Need to re-heapify after each iteration
+        | c, b, a <== hey look, sorted!
+        Still need to still sift down after each iteration
         */
         return ret;
     }
@@ -55,5 +57,9 @@ public class HeapSort {
             arr[i] = new PrioritizableInteger(rng.nextInt(256));
         }
         Prioritizable[] asHeap = sorter.heapify(arr);
+        Prioritizable[] sorted = sorter.heapToSortedArray(asHeap);
+        for(int i = 0; i < sorted.length; i++){
+            System.out.println(sorted[i].toString());
+        }
     }
 }
