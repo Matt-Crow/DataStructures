@@ -15,6 +15,12 @@ import java.util.Random;
  * @author Matt
  */
 public class HeapSort {
+    private final boolean sortLowToHigh;
+    
+    public HeapSort(boolean sortLowToHigh){
+        this.sortLowToHigh = sortLowToHigh;
+    }
+    
     
     private Prioritizable[] heapify(Prioritizable[] array){
         Prioritizable[] ret = Arrays.copyOf(array, array.length, Prioritizable[].class);
@@ -49,8 +55,34 @@ public class HeapSort {
         return ret;
     }
     
+    private boolean shouldSwap(Prioritizable[] array, int parentIdx, int childIdx){
+        boolean shouldSwap = false;
+        if(this.sortLowToHigh && array[parentIdx].getPriority() < array[childIdx].getPriority()){
+            // to sort low to high, sort heap from high to low
+            shouldSwap = true;
+        } else if(!this.sortLowToHigh && array[parentIdx].getPriority() > array[childIdx].getPriority()){
+            shouldSwap = true;
+        }
+        return shouldSwap;
+    }
+    
+    private void swap(Prioritizable[] array, int a, int b){
+        Prioritizable temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+    }
+    
+    // not done
+    private int getChildToSwapWith(Prioritizable[] array, int parentIdx){
+        int leftIdx = 2 * parentIdx + 1;
+        int rightIdx = 2 * parentIdx + 2;
+        int better = leftIdx;
+        
+        return better;
+    }
+    
     public static void main(String[] args){
-        HeapSort sorter = new HeapSort();
+        HeapSort sorter = new HeapSort(true);
         Random rng = new Random();
         PrioritizableInteger[] arr = new PrioritizableInteger[10];
         for(int i = 0; i < arr.length; i++){
