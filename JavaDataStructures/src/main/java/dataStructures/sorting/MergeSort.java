@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class MergeSort {
     
-    // inclusive of min, exclusive of max
+    // inclusive of min and max
     public final void mergeSort(Prioritizable[] array, int min, int max){
         if(max <= min){
             return;
@@ -25,7 +25,7 @@ public class MergeSort {
         int i = min;
         int j = mid + 1;
         int newIdx = 0;
-        Prioritizable[] merged = new Prioritizable[max - min];
+        Prioritizable[] merged = new Prioritizable[max - min + 1];
         while(newIdx < merged.length && i <= mid && j <= max){
             if(array[i].getPriority() > array[j].getPriority()){
                 merged[newIdx] = array[j];
