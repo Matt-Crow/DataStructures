@@ -72,18 +72,16 @@ public class QuickSort {
                 i++;
                 j--;
             }
-            // don't do else here
-            if(i >= j){
-                // array[i] is now greater than the pivot
-                swap(array, max - 1, i);
-                // pivot is now in its proper place
-            }
         }          
+        // array[i] is now greater than the pivot
+        swap(array, max - 1, i);
+        // pivot is now in its proper place
         
         
+        System.out.printf("[%d, %d)\n", min, max);
         System.out.printf("Pivot %d Index %d is set: %s\n", pivot.getPriority(), i, Arrays.toString(array));
         
-        System.out.printf("[%d, %d) U [%d,%d)\n", min, i, i + 1, max);
+        System.out.printf("[%d, %d) U [%d,%d)\n\n", min, i, i + 1, max);
         // call quicksort on the left partition
         quickSort(array, min, i);
         // call quicksort on the right partition
