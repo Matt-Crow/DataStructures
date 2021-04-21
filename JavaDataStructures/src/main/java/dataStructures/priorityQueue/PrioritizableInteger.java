@@ -18,6 +18,6 @@ public class PrioritizableInteger implements Prioritizable {
     
     @Override
     public String toString(){
-        return String.format("PriorityInt(%d)", value);
+        return String.format("%d", value);
     }
 }

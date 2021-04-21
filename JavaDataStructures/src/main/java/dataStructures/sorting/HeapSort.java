@@ -22,23 +22,23 @@ public class HeapSort {
     }
     
     
-    private Prioritizable[] heapify(Prioritizable[] array){
-        Prioritizable[] ret = Arrays.copyOf(array, array.length, Prioritizable[].class);
+    private void heapify(Prioritizable[] array){
         /*
         Heap-Order property of leaves are automatically satisfied, as a leaf node
         cannot have children to violate this property. Therefore, start heapifying
         from the first non-leaf node.
         */
-        int idxOfLastNonLeafNode = (array.length / 2) - 1; // maybe different
+        int lastLeaf = array.length - 1;
+        int idxOfLastNonLeafNode = (lastLeaf - 1) / 2;
         while(idxOfLastNonLeafNode >= 0){
             // sift down the current node into place
+            siftDown(array, idxOfLastNonLeafNode, array.length);
+            
             idxOfLastNonLeafNode--;
         }
-        return ret;
     }
     
-    private Prioritizable[] heapToSortedArray(Prioritizable[] asHeap){
-        Prioritizable[] ret = Arrays.copyOf(asHeap, asHeap.length, Prioritizable[].class);
+    private void heapToSortedArray(Prioritizable[] asHeap){
         /*
         Use a max heap to sort from smallest to largest,
         and a min heap to sort from largest to smallest
@@ -52,7 +52,34 @@ public class HeapSort {
         | c, b, a <== hey look, sorted!
         Still need to still sift down after each iteration
         */
-        return ret;
+        for(int i = asHeap.length - 1; i > 0; i--){
+            swap(asHeap, 0, i); // first becomes last
+            siftDown(asHeap, 0, i); 
+            // sift down, but ignore the elements we've sifted down
+        }
+    }
+    
+    /**
+     * 
+     * @param array
+     * @param idxToSiftDown
+     * @param stopIdx the size of the heap, not the array 
+     */
+    private void siftDown(Prioritizable[] array, int idxToSiftDown, int stopIdx){
+        int parent = idxToSiftDown;
+        int left = 2 * parent + 1;
+        int right = 2 * parent + 2;
+        int newParentIdx;
+        while(
+            (left < stopIdx && shouldSwap(array, parent, left))
+            || (right < stopIdx && shouldSwap(array, parent, right))
+        ){
+            newParentIdx = getChildToSwapWith(array, parent, stopIdx);
+            swap(array, parent, newParentIdx);
+            parent = newParentIdx;
+            left = 2 * parent + 1;
+            right = 2 * parent + 2;
+        }
     }
     
     private boolean shouldSwap(Prioritizable[] array, int parentIdx, int childIdx){
@@ -72,11 +99,32 @@ public class HeapSort {
         array[b] = temp;
     }
     
-    // not done
-    private int getChildToSwapWith(Prioritizable[] array, int parentIdx){
+    /**
+     * 
+     * @param array
+     * @param parentIdx
+     * @param stopIdx the size of the heap - not the array
+     * @return 
+     */
+    private int getChildToSwapWith(Prioritizable[] array, int parentIdx, int stopIdx){
         int leftIdx = 2 * parentIdx + 1;
         int rightIdx = 2 * parentIdx + 2;
         int better = leftIdx;
+        
+        if(rightIdx >= stopIdx){
+            better = leftIdx;
+        } else if(sortLowToHigh && array[leftIdx].getPriority() < array[rightIdx].getPriority()){
+            // to sort low to high, sort heap from high to low
+            better = rightIdx;
+        } else if(sortLowToHigh && array[leftIdx].getPriority() > array[rightIdx].getPriority()){
+            better = leftIdx;
+        } else if(!sortLowToHigh && array[leftIdx].getPriority() < array[rightIdx].getPriority()){
+            better = leftIdx;
+        } else if(!sortLowToHigh && array[leftIdx].getPriority() > array[rightIdx].getPriority()){
+            better = rightIdx;
+        } else {
+            better = leftIdx;
+        }
         
         return better;
     }
@@ -88,10 +136,10 @@ public class HeapSort {
         for(int i = 0; i < arr.length; i++){
             arr[i] = new PrioritizableInteger(rng.nextInt(256));
         }
-        Prioritizable[] asHeap = sorter.heapify(arr);
-        Prioritizable[] sorted = sorter.heapToSortedArray(asHeap);
-        for(int i = 0; i < sorted.length; i++){
-            System.out.println(sorted[i].toString());
-        }
+        System.out.printf("Before heapifying: %s\n", Arrays.toString(arr));
+        sorter.heapify(arr);
+        System.out.printf("Before sorting: %s\n", Arrays.toString(arr));
+        sorter.heapToSortedArray(arr);
+        System.out.printf("After sorting: %s\n", Arrays.toString(arr));
     }
 }
