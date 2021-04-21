@@ -45,7 +45,7 @@ public class QuickSort {
      * @param max maximum index - exclusive
      */
     private void quickSort(Prioritizable[] array, int min, int max) {
-        if(min >= max){
+        if(max - min <= 1){ // don't sort one-element sets
             return;
         }
         // choose pivot. Can be any index within [min, max)
