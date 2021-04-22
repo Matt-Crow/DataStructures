@@ -60,10 +60,11 @@ public class QuickSort {
         int i = min;
         int j = max - 2; // left of pivot
         while(i < j){
-            while(i < max - 2 && array[i].getPriority() <= pivot.getPriority()){
+            // don't move i or j if they point to same priority as the pivot
+            while(i < max - 2 && array[i].getPriority() < pivot.getPriority()){
                 i++;
             } // by now, i points to a problematic value
-            while(j > min && array[j].getPriority() >= pivot.getPriority()){
+            while(j > min && array[j].getPriority() > pivot.getPriority()){
                 j--;
             } // by now, both i and j point to problematic values
             if(i < j){
