@@ -59,7 +59,7 @@ public class QuickSort {
         // partition values greater than pivot to its right
         int i = min;
         int j = max - 2; // left of pivot
-        while(i < j){
+        while(i < j){ // for sets of 2, i and j start equal, so this loop is never entered???
             // don't move i or j if they point to same priority as the pivot
             while(i < max - 2 && array[i].getPriority() < pivot.getPriority()){
                 i++;
@@ -95,7 +95,9 @@ public class QuickSort {
     
     public static void main(String[] args){
         PrioritizableInteger[] unsorted = new PrioritizableInteger[10];
+        //PrioritizableInteger[] unsorted = new PrioritizableInteger[2];
         int[] is = new int[]{9, 0, 1, 3, 4, 6, 8, 2, 5, 7};
+        //is = new int[]{0, 1};
         for(int i = 0; i < is.length; i++){
             unsorted[i] = new PrioritizableInteger(is[i]);
         }
