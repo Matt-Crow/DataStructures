@@ -11,10 +11,14 @@ import java.util.function.BiFunction;
  *  - quadratic probing
  *  - double hashing
  * 
+ * Rehashing: once a hash table is at ~ 80% capacity, insert all values into a
+ * new, larger table, then switch to using the new table
+ * 
  * @author Matt
  */
 public class HashTable {
     // must be of constant size
+    private final int doubleHashSize;
     private final Prioritizable[] keys;
     private final Object[] values; 
     private final int[] valuesWithHash; // how many values in the table have a given hash
@@ -25,6 +29,7 @@ public class HashTable {
     */
     
     public HashTable(int size){
+        doubleHashSize = new PrimeNumberService().largestPrimeLessThan(size);
         keys = new Prioritizable[size];
         values = new Object[size];
         valuesWithHash = new int[size];
@@ -81,11 +86,12 @@ public class HashTable {
             idx = hash;
         } else {
             // collision.
-            idx = quadraticProbe(hash, key, valuesWithHash[hash] + 1, this::findValue);
+            idx = doubleHash(hash, key, valuesWithHash[hash] + 1, this::findValue);
         }
         
         if(idx == -1){
             // still not found
+            throw new RuntimeException(String.format("Failed to find an index for key %s\n", key));
         }
         
         return idx;
@@ -99,22 +105,15 @@ public class HashTable {
             idx = hash;
         } else {
             // collision.
-            idx = quadraticProbe(hash, key, valuesWithHash[hash] + 1, this::findEmpty);
+            idx = doubleHash(hash, key, valuesWithHash[hash] + 1, this::findEmpty);
         }
         
         if(idx == -1){
             // still not found
+            throw new RuntimeException(String.format("Failed to find an open index for key %s\n", key));
         }
         
         return idx;
-    }
-    
-    private boolean findEmpty(int i, Prioritizable dummy){
-        return keys[i] == null;
-    }
-    
-    private boolean findValue(int i, Prioritizable key){
-        return Objects.equals(keys[i], key);
     }
     
     // doesn't work for remove
@@ -154,6 +153,43 @@ public class HashTable {
         return idx;
     }
     
+    /**
+     * A hashing technique used to resolve problems where two keys have the same
+     * hash, so linear- or quadratic-probing would just keep hitting the same
+     * indeces for both of them.
+     * 
+     * @param fromIdx
+     * @param key
+     * @param maxTries
+     * @param matcher
+     * @return 
+     */
+    private int doubleHash(int fromIdx, Prioritizable key, int maxTries, BiFunction<Integer, Prioritizable, Boolean> matcher){
+        int r = doubleHashSize;
+        int secondHash = (r - key.getPriority() % r); 
+        int idx = -1;
+        int temp;
+        for(int attempt = 1; attempt <= maxTries && idx == -1; attempt++){
+            temp = (fromIdx + attempt * secondHash) % keys.length;
+            if(matcher.apply(temp, key)){
+                idx = temp;
+            }
+            
+            if(hash(keys[temp]) != hash(key)){
+                maxTries++; // check doesn't count
+            }
+        }
+        
+        return idx;
+    }
+    
+    private boolean findEmpty(int i, Prioritizable dummy){
+        return keys[i] == null;
+    }
+    
+    private boolean findValue(int i, Prioritizable key){
+        return Objects.equals(keys[i], key);
+    }    
     
     @Override
     public String toString(){
@@ -172,6 +208,7 @@ public class HashTable {
         HashTable tab = new HashTable(10);
         for(int i = 0; i < 10; i++){
             tab.put(new PrioritizableInteger(i * i), String.format("Entry #%d", i * i));
+            //System.out.println(tab);
         }
         
         System.out.println(tab);
