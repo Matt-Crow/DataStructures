@@ -1,4 +1,4 @@
-package dataStructures.misc;
+package dataStructures.hashing;
 
 import dataStructures.priorityQueue.Prioritizable;
 import dataStructures.priorityQueue.PrioritizableInteger;

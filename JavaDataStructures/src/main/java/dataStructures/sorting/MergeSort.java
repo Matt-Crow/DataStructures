@@ -10,23 +10,23 @@ import java.util.Arrays;
  */
 public class MergeSort {
     
-    // inclusive of min and max
+    // sorts the interval [min, max)
     public final void mergeSort(Prioritizable[] array, int min, int max){
-        if(max <= min){
+        if(max - min <= 1){ // don't sort just 1 element
             return;
         }
         
         int mid = (max + min) / 2;
         
         mergeSort(array, min, mid);
-        mergeSort(array, mid + 1, max);
+        mergeSort(array, mid, max);
         
         // merge result
         int i = min;
-        int j = mid + 1;
+        int j = mid;
         int newIdx = 0;
-        Prioritizable[] merged = new Prioritizable[max - min + 1];
-        while(newIdx < merged.length && i <= mid && j <= max){
+        Prioritizable[] merged = new Prioritizable[max - min];
+        while(newIdx < merged.length && i < mid && j < max){
             if(array[i].getPriority() > array[j].getPriority()){
                 merged[newIdx] = array[j];
                 j++;
@@ -37,13 +37,13 @@ public class MergeSort {
             newIdx++;
         }
         
-        while(newIdx < merged.length && i <= mid){
+        while(newIdx < merged.length && i < mid){
             merged[newIdx] = array[i];
             i++;
             newIdx++;
         }
         
-        while(newIdx < merged.length && j <= max){
+        while(newIdx < merged.length && j < max){
             merged[newIdx] = array[j];
             j++;
             newIdx++;
@@ -55,14 +55,15 @@ public class MergeSort {
     }
     
     public static void main(String[] args){
-        PrioritizableInteger[] unsorted = new PrioritizableInteger[10];
-        int[] is = new int[]{9, 0, 1, 3, 4, 6, 8, 2, 5, 7};
+        int count = 100;
+        PrioritizableInteger[] unsorted = new PrioritizableInteger[count];
+        int[] is = new int[count];
         for(int i = 0; i < is.length; i++){
-            unsorted[i] = new PrioritizableInteger(is[i]);
+            unsorted[i] = new PrioritizableInteger(count - 1 - i);
         }
         
         System.out.println(Arrays.toString(unsorted));
-        new MergeSort().mergeSort(unsorted, 0, unsorted.length - 1);
+        new MergeSort().mergeSort(unsorted, 0, unsorted.length);
         System.out.println(Arrays.toString(unsorted));
     }
 }

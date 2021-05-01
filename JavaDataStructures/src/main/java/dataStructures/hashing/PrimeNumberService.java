@@ -1,4 +1,4 @@
-package dataStructures.misc;
+package dataStructures.hashing;
 
 /**
  *

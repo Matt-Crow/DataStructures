@@ -132,7 +132,7 @@ public class HeapSort {
     public static void main(String[] args){
         HeapSort sorter = new HeapSort(true);
         Random rng = new Random();
-        PrioritizableInteger[] arr = new PrioritizableInteger[10];
+        PrioritizableInteger[] arr = new PrioritizableInteger[100];
         for(int i = 0; i < arr.length; i++){
             arr[i] = new PrioritizableInteger(rng.nextInt(256));
         }

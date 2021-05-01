@@ -3,6 +3,7 @@ package dataStructures.sorting;
 import dataStructures.priorityQueue.Prioritizable;
 import dataStructures.priorityQueue.PrioritizableInteger;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  *
@@ -59,15 +60,27 @@ public class QuickSort {
         // partition values greater than pivot to its right
         int i = min;
         int j = max - 2; // left of pivot
-        while(i < j){ // for sets of 2, i and j start equal, so this loop is never entered???
+        while(i <= j){ // exit when i and j cross. VERY IMPORTANT: i can equal j
             // don't move i or j if they point to same priority as the pivot
-            while(i < max - 2 && array[i].getPriority() < pivot.getPriority()){
+            while(i < max - 1 && array[i].getPriority() < pivot.getPriority()){
                 i++;
-            } // by now, i points to a problematic value
-            while(j > min && array[j].getPriority() > pivot.getPriority()){
+            } 
+            /*
+            by now, i points to a problematic value or the pivot. If it points to
+            the pivot, that means the pivot is the pivot is the largest value in
+            this portion of the array.
+            */
+            
+            //            needs the - 1
+            while(j > min - 1 && array[j].getPriority() > pivot.getPriority()){
                 j--;
-            } // by now, both i and j point to problematic values
-            if(i < j){
+            }
+            /*
+            by now, both i and j point to problematic values, or j has fallen 
+            off the left end of the array. If j == min - 1, that means there are
+            no values less than the pivot
+            */
+            if(i <= j){
                 // a[i] is greater than pivot, a[j] is lesser, so swap them 
                 swap(array, i, j);
                 i++;
@@ -79,10 +92,12 @@ public class QuickSort {
         // pivot is now in its proper place
         
         
+        /*
         System.out.printf("[%d, %d)\n", min, max);
         System.out.printf("Pivot %d Index %d is set: %s\n", pivot.getPriority(), i, Arrays.toString(array));
-        
         System.out.printf("[%d, %d) U [%d,%d)\n\n", min, i, i + 1, max);
+        */
+        
         // call quicksort on the left partition
         quickSort(array, min, i);
         // call quicksort on the right partition
@@ -94,12 +109,11 @@ public class QuickSort {
     }
     
     public static void main(String[] args){
-        PrioritizableInteger[] unsorted = new PrioritizableInteger[10];
-        //PrioritizableInteger[] unsorted = new PrioritizableInteger[2];
-        int[] is = new int[]{9, 0, 1, 3, 4, 6, 8, 2, 5, 7};
-        //is = new int[]{0, 1};
-        for(int i = 0; i < is.length; i++){
-            unsorted[i] = new PrioritizableInteger(is[i]);
+        int count = 100;
+        PrioritizableInteger[] unsorted = new PrioritizableInteger[count];
+        Random rng = new Random();
+        for(int i = 0; i < unsorted.length; i++){
+            unsorted[i] = new PrioritizableInteger(rng.nextInt(256));
         }
         
         System.out.println(Arrays.toString(unsorted));
