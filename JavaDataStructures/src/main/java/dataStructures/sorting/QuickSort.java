@@ -62,7 +62,7 @@ public class QuickSort {
         int j = max - 2; // left of pivot
         while(i <= j){ // exit when i and j cross. VERY IMPORTANT: i can equal j
             // don't move i or j if they point to same priority as the pivot
-            while(i < max - 1 && array[i].getPriority() < pivot.getPriority()){
+            while(i <= max && array[i].getPriority() < pivot.getPriority()){
                 i++;
             } 
             /*
@@ -71,8 +71,8 @@ public class QuickSort {
             this portion of the array.
             */
             
-            //            needs the - 1
-            while(j > min - 1 && array[j].getPriority() > pivot.getPriority()){
+            // needs the ">= min", not "> min"
+            while(j >= min && array[j].getPriority() > pivot.getPriority()){
                 j--;
             }
             /*
