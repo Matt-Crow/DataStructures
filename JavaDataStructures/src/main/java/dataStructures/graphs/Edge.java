@@ -9,7 +9,7 @@ import dataStructures.priorityQueue.Prioritizable;
 public class Edge implements Prioritizable {
     private final int v1;
     private final int v2;
-    private final int weight;
+    private final int weight; // cannot be negative
     
     public Edge(int v1, int v2, int weight){
         this.v1 = v1;

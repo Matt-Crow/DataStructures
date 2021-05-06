@@ -42,9 +42,19 @@ public class Graph {
         return vertices.get(id);
     }
     
-    public final List<Edge> getEdges(int id){
+    public final List<Vertex> getAllVertices(){
+        return vertices.values().stream().collect(Collectors.toList());
+    }
+    
+    public final List<Edge> getEdgesAdjTo(int id){
         // shallow copy
         return edges.get(id).stream().collect(Collectors.toList());
+    }
+    
+    public final List<Edge> getAllEdges(){
+        return edges.values().stream().flatMap((LinkedList<Edge> list)->{
+            return list.stream();
+        }).collect(Collectors.toList());
     }
     
     public final int getVertexCount(){
