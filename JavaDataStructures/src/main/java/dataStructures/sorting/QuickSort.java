@@ -26,11 +26,23 @@ public class QuickSort {
         int minVal = array[min].getPriority();
         int midVal = array[mid].getPriority();
         int maxVal = array[max - 1].getPriority();
+        int bestIdx = -1;
         
-        // todo median idx
+        if(
+            (midVal <= minVal && minVal <= maxVal) ||
+            (maxVal <= minVal && minVal <= midVal)
+        ){
+            bestIdx = min;
+        } else if(
+            (midVal <= maxVal && maxVal <= minVal) ||
+            (minVal <= maxVal && maxVal <= midVal)
+        ){
+            bestIdx = max;
+        } else {
+            bestIdx = mid;
+        }
         
-        
-        return mid;
+        return bestIdx;
     }
     
     private void swap(Prioritizable[] array, int a, int b){
@@ -50,7 +62,7 @@ public class QuickSort {
             return;
         }
         // choose pivot. Can be any index within [min, max)
-        int pivotIdx = medianIdx(array, min, max);
+        int pivotIdx = medianIdx(array, min, max - 1);
         Prioritizable pivot = array[pivotIdx];
         
         // move pivot to the end to make things easier
