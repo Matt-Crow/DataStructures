@@ -74,6 +74,7 @@ public class QuickSort {
         int j = max - 2; // left of pivot
         while(i <= j){ // exit when i and j cross. VERY IMPORTANT: i can equal j
             // don't move i or j if they point to same priority as the pivot
+            //                            do not use <= here! a[i] = p is problematic
             while(i <= max && array[i].getPriority() < pivot.getPriority()){
                 i++;
             } 
@@ -84,6 +85,7 @@ public class QuickSort {
             */
             
             // needs the ">= min", not "> min"
+            //                            do not use >= here!
             while(j >= min && array[j].getPriority() > pivot.getPriority()){
                 j--;
             }
@@ -125,7 +127,7 @@ public class QuickSort {
         PrioritizableInteger[] unsorted = new PrioritizableInteger[count];
         Random rng = new Random();
         for(int i = 0; i < unsorted.length; i++){
-            unsorted[i] = new PrioritizableInteger(rng.nextInt(256));
+            unsorted[i] = new PrioritizableInteger(rng.nextInt(5));
         }
         
         System.out.println(Arrays.toString(unsorted));
