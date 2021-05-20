@@ -10,6 +10,10 @@ import java.util.Arrays;
  */
 public class MergeSort {
     
+    public final void mergeSort(Prioritizable[] array){
+        mergeSort(array, 0, array.length);
+    }
+    
     // sorts the interval [min, max)
     public final void mergeSort(Prioritizable[] array, int min, int max){
         if(max - min <= 1){ // don't sort just 1 element
@@ -63,7 +67,7 @@ public class MergeSort {
         }
         
         System.out.println(Arrays.toString(unsorted));
-        new MergeSort().mergeSort(unsorted, 0, unsorted.length);
+        new MergeSort().mergeSort(unsorted);
         System.out.println(Arrays.toString(unsorted));
     }
 }
