@@ -45,13 +45,13 @@ public class BinaryHeap implements PriorityQueue {
         this.isMinHeap = isMinHeap;
     }
     
-    public final boolean isEmpty(){
-        return nextEmptyIdx == 0;
+    public BinaryHeap(boolean isMinHeap, int initialCapacity){
+        this(isMinHeap);
+        contents.ensureCapacity(initialCapacity); // saves time when resizing
     }
     
-    private boolean hasParent(int idx){
-        int pIdx = parentIdx(idx);
-        return 0 <= pIdx && pIdx < nextEmptyIdx;
+    public final boolean isEmpty(){
+        return nextEmptyIdx == 0;
     }
     
     private boolean hasLeftChild(int idx){
@@ -76,10 +76,6 @@ public class BinaryHeap implements PriorityQueue {
     
     private int getValue(int idx){
         return contents.get(idx).getPriority();
-    }
-    
-    private int getParentValue(int idx){
-        return getValue(parentIdx(idx));
     }
     
     private int getLeftValue(int idx){
@@ -111,14 +107,20 @@ public class BinaryHeap implements PriorityQueue {
      */
     @Override
     public void add(Prioritizable newObj) {
-        contents.ensureCapacity(nextEmptyIdx);
-        contents.add(nextEmptyIdx, newObj);
+        contents.ensureCapacity(nextEmptyIdx + 1);
+        // https://stackoverflow.com/questions/7688151/java-arraylist-ensurecapacity-not-working
+        while(contents.size() < nextEmptyIdx + 1){
+            contents.add(null);
+        }
+        contents.set(nextEmptyIdx, newObj);
         nextEmptyIdx++;
-        int currIdx = nextEmptyIdx - 1;
+        int childIdx = nextEmptyIdx - 1;
+        int parentIdx = (childIdx - 1) / 2;
         //System.out.println(this);
-        while(hasParent(currIdx) && shouldSwap(parentIdx(currIdx), currIdx)){
-            swap(currIdx, parentIdx(currIdx));
-            currIdx = parentIdx(currIdx);
+        while(parentIdx >= 0 && shouldSwap(parentIdx, childIdx)){
+            swap(childIdx, parentIdx);
+            childIdx = parentIdx;
+            parentIdx = (childIdx - 1) / 2;
             //System.out.println(this);
         }
     }
