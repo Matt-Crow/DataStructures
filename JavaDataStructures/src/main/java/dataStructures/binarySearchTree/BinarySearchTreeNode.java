@@ -3,9 +3,7 @@ package dataStructures.binarySearchTree;
 import java.util.function.Consumer;
 
 /**
- * Psuedo static methods in BinarySearchTreeHelper
- * 
- * @author Matt
+ * @author Matt Crow
  */
 public class BinarySearchTreeNode {
     protected int value;
@@ -36,7 +34,7 @@ public class BinarySearchTreeNode {
     
     public static final BinarySearchTreeNode findMin(BinarySearchTreeNode root){
         BinarySearchTreeNode lefternmost = root;
-        if(lefternmost.left != null){
+        if(lefternmost != null && lefternmost.left != null){
             lefternmost = findMin(lefternmost.left);
         }
         return lefternmost;
