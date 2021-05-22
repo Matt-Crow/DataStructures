@@ -27,7 +27,7 @@ import java.util.ArrayList;
  *     /   \
  *   (x)  (x-n)
  * 
- * @author Matt
+ * @author Matt Crow
  */
 public class BinaryHeap implements PriorityQueue {
     private final ArrayList<Prioritizable> contents;
@@ -54,49 +54,6 @@ public class BinaryHeap implements PriorityQueue {
         return nextEmptyIdx == 0;
     }
     
-    private boolean hasLeftChild(int idx){
-        return leftChildIdx(idx) <= nextEmptyIdx;
-    }
-    
-    private boolean hasRightChild(int idx){
-        return rightChildIdx(idx) <= nextEmptyIdx;
-    }
-    
-    private int parentIdx(int idx){
-        return (idx - 1) / 2;
-    }
-    
-    private int leftChildIdx(int idx){
-        return 2 * idx + 1;
-    }
-    
-    private int rightChildIdx(int idx){
-        return 2 * idx + 2;
-    }
-    
-    private int getValue(int idx){
-        return contents.get(idx).getPriority();
-    }
-    
-    private int getLeftValue(int idx){
-        return getValue(leftChildIdx(idx));
-    }
-    
-    private int getRightValue(int idx){
-        return getValue(rightChildIdx(idx));
-    }
-    
-    private void swap(int idx1, int idx2){
-        Prioritizable temp = contents.get(idx1);
-        contents.set(idx1, contents.get(idx2));
-        contents.set(idx2, temp);
-    }
-    
-    private boolean shouldSwap(int parentIdx, int childIdx){
-        return (isMinHeap && getValue(parentIdx) > getValue(childIdx))
-            || (!isMinHeap && getValue(parentIdx) < getValue(childIdx)); 
-    }
-    
     /**
      * Inserts the given object in the first empty index of the heap,
      * then repeatedly swaps it with it's parent until it is in its proper place.
@@ -114,15 +71,38 @@ public class BinaryHeap implements PriorityQueue {
         }
         contents.set(nextEmptyIdx, newObj);
         nextEmptyIdx++;
+        
+        /*
+        sift up by swapping the newly inserted value with its parent until the
+        child is in the correct position relative to its parent. This ensures 
+        the heap order property is maintained.
+        
+        For a min heap, a heavier parent will sink into the heap.
+        For a max heap, a lighter parent will sink into the heap.
+        */
         int childIdx = nextEmptyIdx - 1;
         int parentIdx = (childIdx - 1) / 2;
-        //System.out.println(this);
         while(parentIdx >= 0 && shouldSwap(parentIdx, childIdx)){
             swap(childIdx, parentIdx);
             childIdx = parentIdx;
             parentIdx = (childIdx - 1) / 2;
             //System.out.println(this);
         }
+    }
+    
+    private boolean shouldSwap(int parentIdx, int childIdx){
+        return (isMinHeap && getValue(parentIdx) > getValue(childIdx))
+            || (!isMinHeap && getValue(parentIdx) < getValue(childIdx)); 
+    }
+    
+    private void swap(int idx1, int idx2){
+        Prioritizable temp = contents.get(idx1);
+        contents.set(idx1, contents.get(idx2));
+        contents.set(idx2, temp);
+    }
+    
+    private int getValue(int idx){
+        return contents.get(idx).getPriority();
     }
 
     /**
@@ -133,47 +113,49 @@ public class BinaryHeap implements PriorityQueue {
      */
     @Override
     public Prioritizable dequeueHighestPriority() {
-        Prioritizable ret = null;
-        if(!isEmpty()){
-            ret = contents.get(0);
-            contents.set(0, contents.get(nextEmptyIdx - 1)); // last becomes first
-            nextEmptyIdx--;
-            // todo: clean up
-            int currIdx = 0;
-            while(
-                (hasLeftChild(currIdx) && shouldSwap(currIdx, leftChildIdx(currIdx)))
-                || (hasRightChild(currIdx) && shouldSwap(currIdx, rightChildIdx(currIdx)))
-            ){
-                if(isMinHeap){
-                    if(hasLeftChild(currIdx) && hasRightChild(currIdx) && getLeftValue(currIdx) > getRightValue(currIdx)){
-                        swap(currIdx, rightChildIdx(currIdx));
-                        currIdx = rightChildIdx(currIdx);
-                    } else if(hasLeftChild(currIdx) && hasRightChild(currIdx)){
-                        swap(currIdx, leftChildIdx(currIdx));
-                        currIdx = leftChildIdx(currIdx);
-                    } else if(hasLeftChild(currIdx)){
-                        swap(currIdx, leftChildIdx(currIdx));
-                        currIdx = leftChildIdx(currIdx);
-                    } else { // just right child
-                        swap(currIdx, rightChildIdx(currIdx));
-                        currIdx = rightChildIdx(currIdx);
-                    }
+        if(this.isEmpty()){
+            throw new UnsupportedOperationException("Cannot dequeue highest priority from an empty BinaryHeap");
+        }
+        Prioritizable ret = contents.get(0);
+        contents.set(0, contents.get(nextEmptyIdx - 1)); // last becomes first
+        nextEmptyIdx--;
+        
+        int currIdx = 0;
+        int left = 1;
+        int right = 2;
+        
+        // sift down
+        while(
+            (left < nextEmptyIdx && shouldSwap(currIdx, left )) || 
+            (right< nextEmptyIdx && shouldSwap(currIdx, right))
+        ){
+            if(isMinHeap){
+                /*
+                Parent is larger than at least one of its children
+                swap with the smaller child
+                */
+                if(right < nextEmptyIdx && getValue(left) > getValue(right)){
+                    swap(currIdx, right);
+                    currIdx = right;
                 } else {
-                    if(hasLeftChild(currIdx) && hasRightChild(currIdx) && getLeftValue(currIdx) < getRightValue(currIdx)){
-                        swap(currIdx, rightChildIdx(currIdx));
-                        currIdx = rightChildIdx(currIdx);
-                    } else if(hasLeftChild(currIdx) && hasRightChild(currIdx)){
-                        swap(currIdx, leftChildIdx(currIdx));
-                        currIdx = leftChildIdx(currIdx);
-                    } else if(hasLeftChild(currIdx)){
-                        swap(currIdx, leftChildIdx(currIdx));
-                        currIdx = leftChildIdx(currIdx);
-                    } else { // just right child
-                        swap(currIdx, rightChildIdx(currIdx));
-                        currIdx = rightChildIdx(currIdx);
-                    }
+                    swap(currIdx, left);
+                    currIdx = left;
+                }
+            } else { // is max heap
+                /*
+                Parent is smaller than at least one of its childen
+                swap with the larger child
+                */
+                if(right < nextEmptyIdx && getValue(left) < getValue(right)){
+                    swap(currIdx, right);
+                    currIdx = right;
+                } else {
+                    swap(currIdx, left);
+                    currIdx = left;
                 }
             }
+            left = 2 * currIdx + 1;
+            right =2 * currIdx + 2;
         }
         return ret;
     }
