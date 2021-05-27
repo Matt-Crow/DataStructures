@@ -1,6 +1,16 @@
 #ifndef CORE
 #define CORE
 
+
+
+// maybe use this for menu options?
+typedef void (*Consumer)(void* dataStructure, void* param1, void* param2);
+
+
+
+
+
+
 /**
 A Runnable is a function which
 accepts no arguments, and returns
