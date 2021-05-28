@@ -1,6 +1,7 @@
 #include "graph.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h> // memset
 
 /*
 Private functions
@@ -52,8 +53,17 @@ void freeAdjacencyMatrix(AdjacencyMatrix** m){
 void printAdjacencyMatrix(AdjacencyMatrix* m){
     if(m){
         int s = m->size;
+        // print header
+        printf("%3c  ", ' ');
+        for(int v = 0; v < s; ++v){
+            printf("%3d ", v);
+        }
+        printf("%c", '\n');
+
         for(int i = 0; i < s; ++i){
-            for(int j = 0; j < 3; ++j){
+            // print row prefix
+            printf("%3d |", i);
+            for(int j = 0; j < s; ++j){
                 if(m->weights[i][j] == NO_EDGE){
                     printf("%3c ", 'X');
                 } else {
@@ -69,10 +79,57 @@ void printAdjacencyMatrix(AdjacencyMatrix* m){
 Public functions
 */
 
-Graph* newGraph(int numVertices);
-void freeGraph(Graph** g);
+Graph* newGraph(int numVertices){
+    Graph* g = (Graph*)malloc(sizeof(Graph));
+    g->numVertices = numVertices;
+    g->vertices = (Vertex**)malloc(numVertices * sizeof(Vertex*));
+    memset(g->vertices, 0, numVertices * sizeof(Vertex*));
+    g->adjMatrix = newAdjacencyMatrix(numVertices);
+    g->nextId = 0;
+    return g;
+}
+void freeGraph(Graph** gp){
+    if(gp && *gp){
+        Graph* g = *gp;
+        Vertex* v;
+        //                                   vertex has been allocated
+        for(int i = 0; i < g->numVertices && g->vertices[i]; ++i){
+            v = g->vertices[i];
+            freeVertex(&(g->vertices[i]));
+        }
+        free(g->vertices);
+        AdjacencyMatrix* m = g->adjMatrix;
+        freeAdjacencyMatrix(&(g->adjMatrix));
+        free(g);
+        *gp = 0;
+    }
+}
 
-Vertex* createVertex(Graph* g, int x, int y);
-void createEdge(Graph* g, Vertex* v1, Vertex* v2, int weight);
+Vertex* createVertex(Graph* g, int x, int y){
+    Vertex* v = newVertex(g->nextId, x, y);
+    g->vertices[g->nextId] = v;
+    g->nextId++;
+    return v;
+}
+void createEdge(Graph* g, Vertex* v1, Vertex* v2, int weight){
+    if(g && v1 && v2){
+        AdjacencyMatrix* m = g->adjMatrix;
+        m->weights[v1->id][v2->id] = weight;
+    }
+}
+void createUndirectedEdge(Graph* g, Vertex* v1, Vertex* v2, int weight){
+    createEdge(g, v1, v2, weight);
+    createEdge(g, v2, v1, weight);
+}
 
-void printGraph(Graph* g);
+void printGraph(Graph* g){
+    if(g){
+        printf("%s\n", "GRAPH:");
+        printf("%s\n", "Vertices:");
+        for(int i = 0; i < g->numVertices && g->vertices[i]; ++i){
+            printVertex(g->vertices[i]);
+            printf("%c", '\n');
+        }
+        printAdjacencyMatrix(g->adjMatrix);
+    }
+}
