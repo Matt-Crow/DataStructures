@@ -6,6 +6,18 @@
 
 using namespace std;
 
+travelInfo* get(adjMatrix* m, int from, int to){
+    travelInfo* ret = new travelInfo;
+    ret->from = from;
+    ret->to = to;
+    ret->dist = 0;
+    ret->valid = (from != to && from < m->size && to < m->size && m->matrix[from][to] != 0);
+    if(ret->valid){
+        ret->dist = m->matrix[from][to];
+    }
+    return ret;
+}
+
 int useFindPath(){
     //set up everything
     adjMatrix* m = newMatrix(5);
@@ -86,7 +98,7 @@ int useFindPath(){
 }
 
 
-
+/*
 void printTravelInfo(travelInfo* t){
     cout << "From " << t->from << " to " << t->to << ": ";
     if(t->valid){
@@ -95,7 +107,8 @@ void printTravelInfo(travelInfo* t){
         cout << "Path does not exist" << endl;
     }
 }
-
+*/
+/*
 adjMatrix* newMatrix(int size){
     adjMatrix* ret = new adjMatrix;
     ret->size = size;
@@ -115,18 +128,8 @@ bool set(adjMatrix* m, int from, int to, int dist){
         m->matrix[to][from] = dist;
     }
     return canSet;
-}
-travelInfo* get(adjMatrix* m, int from, int to){
-    travelInfo* ret = new travelInfo;
-    ret->from = from;
-    ret->to = to;
-    ret->dist = 0;
-    ret->valid = (from != to && from < m->size && to < m->size && m->matrix[from][to] != 0);
-    if(ret->valid){
-        ret->dist = m->matrix[from][to];
-    }
-    return ret;
-}
+}*/
+/*
 void print(adjMatrix* m){
     int s = m->size;
     for(int i = 0; i < s; i++){
@@ -135,8 +138,8 @@ void print(adjMatrix* m){
         }
         cout << endl;
     }
-}
-
+}*/
+/*
 void push(travelLog* &top, travelInfo* value){
     travelLog* newFrame = new travelLog;
     newFrame->next = top;
@@ -145,7 +148,8 @@ void push(travelLog* &top, travelInfo* value){
     newFrame = 0;
     delete newFrame;
 }
-
+*/
+/*
 travelInfo* pop(travelLog* &top){
     travelInfo* ret = 0;
     if(top){
@@ -158,3 +162,4 @@ travelInfo* pop(travelLog* &top){
     }
     return ret;
 }
+*/

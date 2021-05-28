@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-TravelInfo* newTravelInfo(int from, int to, double weight){
+TravelInfo* newTravelInfo(int from, int to, int weight){
     TravelInfo* tInfo = (TravelInfo*)malloc(sizeof(TravelInfo));
     tInfo->from = from;
     tInfo->to = to;

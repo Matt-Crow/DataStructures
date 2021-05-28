@@ -4,7 +4,7 @@ SRC = ./src
 BIN = ./bin
 OBJ = ./obj
 
-pathfinding: main.o travelInfo.o pathStack.o graph.o | $(OBJ) $(BIN)
+pathfinding: main.o travelInfo.o pathStack.o pathHeap.o graph.o | $(OBJ) $(BIN)
 	$(CXX) $(OBJ)/* -o $(BIN)/pathfinding
 
 main.o: $(SRC)/main.c | $(OBJ)
@@ -15,6 +15,9 @@ travelInfo.o: $(SRC)/travelInfo.c | $(OBJ)
 
 pathStack.o: $(SRC)/pathStack.c | $(OBJ)
 	$(CXX) -c $(SRC)/pathStack.c -I $(HEADERS) -o $(OBJ)/pathStack.o
+
+pathHeap.o: $(SRC)/pathHeap.c | $(OBJ)
+	$(CXX) -c $(SRC)/pathHeap.c -I $(HEADERS) -o $(OBJ)/pathHeap.o
 
 graph.o: $(SRC)/graph.c | $(OBJ)
 	$(CXX) -c $(SRC)/graph.c -I $(HEADERS) -o $(OBJ)/graph.o

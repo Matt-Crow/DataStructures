@@ -4,10 +4,10 @@
 typedef struct TravelInfo {
     int from;
     int to;
-    double weight;
+    int weight;
 } TravelInfo;
 
-TravelInfo* newTravelInfo(int from, int to, double weight);
+TravelInfo* newTravelInfo(int from, int to, int weight);
 void freeTravelInfo(TravelInfo** travelInfo);
 
 void printTravelInfo(TravelInfo* travelInfo);
