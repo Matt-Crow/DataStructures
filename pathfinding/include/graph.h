@@ -24,4 +24,6 @@ void freeGraph(Graph** g);
 Vertex* createVertex(Graph* g, int x, int y);
 void createEdge(Graph* g, Vertex* v1, Vertex* v2, int weight);
 
+void printGraph(Graph* g);
+
 #endif
