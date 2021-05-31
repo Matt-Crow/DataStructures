@@ -1,6 +1,8 @@
 #ifndef GRAPH
 #define GRAPH
 
+#include<stdbool.h>
+
 typedef struct Vertex {
     int id;
     int x;
@@ -27,6 +29,9 @@ void freeGraph(Graph** g);
 Vertex* createVertex(Graph* g, int x, int y);
 void createEdge(Graph* g, Vertex* v1, Vertex* v2, int weight);
 void createUndirectedEdge(Graph* g, Vertex* v1, Vertex* v2, int weight);
+
+bool isAdjacent(Graph* g, int from, int to);
+int getWeight(Graph* g, int from, int to);
 
 void printGraph(Graph* g);
 

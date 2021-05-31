@@ -122,6 +122,22 @@ void createUndirectedEdge(Graph* g, Vertex* v1, Vertex* v2, int weight){
     createEdge(g, v2, v1, weight);
 }
 
+bool isAdjacent(Graph* g, int from, int to){
+    bool theyAreAdj = false;
+    if(g){
+        theyAreAdj = getWeight(g, from, to) != NO_EDGE;
+    }
+    return theyAreAdj;
+}
+
+int getWeight(Graph* g, int from, int to){
+    int weight = NO_EDGE;
+    if(g){
+        weight = g->adjMatrix->weights[from][to];
+    }
+    return weight;
+}
+
 void printGraph(Graph* g){
     if(g){
         printf("%s\n", "GRAPH:");
