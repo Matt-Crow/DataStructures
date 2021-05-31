@@ -13,7 +13,8 @@ void swap(PathHeap* heap, int i, int j){
     heap->values[j] = temp;
 }
 
-int getHeapWeight(PathHeap* heap, int i){
+// used as shorthand to make things cleaner
+int getW(PathHeap* heap, int i){
     return heap->values[i]->weight;
 }
 
@@ -49,10 +50,18 @@ void siftUpPathHeap(PathHeap* heap, TravelInfo* value){
     if(heap && value && heap->capacity != heap->size){
         heap->values[heap->size] = value;
         int curr = heap->size;
+        /*
+        Since the heap is interpreted as a binary tree,
+        if the parent is at index X,
+        then each of its children are
+        at indexes 2X + 1 and 2X + 2,
+        so integer division can reverse
+        that calculation
+        */
         int parent = (curr - 1) / 2;
         heap->size++;
 
-        while(parent >= 0 && getHeapWeight(heap, parent) > getHeapWeight(heap, curr)){
+        while(parent >= 0 && getW(heap, parent) > getW(heap, curr)){
             swap(heap, parent, curr);
             curr = parent;
             parent = (curr - 1) / 2;
@@ -74,10 +83,11 @@ TravelInfo* siftDownPathHeap(PathHeap* heap){
         int left = 2 * curr + 1;
         int right= 2 * curr + 2;
         while(
-            (left < heap->size && getHeapWeight(heap, curr) > getHeapWeight(heap, left )) ||
-            (right< heap->size && getHeapWeight(heap, curr) > getHeapWeight(heap, right))
+            (left < heap->size && getW(heap, curr) > getW(heap, left )) ||
+            (right< heap->size && getW(heap, curr) > getW(heap, right))
         ){
-            if(right < heap->size && getHeapWeight(heap, right) < getHeapWeight(heap, left)){
+            // swap curr with its smaller child
+            if(right < heap->size && getW(heap, right) < getW(heap, left)){
                 swap(heap, curr, right);
                 curr = right;
             } else {

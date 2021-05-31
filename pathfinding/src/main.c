@@ -7,78 +7,16 @@
 #include "graph.h"
 
 Graph* createDefaultGraph();
+void findAllPaths(Graph* g);
+void findPath(Graph* g, int from, int to);
 void printPath(PathStack* stack);
 
 int main(){
     // todo read graph from a file
     Graph* g = createDefaultGraph();
     printGraph(g);
-
-    // set up everything
-    TravelInfo* t = 0;
-    PathStack* travelLog = 0;
-    //                                    worst case: each vertex connects to every other vertex
-    PathHeap* travelOptions = newPathHeap(g->numVertices * (g->numVertices - 1));
-    bool visited[g->numVertices];
-    memset(visited, false, g->numVertices * sizeof(bool));
-    int numVisited = 0;
-    int start = 0; // maybe get user input
-    int end = g->numVertices - 1;
-
-    // visit the start
-    int curr = start;
-    visited[curr] = true;
-    t = newTravelInfo(curr, curr, 0);
-    pushToPathStack(&travelLog, t);
-    ++numVisited;
-    int totalDist;
-    while(numVisited < g->numVertices || curr != end){
-        // get edges from the current node
-        for(int to = 0; to < g->numVertices; ++to){
-            if(isAdjacent(g, curr, to) && !visited[to]){
-                // get the cumulative weight from "start" to "curr" and then to "to"
-                //                                   weight it took to get to curr
-                totalDist = getWeight(g, curr, to) + travelLog->value->weight;
-                t = newTravelInfo(curr, to, totalDist);
-                siftUpPathHeap(travelOptions, t);
-            }
-        }
-
-        // find the best path to check next
-        do {
-            t = siftDownPathHeap(travelOptions);
-            if(visited[t->to]){
-                freeTravelInfo(&t);
-            }
-        } while(!t); // loop until we find a path
-
-        pushToPathStack(&travelLog, t);
-        ++numVisited;
-        curr = t->to;
-        visited[curr] = true;
-    }
-
-    // backtrack to get path
-    totalDist = travelLog->value->weight;
-    PathStack* path = 0;
-    while(travelLog && curr != start){
-        t = popFromPathStack(&travelLog);
-        if(t->to == curr && t->weight == totalDist){
-            totalDist -= getWeight(g, t->from, t->to);
-            pushToPathStack(&path, t);
-            curr = t->from;
-        } else {
-            freeTravelInfo(&t);
-        }
-    }
-
-    printPath(path);
-
-    freePathStack(&path);
-    freePathHeap(&travelOptions);
-    freePathStack(&travelLog);
+    findAllPaths(g);
     freeGraph(&g);
-
     return 0;
 }
 
@@ -116,6 +54,83 @@ Graph* createDefaultGraph(){
     createUndirectedEdge(g, vs[5], vs[6], 4);
 
     return g;
+}
+
+void findAllPaths(Graph* g){
+    for(int from = 0; from < g->numVertices; ++from){
+        for(int to = 0; to < g->numVertices; ++to){
+            findPath(g, from, to);
+        }
+    }
+}
+
+void findPath(Graph* g, int from, int to){
+    // set up everything
+    TravelInfo* t = 0;
+    PathStack* travelLog = 0;
+    //                                    worst case: each vertex connects to every other vertex
+    PathHeap* travelOptions = newPathHeap(g->numVertices * (g->numVertices - 1));
+    bool visited[g->numVertices];
+    memset(visited, false, g->numVertices * sizeof(bool));
+    int numVisited = 0;
+    int start = from;
+    int end = to;
+
+    // visit the start
+    int curr = start;
+    visited[curr] = true;
+    t = newTravelInfo(curr, curr, 0);
+    pushToPathStack(&travelLog, t);
+    ++numVisited;
+    int totalDist;
+    while(numVisited < g->numVertices && curr != end){
+        // get edges from the current node
+        for(int to = 0; to < g->numVertices; ++to){
+            if(isAdjacent(g, curr, to) && !visited[to]){
+                // get the cumulative weight from "start" to "curr" and then to "to"
+                //                                   weight it took to get to curr
+                totalDist = getWeight(g, curr, to) + travelLog->value->weight;
+                t = newTravelInfo(curr, to, totalDist);
+                siftUpPathHeap(travelOptions, t);
+            }
+        }
+
+        // find the best path to check next
+        do {
+            t = siftDownPathHeap(travelOptions);
+            if(visited[t->to]){
+                freeTravelInfo(&t);
+            }
+        } while(!t); // loop until we find a path
+
+        pushToPathStack(&travelLog, t);
+        ++numVisited;
+        curr = t->to;
+        visited[curr] = true;
+    }
+
+    // backtrack to get path
+    PathStack* path = 0;
+    while(travelLog && curr != start){
+        t = popFromPathStack(&travelLog);
+        if(t->to == curr){
+            pushToPathStack(&path, t);
+            curr = t->from;
+        } else {
+            freeTravelInfo(&t);
+        }
+    }
+
+    printf("Path from %d to %d: ", from, to);
+    if(from == to){
+        printf("%d\n", from);
+    } else {
+        printPath(path);
+    }
+
+    freePathStack(&path);
+    freePathHeap(&travelOptions);
+    freePathStack(&travelLog);
 }
 
 void printPath(PathStack* stack){

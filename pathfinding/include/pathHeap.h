@@ -3,9 +3,14 @@
 
 #include "travelInfo.h"
 
+/*
+Dijkstra's algorithm requires finding the shortest path as quickly as possible,
+so PathHeap is implemented as a min-heap.
+*/
+
 typedef struct PathHeap {
     int capacity;
-    TravelInfo** values;
+    TravelInfo** values; // array of TravelInfo*
     int size;
 } PathHeap;
 

@@ -30,12 +30,12 @@ void printVertex(Vertex* v){
 AdjacencyMatrix* newAdjacencyMatrix(int size){
     AdjacencyMatrix* m = (AdjacencyMatrix*)malloc(sizeof(AdjacencyMatrix));
     m->size = size;
-    m->weights = (int**)malloc(size * sizeof(int*)); // space for rows
+    //first, allocate the "rows"
+    m->weights = (int**)malloc(size * sizeof(int*));
     for(int i = 0; i < size; ++i){
+        //allocate each "column"
         m->weights[i] = (int*)malloc(size * sizeof(int)); // allocate each row
-        for(int j = 0; j < size; ++j){
-            m->weights[i][j] = NO_EDGE;
-        }
+        memset(m->weights[i], NO_EDGE, size * sizeof(int));
     }
     return m;
 }
