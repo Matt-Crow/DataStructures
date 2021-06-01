@@ -1,6 +1,45 @@
 #include "core.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+
+
+ConsumerMenuOption* newConsumerMenuOption(char* msg, Consumer runIfSelected){
+    ConsumerMenuOption* option = (ConsumerMenuOption*)malloc(sizeof(ConsumerMenuOption));
+    int n = strlen(msg);
+    option->msg = (char*)malloc(sizeof(char) * (n + 1));
+    strncpy(option->msg, msg, n);
+    option->msg[n] = '\0';
+    option->runIfSelected = runIfSelected;
+    return option;
+}
+void freeConsumerMenuOption(ConsumerMenuOption** option){
+    if(option && *option){
+        ConsumerMenuOption* opt = *option;
+        free(opt->msg);
+        free(opt);
+        *option = 0;
+    }
+}
+int doConsumerMenu(ConsumerMenuOption** options, int numOptions, void** dataStructure){
+    int status = 0;
+    int ip = 0;
+    Consumer selected;
+    do {
+        for(int optNum = 0; optNum < numOptions; optNum++){
+            printf("%d: %s\n", optNum + 1, (options[optNum])->msg);
+        }
+        printf("%s", "-1: Quit\n");
+        printf("%s", "Please choose an option: ");
+        scanf("%d", &ip);
+        if(ip >= 1 && ip <= numOptions){
+            selected = options[ip - 1]->runIfSelected;
+            selected(dataStructure);
+        }
+    } while(ip != -1);
+
+    return status;
+}
 
 
 

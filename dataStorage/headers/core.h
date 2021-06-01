@@ -4,10 +4,16 @@
 
 
 // maybe use this for menu options?
-typedef void (*Consumer)(void* dataStructure, void* param1, void* param2);
+typedef void (*Consumer)(void** dataStructure);
 
+typedef struct ConsumerMenuOption {
+    char* msg;
+    Consumer runIfSelected;
+} ConsumerMenuOption;
 
-
+ConsumerMenuOption* newConsumerMenuOption(char* msg, Consumer runIfSelected);
+void freeConsumerMenuOption(ConsumerMenuOption** option);
+int doConsumerMenu(ConsumerMenuOption** options, int numOptions, void** dataStructure);
 
 
 

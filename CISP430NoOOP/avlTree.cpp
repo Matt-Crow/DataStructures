@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include "misc.h"
 
@@ -9,6 +10,7 @@ struct treeNode{
     treeNode* right;
     int height;
 };
+*/
 
 struct tQNode{
     treeNode* data;
@@ -22,7 +24,7 @@ struct treeQ{
 };
 
 
-
+/*
 treeNode* newTreeNode(int data);
 
 void insert(treeNode* &root, int data);
@@ -47,7 +49,7 @@ bool inTree(treeNode* root, int val);
 
 void setHeights(treeNode* root);
 int getBalance(treeNode* root);
-
+*/
 treeQ* newTreeQ();
 void enqueue(treeQ* q, treeNode* data);
 treeNode* deque(treeQ* q);
@@ -381,4 +383,3 @@ treeNode* deque(treeQ* q){
     }
     return ret;
 }
-

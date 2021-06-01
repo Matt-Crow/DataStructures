@@ -4,6 +4,7 @@
 #include "queue.h"
 #include "linkedList.h"
 #include "tree.h"
+#include "avlTree.h"
 #include "hashArray.h"
 #include "heap.h"
 #include "linkedHashTable.h"
@@ -14,6 +15,7 @@ int main(){
         newIntMenuOption("test queue", testQueue),
         newIntMenuOption("test linked list", testLinkedList),
         newIntMenuOption("test binary tree", testBinaryTree),
+        newIntMenuOption("test AVL tree", testAvlTree),
         newIntMenuOption("test hash array", testHashArray),
         newIntMenuOption("test heap", testHeap),
         newIntMenuOption("test linked hash table", testLinkedHashTable)
