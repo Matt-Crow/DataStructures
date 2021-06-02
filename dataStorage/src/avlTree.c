@@ -62,9 +62,27 @@ bool removeFromAvlTree(AvlTreeNode** root, int val);
 
 int getAvlHeight(AvlTreeNode* root);
 
-void preOrderAvl(AvlTreeNode* root);
-void inOrderAvl(AvlTreeNode* root);
-void postOrderAvl(AvlTreeNode* root);
+void preOrderAvl(AvlTreeNode* root){
+    if(root){
+        printf("%d ", root->value);
+        preOrderAvl(root->left);
+        preOrderAvl(root->right);
+    }
+}
+void inOrderAvl(AvlTreeNode* root){
+    if(root){
+        inOrderAvl(root->left);
+        printf("%d ", root->value);
+        inOrderAvl(root->right);
+    }
+}
+void postOrderAvl(AvlTreeNode* root){
+    if(root){
+        postOrderAvl(root->left);
+        postOrderAvl(root->right);
+        printf("%d ", root->value);
+    }
+}
 void breadthPrintAvl(AvlTreeNode* root);
 
 // Conforms to the Consumer standard defined in core.h
@@ -75,14 +93,34 @@ void askInsertAvl(void** avlTree){
     scanf("%d", &i);
     insertIntoAvlTree(root, i);
 }
+void doPreOrder(void** avlTree){
+    AvlTreeNode** root = (AvlTreeNode**)avlTree;
+    preOrderAvl(*root);
+    printf("%c", '\n');
+}
+void doInOrder(void** avlTree){
+    AvlTreeNode** root = (AvlTreeNode**)avlTree;
+    inOrderAvl(*root);
+    printf("%c", '\n');
+}
+void doPostOrder(void** avlTree){
+    AvlTreeNode** root = (AvlTreeNode**)avlTree;
+    postOrderAvl(*root);
+    printf("%c", '\n');
+}
 
 int testAvlTree(){
     AvlTreeNode* alvin = 0;
 
+    printf("%s\n", "AVL Tree");
+
     ConsumerMenuOption* options[] = {
-        newConsumerMenuOption("Insert into the AVL Tree", &askInsertAvl)
+        newConsumerMenuOption("Insert into the AVL Tree", &askInsertAvl),
+        newConsumerMenuOption("Print pre-order", &doPreOrder),
+        newConsumerMenuOption("Print in-order", &doInOrder),
+        newConsumerMenuOption("Print post-order", &doPostOrder)
     };
-    int numOptions = 1;
+    int numOptions = 4;
 
     doConsumerMenu(options, numOptions, (void**)&alvin);
 
