@@ -134,18 +134,6 @@ AvlTreeQueue* newAvlTreeQueue(){
     q->tail = 0;
     return q;
 }
-void deleteAvlTreeQueueNode(AvlTreeQueueNode** queue){
-    if(queue && *queue){
-        free(*queue);
-        *queue = 0;
-    }
-}
-void deleteAvlTreeQueue(AvlTreeQueue** queue){
-    if(queue && *queue){
-        free(*queue);
-        *queue = 0;
-    }
-}
 void enqueueAvlTreeQueue(AvlTreeQueue* queue, AvlTreeNode* value){
     if(queue){ // not passed null-pointer
         AvlTreeQueueNode* nn = newAvlTreeQueueNode(value);
@@ -155,6 +143,12 @@ void enqueueAvlTreeQueue(AvlTreeQueue* queue, AvlTreeNode* value){
             queue->head = nn;
         }
         queue->tail = nn;
+    }
+}
+void deleteAvlTreeQueueNode(AvlTreeQueueNode** queue){
+    if(queue && *queue){
+        free(*queue);
+        *queue = 0;
     }
 }
 AvlTreeNode* dequeueAvlTreeQueue(AvlTreeQueue* queue){
@@ -169,6 +163,17 @@ AvlTreeNode* dequeueAvlTreeQueue(AvlTreeQueue* queue){
         }
     }
     return dequeued;
+}
+void deleteAvlTreeQueue(AvlTreeQueue** queue){
+    if(queue && *queue){
+        AvlTreeQueue* q = *queue;
+        while(q->head){
+            // don't delete the values returned from this
+            dequeueAvlTreeQueue(q);
+        }
+        free(*queue);
+        *queue = 0;
+    }
 }
 
 /*
@@ -194,7 +199,19 @@ void deleteAvlTree(AvlTreeNode** root){
     }
 }
 
-bool isInAvlTree(AvlTreeNode* root, int val);
+bool isInAvlTree(AvlTreeNode* root, int val){
+    bool found = false;
+    if(root){
+        if(root->value == val){
+            found = true;
+        } else if(root->value > val){
+            found = isInAvlTree(root->left, val);
+        } else if(root->value < val){
+            found = isInAvlTree(root->right, val);
+        }
+    }
+    return found;
+}
 
 bool insertIntoAvlTree(AvlTreeNode** root, int val){
     bool notDuplicate = false;
@@ -298,14 +315,19 @@ void postOrderAvl(AvlTreeNode* root){
 void breadthPrintAvl(AvlTreeNode* root){
     AvlTreeQueue* currentLevel = newAvlTreeQueue();
     AvlTreeQueue* nextLevel = 0;
+    bool anotherLevel = false;
     if(root){
         enqueueAvlTreeQueue(currentLevel, root);
+        anotherLevel = true;
     }
     AvlTreeNode* currNode = 0;
-    while(currentLevel->head){
+    while(anotherLevel){
         nextLevel = newAvlTreeQueue();
+        anotherLevel = false;
         while(currentLevel->head){
             currNode = dequeueAvlTreeQueue(currentLevel);
+            /*
+            Can use this method to skip printing nulls
             if(currNode->left){
                 enqueueAvlTreeQueue(nextLevel, currNode->left);
             }
@@ -313,6 +335,19 @@ void breadthPrintAvl(AvlTreeNode* root){
                 enqueueAvlTreeQueue(nextLevel, currNode->right);
             }
             printf("%d (%d) ", currNode->value, currNode->height);
+            */
+            if(currNode){
+                enqueueAvlTreeQueue(nextLevel, currNode->left);
+                enqueueAvlTreeQueue(nextLevel, currNode->right);
+                printf("%d (%d) ", currNode->value, currNode->height);
+                if(currNode->left || currNode->right){
+                    anotherLevel = true;
+                }
+            } else {
+                enqueueAvlTreeQueue(nextLevel, 0);
+                enqueueAvlTreeQueue(nextLevel, 0);
+                printf("%c (%d) ", '_', -1);
+            }
         }
         // done with current level
         printf("%c", '\n');
@@ -338,6 +373,14 @@ void askDeleteAvl(void** avlTree){
     scanf("%d", &i);
     bool deleted = removeFromAvlTree(root, i);
     printf("%d %s deleted\n", i, (deleted) ? "was" : "was not");
+}
+void askFindAvl(void** avlTree){
+    AvlTreeNode** root = (AvlTreeNode**)avlTree;
+    printf("%s", "Enter value to find: ");
+    int i;
+    scanf("%d", &i);
+    bool found = isInAvlTree(*root, i);
+    printf("%d %s found\n", i, (found) ? "was" : "was not");
 }
 void doPreOrder(void** avlTree){
     AvlTreeNode** root = (AvlTreeNode**)avlTree;
@@ -369,12 +412,13 @@ int testAvlTree(){
     ConsumerMenuOption* options[] = {
         newConsumerMenuOption("Insert into the AVL Tree", &askInsertAvl),
         newConsumerMenuOption("Remove from the AVL Tree", &askDeleteAvl),
+        newConsumerMenuOption("Search the AVL Tree", &askFindAvl),
         newConsumerMenuOption("Print pre-order", &doPreOrder),
         newConsumerMenuOption("Print in-order", &doInOrder),
         newConsumerMenuOption("Print post-order", &doPostOrder),
         newConsumerMenuOption("Print breadth", &doBreadthPrint)
     };
-    int numOptions = 6;
+    int numOptions = 7;
 
     doConsumerMenu(options, numOptions, (void**)&alvin);
 
