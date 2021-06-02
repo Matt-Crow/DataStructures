@@ -6,10 +6,108 @@
 /*
 Private functions
 */
-int getBalance(AvlTreeNode* root);
-void rebalance(AvlTreeNode** root);
-void leftRotate(AvlTreeNode** root);
-void rightRotate(AvlTreeNode** root);
+
+/*
+A positive number denotes left -heaviness
+A negative number denotes right-heaviness
+*/
+int getBalance(AvlTreeNode* root){
+    int balance = 0;
+    if(root){
+        balance = getAvlHeight(root->left) - getAvlHeight(root->right);
+    }
+    return balance;
+}
+
+/*
+This assumes the heights of root's childen have already been updated.
+Pro-tip: call this after recursive calls
+*/
+void setHeight(AvlTreeNode* root){
+    if(root){
+        int h1 = getAvlHeight(root->left);
+        int h2 = getAvlHeight(root->right);
+        root->height = ((h1 > h2) ? h1 : h2) + 1;
+    }
+}
+/*
+ *      (4)
+ *     /   \
+ *   (2)    (6)
+ *  /  \    /  \
+ * (1) (3) (5) (7)
+ *
+ * leftRotate((4)):
+ *         (6)
+ *        /   \
+ *      (4)   (7)
+ *     /   \
+ *   (2)   (5)
+ *  /   \
+ * (1)  (3)
+ */
+void leftRotate(AvlTreeNode** root){
+    if(root && *root){
+        AvlTreeNode* oldRoot = *root;
+        AvlTreeNode* newRoot = oldRoot->right;
+        *root = newRoot;
+        oldRoot->right = newRoot->left;
+        newRoot->left = oldRoot;
+        // need to update in this order
+        setHeight(oldRoot);
+        setHeight(newRoot);
+    }
+}
+
+/*
+ *      (4)
+ *    /     \
+ *  (2)     (6)
+ * /  \     / \
+ *(1) (3) (5) (7)
+ *
+ * to
+ *
+ *      (2)
+ *    /     \
+ *  (1)     (4)
+ *          / \
+ *        (3) (6)
+ *            / \
+ *          (5) (7)
+ */
+void rightRotate(AvlTreeNode** root){
+    if(root && *root){
+        AvlTreeNode* oldRoot = *root;
+        AvlTreeNode* newRoot = oldRoot->left;
+        *root = newRoot;
+        oldRoot->left = newRoot->right;
+        newRoot->right = oldRoot;
+        // need to update in this order
+        setHeight(oldRoot);
+        setHeight(newRoot);
+    }
+}
+void rebalance(AvlTreeNode** root){
+    if(root && *root){
+        AvlTreeNode* node = *root;
+
+        setHeight(node);
+
+        int balance = getBalance(node);
+        if(balance > 1){ // left heavy
+            if(getBalance(node->left) < 0){ // left heavy inner
+                leftRotate(&(node->left));
+            }
+            rightRotate(root);
+        } else if(balance < -1){ // right heavy
+            if(getBalance(node->right) > 0){ // right heavy inner
+                rightRotate(&(node->right));
+            }
+            leftRotate(root);
+        } // else, is OK
+    }
+}
 
 
 
@@ -47,10 +145,10 @@ bool insertIntoAvlTree(AvlTreeNode** root, int val){
             notDuplicate = true;
         } else if(node->value > val){
             notDuplicate = insertIntoAvlTree(&(node->left), val);
-            // todo rebalance
+            rebalance(root);
         } else if(node->value < val){
             notDuplicate = insertIntoAvlTree(&(node->right), val);
-            // todo rebalance
+            rebalance(root);
         } else { // node->value == val
             notDuplicate = false;
         }
@@ -66,10 +164,10 @@ bool removeFromAvlTree(AvlTreeNode** root, int val){
             // no node, do nothing
         } else if(node->value > val){
             deleted = removeFromAvlTree(&(node->left), val);
-            // todo rebalance
+            rebalance(root);
         } else if(node->value < val){
             deleted = removeFromAvlTree(&(node->right), val);
-            // todo rebalance
+            rebalance(root);
         }
         // by now, the value has been found
         else if(!(node->left || node->right)){ // no children
@@ -90,7 +188,7 @@ bool removeFromAvlTree(AvlTreeNode** root, int val){
             */
             deleted = removeFromAvlTree(root, swapMe->value);
             node->value = newVal;
-            // todo rebalance?
+            rebalance(root);
         } else if(node->left){
             AvlTreeNode* temp = node;
             *root = node->left;
@@ -108,7 +206,13 @@ bool removeFromAvlTree(AvlTreeNode** root, int val){
     return deleted;
 }
 
-int getAvlHeight(AvlTreeNode* root);
+int getAvlHeight(AvlTreeNode* root){
+    int height = -1;
+    if(root){
+        height = root->height;
+    }
+    return height;
+}
 
 void preOrderAvl(AvlTreeNode* root){
     if(root){
@@ -131,6 +235,7 @@ void postOrderAvl(AvlTreeNode* root){
         printf("%d ", root->value);
     }
 }
+
 void breadthPrintAvl(AvlTreeNode* root);
 
 // Conforms to the Consumer standard defined in core.h
