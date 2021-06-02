@@ -58,7 +58,55 @@ bool insertIntoAvlTree(AvlTreeNode** root, int val){
     return notDuplicate;
 }
 
-bool removeFromAvlTree(AvlTreeNode** root, int val);
+bool removeFromAvlTree(AvlTreeNode** root, int val){
+    bool deleted = false;
+    if(root){ // not passed a null pointer
+        AvlTreeNode* node = *root;
+        if(!node){
+            // no node, do nothing
+        } else if(node->value > val){
+            deleted = removeFromAvlTree(&(node->left), val);
+            // todo rebalance
+        } else if(node->value < val){
+            deleted = removeFromAvlTree(&(node->right), val);
+            // todo rebalance
+        }
+        // by now, the value has been found
+        else if(!(node->left || node->right)){ // no children
+            free(node);
+            *root = 0;
+            deleted = true;
+        } else if(node->left && node->right){ // two children
+            // swap with either smallest right child or largest left child
+            AvlTreeNode* swapMe = node->left;
+            while(swapMe->right){
+                swapMe = swapMe->right;
+            }
+            int newVal = swapMe->value;
+
+            /*
+            Need to remove from the root to update all the heights along the
+            path to swapMe
+            */
+            deleted = removeFromAvlTree(root, swapMe->value);
+            node->value = newVal;
+            // todo rebalance?
+        } else if(node->left){
+            AvlTreeNode* temp = node;
+            *root = node->left;
+            temp->left = 0;
+            free(temp);
+            deleted = true;
+        } else if(node->right){
+            AvlTreeNode* temp = node;
+            *root = node->right;
+            temp->right = 0;
+            free(temp);
+            deleted = true;
+        }
+    }
+    return deleted;
+}
 
 int getAvlHeight(AvlTreeNode* root);
 
@@ -93,6 +141,14 @@ void askInsertAvl(void** avlTree){
     scanf("%d", &i);
     insertIntoAvlTree(root, i);
 }
+void askDeleteAvl(void** avlTree){
+    AvlTreeNode** root = (AvlTreeNode**)avlTree;
+    printf("%s", "Enter value to delete: ");
+    int i;
+    scanf("%d", &i);
+    bool deleted = removeFromAvlTree(root, i);
+    printf("%d %s deleted\n", i, (deleted) ? "was" : "was not");
+}
 void doPreOrder(void** avlTree){
     AvlTreeNode** root = (AvlTreeNode**)avlTree;
     preOrderAvl(*root);
@@ -116,11 +172,12 @@ int testAvlTree(){
 
     ConsumerMenuOption* options[] = {
         newConsumerMenuOption("Insert into the AVL Tree", &askInsertAvl),
+        newConsumerMenuOption("Remove from the AVL Tree", &askDeleteAvl),
         newConsumerMenuOption("Print pre-order", &doPreOrder),
         newConsumerMenuOption("Print in-order", &doInOrder),
         newConsumerMenuOption("Print post-order", &doPostOrder)
     };
-    int numOptions = 4;
+    int numOptions = 5;
 
     doConsumerMenu(options, numOptions, (void**)&alvin);
 
