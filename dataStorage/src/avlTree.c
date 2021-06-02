@@ -109,7 +109,67 @@ void rebalance(AvlTreeNode** root){
     }
 }
 
+/*
+These are needed for breadth printing
+*/
+typedef struct AvlTreeQueueNode {
+    AvlTreeNode* value;
+    struct AvlTreeQueueNode* next;
+} AvlTreeQueueNode;
 
+typedef struct AvlTreeQueue {
+    AvlTreeQueueNode* head;
+    AvlTreeQueueNode* tail;
+} AvlTreeQueue;
+
+AvlTreeQueueNode* newAvlTreeQueueNode(AvlTreeNode* value){
+    AvlTreeQueueNode* q = (AvlTreeQueueNode*)malloc(sizeof(AvlTreeQueueNode));
+    q->value = value;
+    q->next = 0;
+    return q;
+}
+AvlTreeQueue* newAvlTreeQueue(){
+    AvlTreeQueue* q = (AvlTreeQueue*)malloc(sizeof(AvlTreeQueue));
+    q->head = 0;
+    q->tail = 0;
+    return q;
+}
+void deleteAvlTreeQueueNode(AvlTreeQueueNode** queue){
+    if(queue && *queue){
+        free(*queue);
+        *queue = 0;
+    }
+}
+void deleteAvlTreeQueue(AvlTreeQueue** queue){
+    if(queue && *queue){
+        free(*queue);
+        *queue = 0;
+    }
+}
+void enqueueAvlTreeQueue(AvlTreeQueue* queue, AvlTreeNode* value){
+    if(queue){ // not passed null-pointer
+        AvlTreeQueueNode* nn = newAvlTreeQueueNode(value);
+        if(queue->head){
+            queue->tail->next = nn;
+        } else {
+            queue->head = nn;
+        }
+        queue->tail = nn;
+    }
+}
+AvlTreeNode* dequeueAvlTreeQueue(AvlTreeQueue* queue){
+    AvlTreeNode* dequeued = 0;
+    if(queue && queue->head){
+        AvlTreeQueueNode* oldHead = queue->head;
+        dequeued = oldHead->value;
+        queue->head = oldHead->next;
+        deleteAvlTreeQueueNode(&oldHead);
+        if(!(queue->head)){ // no more nodes
+            queue->tail = 0;
+        }
+    }
+    return dequeued;
+}
 
 /*
 Public functions
@@ -235,8 +295,33 @@ void postOrderAvl(AvlTreeNode* root){
         printf("%d ", root->value);
     }
 }
+void breadthPrintAvl(AvlTreeNode* root){
+    AvlTreeQueue* currentLevel = newAvlTreeQueue();
+    AvlTreeQueue* nextLevel = 0;
+    if(root){
+        enqueueAvlTreeQueue(currentLevel, root);
+    }
+    AvlTreeNode* currNode = 0;
+    while(currentLevel->head){
+        nextLevel = newAvlTreeQueue();
+        while(currentLevel->head){
+            currNode = dequeueAvlTreeQueue(currentLevel);
+            if(currNode->left){
+                enqueueAvlTreeQueue(nextLevel, currNode->left);
+            }
+            if(currNode->right){
+                enqueueAvlTreeQueue(nextLevel, currNode->right);
+            }
+            printf("%d (%d) ", currNode->value, currNode->height);
+        }
+        // done with current level
+        printf("%c", '\n');
+        deleteAvlTreeQueue(&currentLevel);
+        currentLevel = nextLevel;
+    }
 
-void breadthPrintAvl(AvlTreeNode* root);
+    deleteAvlTreeQueue(&currentLevel);
+}
 
 // Conforms to the Consumer standard defined in core.h
 void askInsertAvl(void** avlTree){
@@ -269,6 +354,12 @@ void doPostOrder(void** avlTree){
     postOrderAvl(*root);
     printf("%c", '\n');
 }
+void doBreadthPrint(void** avlTree){
+    if(avlTree){
+        AvlTreeNode** node = (AvlTreeNode**)avlTree;
+        breadthPrintAvl(*node);
+    }
+}
 
 int testAvlTree(){
     AvlTreeNode* alvin = 0;
@@ -280,9 +371,10 @@ int testAvlTree(){
         newConsumerMenuOption("Remove from the AVL Tree", &askDeleteAvl),
         newConsumerMenuOption("Print pre-order", &doPreOrder),
         newConsumerMenuOption("Print in-order", &doInOrder),
-        newConsumerMenuOption("Print post-order", &doPostOrder)
+        newConsumerMenuOption("Print post-order", &doPostOrder),
+        newConsumerMenuOption("Print breadth", &doBreadthPrint)
     };
-    int numOptions = 5;
+    int numOptions = 6;
 
     doConsumerMenu(options, numOptions, (void**)&alvin);
 
