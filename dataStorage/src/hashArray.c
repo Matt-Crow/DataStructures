@@ -1,3 +1,4 @@
+#include "core.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -189,6 +190,7 @@ void printHashArray(HashArray* printMe){
         }
     }
 }
+
 void printSearchResult(SearchResult* printMe){
     if(printMe){
         printf("%s", "Search Result:\n");
@@ -202,72 +204,81 @@ void printSearchResult(SearchResult* printMe){
     }
 }
 
+
+void doPrintHashArray(void** dataStructure){
+    HashArray** ha = (HashArray**)dataStructure;
+    printHashArray(*ha);
+}
+
+void doAllocateHashArray(void** dataStructure){
+    HashArray** ha = (HashArray**)dataStructure;
+    if(*ha){
+        printf("%s","Cannot allocate: one already exists\n");
+    } else {
+        int ip;
+        printf("%s", "Enter capacity: ");
+        scanf("%d", &ip);
+        *ha = newHashArray(ip);
+    }
+}
+
+void doFreeHashArray(void** dataStructure){
+    HashArray** ha = (HashArray**)dataStructure;
+    if(*ha){
+        deleteHashArray(ha);
+        printf("%s", "The hash array was deleted\n");
+    } else {
+        printf("%s", "No hash array is allocated, so nothing is deleted\n");
+    }
+}
+
+void doInsertHashArray(void** dataStructure){
+    HashArray** ha = (HashArray**)dataStructure;
+    if(*ha){
+        int ip;
+        printf("%s", "Enter value to insert: ");
+        scanf("%d", &ip);
+        SearchResult* sr = putInHashArray(*ha, ip);
+        printSearchResult(sr);
+        deleteSearchResult(&sr);
+    } else {
+        printf("%s", "No hash array is allocated, so I cannot insert.\n");
+    }
+}
+
+void doFindInHashArray(void** dataStructure){
+    HashArray** ha = (HashArray**)dataStructure;
+    if(*ha){
+        int ip;
+        printf("%s", "Enter value to search for: ");
+        scanf("%d", &ip);
+        SearchResult* sr = getFromHashArray(*ha, ip);
+        printSearchResult(sr);
+        deleteSearchResult(&sr);
+    } else {
+        printf("%s", "No hash array is allocated, so I cannot search.\n");
+    }
+}
+
 int testHashArray(){
     HashArray* ha = 0;
-    SearchResult* sr = 0;
-    int ip = 0;
 
-    do {
-        printf("%s", "HASH ARRAY\n");
-        printf("%s", "Choose an option:\n");
-        printf("%s", "0: Print the Hash Array\n");
-        printf("%s", "1: Allocate a new Hash Array\n");
-        printf("%s", "2: Free the Hash Array\n");
-        printf("%s", "3: Insert into the Hash Array\n");
-        printf("%s", "4: Search for a value in the Hash Array\n");
-        printf("%s", "-1: Quit\n");
-        scanf("%d", &ip);
-        switch(ip){
-            case 0:
-                printHashArray(ha);
-                break;
-            case 1:
-                if(ha){
-                    printf("%s","Cannot allocate: one already exists\n");
-                } else {
-                    printf("%s", "Enter capacity: ");
-                    scanf("%d", &ip);
-                    ha = newHashArray(ip);
-                    ip = 1;
-                }
-                break;
-            case 2:
-                if(ha){
-                    deleteHashArray(&ha);
-                    printf("%s", "The hash array was deleted\n");
-                } else {
-                    printf("%s", "No hash array is allocated, so nothing is deleted\n");
-                }
-                break;
-            case 3:
-                if(ha){
-                    printf("%s", "Enter value to insert: ");
-                    scanf("%d", &ip);
-                    sr = putInHashArray(ha, ip);
-                    printSearchResult(sr);
-                    deleteSearchResult(&sr);
-                    ip = 3;
-                } else {
-                    printf("%s", "No hash array is allocated, so I cannot insert.\n");
-                }
-                break;
-            case 4:
-                if(ha){
-                    printf("%s", "Enter value to search for: ");
-                    scanf("%d", &ip);
-                    sr = getFromHashArray(ha, ip);
-                    printSearchResult(sr);
-                    deleteSearchResult(&sr);
-                    ip = 4;
-                } else {
-                    printf("%s", "No hash array is allocated, so I cannot search.\n");
-                }
-                break;
-        }
-    } while(ip != -1);
+    ConsumerMenuOption* options[] = {
+        newConsumerMenuOption("Print the Hash Array", &doPrintHashArray),
+        newConsumerMenuOption("Allocate a new Hash Array", &doAllocateHashArray),
+        newConsumerMenuOption("Free the Hash Array", &doFreeHashArray),
+        newConsumerMenuOption("Insert into the Hash Array", &doInsertHashArray),
+        newConsumerMenuOption("Search for a value in the Hash Array", &doFindInHashArray)
+    };
+    int numOptions = 5;
+
+    doConsumerMenu(options, numOptions, (void**)&ha);
+
+    for(int i = 0; i < numOptions; ++i){
+        freeConsumerMenuOption(&options[i]);
+    }
 
     deleteHashArray(&ha);
-    deleteSearchResult(&sr);
 
     return 0;
 }
