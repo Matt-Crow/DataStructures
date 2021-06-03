@@ -418,7 +418,7 @@ int testAvlTree(){
         newConsumerMenuOption("Print post-order", &doPostOrder),
         newConsumerMenuOption("Print breadth", &doBreadthPrint)
     };
-    int numOptions = 7;
+    int numOptions = sizeof(options) / sizeof(options[0]);
 
     doConsumerMenu(options, numOptions, (void**)&alvin);
 

@@ -270,7 +270,7 @@ int testHashArray(){
         newConsumerMenuOption("Insert into the Hash Array", &doInsertHashArray),
         newConsumerMenuOption("Search for a value in the Hash Array", &doFindInHashArray)
     };
-    int numOptions = 5;
+    int numOptions = sizeof(options) / sizeof(options[0]);
 
     doConsumerMenu(options, numOptions, (void**)&ha);
 

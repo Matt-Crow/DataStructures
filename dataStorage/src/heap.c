@@ -1,3 +1,4 @@
+#include "core.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "heap.h"
@@ -116,82 +117,91 @@ void printHeap(Heap* heap){
     }
 }
 
+void doPrintHeap(void** dataStructure){
+    Heap** h = (Heap**)dataStructure;
+    if(*h){
+        printHeap(*h);
+    } else {
+        printf("%s", "No heap to print.\n");
+    }
+}
+
+void doAllocateMinHeap(void** dataStructure){
+    Heap** h = (Heap**)dataStructure;
+    if(*h){
+        printf("%s", "Heap already allocated.\n");
+    } else {
+        int ip;
+        printf("Enter heap capacity: ");
+        scanf("%d", &ip);
+        *h = newMinHeap(ip);
+    }
+}
+
+void doAllocateMaxHeap(void** dataStructure){
+    Heap** h = (Heap**)dataStructure;
+    if(*h){
+        printf("%s", "Heap already allocated.\n");
+    } else {
+        int ip;
+        printf("Enter heap capacity: ");
+        scanf("%d", &ip);
+        *h = newMaxHeap(ip);
+    }
+}
+
+void doFreeHeap(void** dataStructure){
+    Heap** h = (Heap**)dataStructure;
+    if(*h){
+        deleteHeap(h);
+        printf("%s", "The heap has been deleted\n");
+    } else {
+        printf("%s", "No heap to delete\n");
+    }
+}
+
+void doSiftUp(void** dataStructure){
+    Heap** h = (Heap**)dataStructure;
+    if(*h){
+        int ip;
+        printf("%s", "Enter value to sift up: ");
+        scanf("%d", &ip);
+        siftUp(*h, ip);
+    } else {
+        printf("%s", "No heap has been allocated.\n");
+    }
+}
+
+void doSiftDown(void** dataStructure){
+    Heap** h = (Heap**)dataStructure;
+    if(!(*h)){
+        printf("%s", "No heap has been allocated.\n");
+    } else if(isHeapEmpty(*h)){
+        printf("%s", "Nothing to sift down.\n");
+    } else {
+        int ip = siftDown(*h);
+        printf("Sifted down %d\n", ip);
+    }
+}
+
 int testHeap(){
     Heap* h = 0;
-    int ip = 0;
-    do {
-        printf("%s", "HEAP\n");
-        printf("%s", "Choose an option:\n");
-        printf("%s", "0: Print the heap\n");
-        printf("%s", "1: allocate a new min heap\n");
-        printf("%s", "2: allocate a new max heap\n");
-        printf("%s", "3: free the heap\n");
-        printf("%s", "4: sift up\n");
-        printf("%s", "5: sift down\n");
-        printf("%s", "-1: Quit\n");
-        scanf("%d", &ip);
 
-        switch(ip){
-            case 0:
-                if(h){
-                    printHeap(h);
-                } else {
-                    printf("%s", "No heap to print.\n");
-                }
-                break;
-            case 1:
-                if(h){
-                    printf("%s", "Heap already allocated.\n");
-                } else {
-                    printf("Enter heap capacity: ");
-                    scanf("%d", &ip);
-                    h = newMinHeap(ip);
-                    ip = 1;
-                }
-                break;
-            case 2:
-                if(h){
-                    printf("%s", "Heap already allocated.\n");
-                } else {
-                    printf("Enter heap capacity: ");
-                    scanf("%d", &ip);
-                    h = newMaxHeap(ip);
-                    ip = 2;
-                }
-                break;
-            case 3:
-                if(h){
-                    deleteHeap(&h);
-                    printf("%s", "The heap has been deleted\n");
-                } else {
-                    printf("%s", "No heap to delete\n");
-                }
-                break;
-            case 4:
-                if(h){
-                    printf("%s", "Enter value to sift up: ");
-                    scanf("%d", &ip);
-                    siftUp(h, ip);
-                    ip = 4;
-                } else {
-                    printf("%s", "No heap has been allocated.\n");
-                }
-                break;
-            case 5:
-                if(h){
-                    if(isHeapEmpty(h)){
-                        printf("%s", "Nothing to sift down.\n");
-                    } else {
-                        ip = siftDown(h);
-                        printf("Sifted down %d\n", ip);
-                        ip = 5;
-                    }
-                } else {
-                    printf("%s", "No heap has been allocated.\n");
-                }
-                break;
-        }
-    } while(ip != -1);
+    ConsumerMenuOption* options[] = {
+        newConsumerMenuOption("Print the heap", &doPrintHeap),
+        newConsumerMenuOption("Allocate a new min heap", &doAllocateMinHeap),
+        newConsumerMenuOption("Allocate a new max heap", &doAllocateMaxHeap),
+        newConsumerMenuOption("Free the heap", &doFreeHeap),
+        newConsumerMenuOption("Sift up", &doSiftUp),
+        newConsumerMenuOption("Sift down", &doSiftDown)
+    };
+    int numOptions = sizeof(options) / sizeof(options[0]);
+
+    doConsumerMenu(options, numOptions, (void**)&h);
+
+    for(int i = 0; i < numOptions; ++i){
+        freeConsumerMenuOption(&options[i]);
+    }
 
     deleteHeap(&h);
 
