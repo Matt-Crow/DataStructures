@@ -1,4 +1,5 @@
 #include "linkedHashTable.h"
+#include "core.h"
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
@@ -97,14 +98,6 @@ bool isInHashTable(LinkedHashTable* table, char* value){
     return found;
 }
 
-void getNextLine(char* intoHere, int maxChars){
-    fgets(intoHere, maxChars, stdin);
-    char* nlChar = strstr(intoHere, "\n");
-    if(nlChar){
-        nlChar[0] = '\0'; // replace newline character
-    }
-}
-
 void printLinkedHashTable(LinkedHashTable* table){
     printf("%s", "Linked Hash Table:\n");
     for(int i = 0; i < table->capacity; i++){
@@ -119,42 +112,71 @@ void printLinkedHashTable(LinkedHashTable* table){
     }
 }
 
-int testLinkedHashTable(){
-    LinkedHashTable* table = newLinkedHashTable(4);
+void getNextLine(char* intoHere, int maxChars){
+    fgets(intoHere, maxChars, stdin);
+    char* nlChar = strchr(intoHere, '\n');
+    if(nlChar){
+        nlChar[0] = '\0'; // replace newline character
+    }
+}
+
+LinkedHashTable* asLinkedHashTablePtr(void** dataStructure){
+    LinkedHashTable** ptrPtr = (LinkedHashTable**)dataStructure;
+    return *ptrPtr;
+}
+
+void doPrintHashTable(void** dataStructure){
+    printLinkedHashTable(asLinkedHashTablePtr(dataStructure));
+}
+
+void clearStdin(){
+    char ch;
+    while((ch = getchar()) != '\n' && ch != EOF){
+        // do nothing
+    }
+}
+
+void doPutHashTable(void** dataStructure){
+    clearStdin();
+    printf("%s", "Enter value to insert: ");
+    int maxChars = 100;
+    char buffer[maxChars];
+    getNextLine(buffer, maxChars);
+    printf("Buffer is \"%s\"\n", buffer);
+    putIntoHashTable(asLinkedHashTablePtr(dataStructure), buffer);
+}
+
+void doSearchHashTable(void** dataStructure){
+    clearStdin();
+    printf("%s", "Enter value to search for: ");
     int maxIpSize = 100;
     char ip[maxIpSize];
-    int option = -1;
-    do {
-        printf("%s", "=== Linked Hash Table ===\n");
-        printf("%s", "0: Print the linked hash table\n");
-        printf("%s", "1: Put into the linked hash table\n");
-        printf("%s", "2: Check if in the linked hash table\n");
-        printf("%s", "-1: Quit\n");
-        printf("%s", "Choose an option: ");
-        scanf("%d", &option);
-        switch (option) {
-            case 0:
-                printLinkedHashTable(table);
-                break;
-            case 1:
-                fgets(ip, maxIpSize, stdin); // clear stdin first
-                printf("%s", "Enter value to insert: ");
-                getNextLine(ip, maxIpSize);
-                putIntoHashTable(table, ip);
-                break;
-            case 2:
-                fgets(ip, maxIpSize, stdin); // clear stdin first
-                printf("%s", "Enter value to search for: ");
-                getNextLine(ip, maxIpSize);
-                bool found = isInHashTable(table, ip);
-                if(found){
-                    printf("\"%s\" is in the hash table\n", ip);
-                } else {
-                    printf("\"%s\" is not in the hash table\n", ip);
-                }
-                break;
-        }
-    } while(option != -1);
+    getNextLine(ip, maxIpSize);
+    bool found = isInHashTable(asLinkedHashTablePtr(dataStructure), ip);
+    if(found){
+        printf("\"%s\" is in the hash table\n", ip);
+    } else {
+        printf("\"%s\" is not in the hash table\n", ip);
+    }
+}
+
+int testLinkedHashTable(){
+    LinkedHashTable* table = newLinkedHashTable(4);
+
+    printf("%s", "=== Linked Hash Table ===\n");
+
+    ConsumerMenuOption* options[] = {
+        newConsumerMenuOption("Print the linked hash table", &doPrintHashTable),
+        newConsumerMenuOption("Put into the linked hash table", &doPutHashTable),
+        newConsumerMenuOption("Check if in the linked hash table", &doSearchHashTable)
+    };
+    int numOptions = sizeof(options) / sizeof(options[0]);
+
+    doConsumerMenu(options, numOptions, (void**)&table);
+
+    for(int i = 0; i < numOptions; ++i){
+        freeConsumerMenuOption(&options[i]);
+    }
 
     freeLinkedHashTable(&table);
     return 0;
