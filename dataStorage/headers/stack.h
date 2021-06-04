@@ -8,7 +8,7 @@ typedef struct Stack{
 
 Stack* newStack(int val);
 
-void deleteStack(Stack* top);
+void deleteStack(Stack** top);
 
 void push(Stack** top, int val);
 int peekStack(Stack* top);

@@ -1,24 +1,25 @@
+#include "linkedList.h"
+#include "core.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "linkedList.h"
 
-struct LinkedList* newLinkedList(int val){
-    struct LinkedList* ret = (struct LinkedList*)malloc(sizeof(struct LinkedList));
+LinkedList* newLinkedList(int val){
+    LinkedList* ret = (LinkedList*)malloc(sizeof(LinkedList));
     ret->next = 0;
     ret->prev = 0;
     ret->value = val;
     return ret;
 }
 
-void deleteLinkedList(struct LinkedList** head, struct LinkedList** tail){
+void deleteLinkedList(LinkedList** head, LinkedList** tail){
      while(*head){
          printf("Delete %i\n", popFromFront(head, tail));
      }
 }
 
-void pushToFront(struct LinkedList** head, struct LinkedList** tail, int val){
+void pushToFront(LinkedList** head, LinkedList** tail, int val){
     if(head && tail){
-        struct LinkedList* newHead = newLinkedList(val);
+        LinkedList* newHead = newLinkedList(val);
         newHead->next = *head;
         if(*head){
             //has at least one node
@@ -32,9 +33,9 @@ void pushToFront(struct LinkedList** head, struct LinkedList** tail, int val){
     } //can't do anything if they are null pointers
 };
 
-void pushToBack(struct LinkedList** head, struct LinkedList** tail, int val){
+void pushToBack(LinkedList** head, LinkedList** tail, int val){
      if(head && tail){
-         struct LinkedList* newTail = newLinkedList(val);
+         LinkedList* newTail = newLinkedList(val);
          newTail->prev = *tail;
          if(*tail){
              (*tail)->next = newTail;
@@ -46,12 +47,12 @@ void pushToBack(struct LinkedList** head, struct LinkedList** tail, int val){
      }
 }
 
-int popFromFront(struct LinkedList** head, struct LinkedList** tail){
+int popFromFront(LinkedList** head, LinkedList** tail){
     int ret = 0;
     if(head && tail && *head){
         ret = peekFront(*head);
-        struct LinkedList* oldHead = *head;
-        struct LinkedList* newHead = oldHead->next;
+        LinkedList* oldHead = *head;
+        LinkedList* newHead = oldHead->next;
         oldHead->next = 0;
         free(oldHead);
 
@@ -66,12 +67,12 @@ int popFromFront(struct LinkedList** head, struct LinkedList** tail){
     return ret;
 }
 
-int popFromBack(struct LinkedList** head, struct LinkedList** tail){
+int popFromBack(LinkedList** head, LinkedList** tail){
     int ret = 0;
     if(head && tail){
         ret = peekBack(*tail);
-        struct LinkedList* oldTail = *tail;
-        struct LinkedList* newTail = oldTail->prev;
+        LinkedList* oldTail = *tail;
+        LinkedList* newTail = oldTail->prev;
         oldTail->prev = 0;
         free(oldTail);
 
@@ -86,14 +87,14 @@ int popFromBack(struct LinkedList** head, struct LinkedList** tail){
     return ret;
 }
 
-int peekFront(struct LinkedList* head){
+int peekFront(LinkedList* head){
     int ret = 0;
     if(head){
         ret = head->value;
     }
     return ret;
 }
-int peekBack(struct LinkedList* tail){
+int peekBack(LinkedList* tail){
     int ret = 0;
     if(tail){
         ret = tail->value;
@@ -101,10 +102,10 @@ int peekBack(struct LinkedList* tail){
     return ret;
 }
 
-bool deleteNode(struct LinkedList** head, struct LinkedList** tail, int withValue){
+bool deleteNode(LinkedList** head, LinkedList** tail, int withValue){
     bool found = false;
     if(head && tail){
-        struct LinkedList* curr = *head;
+        LinkedList* curr = *head;
         while(curr && !found){
             if(curr->value == withValue){
                 found = true;
@@ -129,9 +130,9 @@ bool deleteNode(struct LinkedList** head, struct LinkedList** tail, int withValu
     return found;
 }
 
-void printLinkedList(struct LinkedList* head){
+void printLinkedList(LinkedList* head){
     printf("%s", "Head of linked list:\n");
-    struct LinkedList* curr = head;
+    LinkedList* curr = head;
     while(curr){
         printf("%i\n", curr->value);
         curr = curr->next;
@@ -140,8 +141,8 @@ void printLinkedList(struct LinkedList* head){
 }
 
 int testLinkedList(){
-    struct LinkedList* head = 0;
-    struct LinkedList* tail = 0;
+    LinkedList* head = 0;
+    LinkedList* tail = 0;
     int ip = 0;
     printf("%s", "===LINKED LIST===\n");
     do {

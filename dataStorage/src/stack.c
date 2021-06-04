@@ -1,6 +1,7 @@
+#include "stack.h"
+#include "core.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "stack.h"
 
 Stack* newStack(int val){
     Stack* ret = (Stack*)malloc(sizeof(Stack));
@@ -9,11 +10,9 @@ Stack* newStack(int val){
     return ret;
 }
 
-void deleteStack(Stack* top){
-    if(top){
-        deleteStack(top->next);
-        printf("delete %i\n", top->value);
-        free(top);
+void deleteStack(Stack** top){
+    while(top && *top){
+        pop(top);
     }
 }
 
@@ -39,11 +38,9 @@ int pop(Stack** top){
     if(top && *top){
         //top isn't null pointer, and has at least 1 item in the stack
         Stack* oldTop = *top;
-        Stack* newTop = (*top)->next;
+        Stack* newTop = oldTop->next;
         ret = oldTop->value;
-        oldTop->next = 0; //prevent deleteStack from cascading
-        deleteStack(oldTop);
-        oldTop = 0;
+        free(oldTop);
         *top = newTop;
     }
     return ret;
@@ -59,47 +56,54 @@ void printStack(Stack* top){
     printf("%s", "Bottom of the stack\n");
 }
 
+Stack* asStackPtr(void** dataStructure){
+    Stack** ptrPtr = (Stack**)dataStructure;
+    return *ptrPtr;
+}
+
+void doPrintStack(void** dataStructure){
+    printStack(asStackPtr(dataStructure));
+}
+
+void doPushStack(void** dataStructure){
+    Stack** topPtr = (Stack**)dataStructure;
+    int ip;
+    printf("%s", "Enter value to push: ");
+    scanf("%d", &ip);
+    push(topPtr, ip);
+}
+
+void doPopStack(void** dataStructure){
+    if(*dataStructure){
+        int ip = pop((Stack**)dataStructure);
+        printf("Popped %i\n", ip);
+    } else {
+        printf("%s", "Nothing to pop\n");
+    }
+}
+
+void doDeleteStack(void** dataStructure){
+    deleteStack((Stack**)dataStructure);
+}
+
 int testStack(){
     Stack* top = 0;
-    int ip = 0;
 
-    do {
-        printf("%s", "Choose an option:\n");
-        printf("%s", "0: Print the stack\n");
-        printf("%s", "1: Push to the stack\n");
-        printf("%s", "2: Pop from the stack\n");
-        printf("%s", "3: Delete the stack\n");
-        printf("%s", "-1: Quit\n");
-        scanf("%d", &ip);
+    ConsumerMenuOption* options[] = {
+        newConsumerMenuOption("Print the stack", &doPrintStack),
+        newConsumerMenuOption("Push to the stack", &doPushStack),
+        newConsumerMenuOption("Pop from the stack", &doPopStack),
+        newConsumerMenuOption("Delete the stack", &doDeleteStack)
+    };
+    int numOptions = sizeof(options) / sizeof(options[0]);
 
-        switch(ip){
-            case 0:
-                printStack(top);
-                break;
-            case 1:
-                printf("%s", "Enter value to push: ");
-                scanf("%d", &ip);
-                push(&top, ip);
-                ip = 1;
-                break;
-            case 2:
-                if(top){
-                    ip = pop(&top);
-                    printf("Popped %i\n", ip);
-                    ip = 2;
-                } else {
-                    printf("%s", "Nothing to pop\n");
-                }
-                break;
-            case 3:
-                deleteStack(top);
-                top = 0;
-                break;
-        }
-    } while(ip != -1);
+    doConsumerMenu(options, numOptions, (void**)&top);
 
-    deleteStack(top);
-    top = 0;
+    for(int i = 0; i < numOptions; ++i){
+        freeConsumerMenuOption(&options[i]);
+    }
+
+    deleteStack(&top);
 
     return 0;
 }

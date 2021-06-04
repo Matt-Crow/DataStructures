@@ -3,22 +3,22 @@
 
 #include <stdbool.h>
 
-struct LinkedList{
+typedef struct LinkedList{
     struct LinkedList* next;
     struct LinkedList* prev;
     int value;
-};
+} LinkedList;
 
-struct LinkedList* newLinkedList(int val);
-void deleteLinkedList(struct LinkedList** head, struct LinkedList** tail);
-void pushToFront(struct LinkedList** head, struct LinkedList** tail, int val);
-void pushToBack(struct LinkedList** head, struct LinkedList** tail, int val);
-int popFromFront(struct LinkedList** head, struct LinkedList** tail);
-int popFromBack(struct LinkedList** head, struct LinkedList** tail);
-int peekFront(struct LinkedList* head);
-int peekBack(struct LinkedList* tail);
-bool deleteNode(struct LinkedList** head, struct LinkedList** tail, int withValue);
-void printLinkedList(struct LinkedList* head);
+LinkedList* newLinkedList(int val);
+void deleteLinkedList(LinkedList** head, LinkedList** tail);
+void pushToFront(LinkedList** head, LinkedList** tail, int val);
+void pushToBack(LinkedList** head, LinkedList** tail, int val);
+int popFromFront(LinkedList** head, LinkedList** tail);
+int popFromBack(LinkedList** head, LinkedList** tail);
+int peekFront(LinkedList* head);
+int peekBack(LinkedList* tail);
+bool deleteNode(LinkedList** head, LinkedList** tail, int withValue);
+void printLinkedList(LinkedList* head);
 
 int testLinkedList();
 
