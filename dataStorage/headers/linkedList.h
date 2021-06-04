@@ -3,22 +3,27 @@
 
 #include <stdbool.h>
 
-typedef struct LinkedList{
-    struct LinkedList* next;
-    struct LinkedList* prev;
+typedef struct LinkedListNode{
+    struct LinkedListNode* next;
+    struct LinkedListNode* prev;
     int value;
+} LinkedListNode;
+
+typedef struct LinkedList {
+    LinkedListNode* head;
+    LinkedListNode* tail;
 } LinkedList;
 
-LinkedList* newLinkedList(int val);
-void deleteLinkedList(LinkedList** head, LinkedList** tail);
-void pushToFront(LinkedList** head, LinkedList** tail, int val);
-void pushToBack(LinkedList** head, LinkedList** tail, int val);
-int popFromFront(LinkedList** head, LinkedList** tail);
-int popFromBack(LinkedList** head, LinkedList** tail);
-int peekFront(LinkedList* head);
-int peekBack(LinkedList* tail);
-bool deleteNode(LinkedList** head, LinkedList** tail, int withValue);
-void printLinkedList(LinkedList* head);
+LinkedListNode* newLinkedListNode(int val);
+void deleteLinkedListNode(LinkedListNode** head, LinkedListNode** tail);
+void pushToFront(LinkedListNode** head, LinkedListNode** tail, int val);
+void pushToBack(LinkedListNode** head, LinkedListNode** tail, int val);
+int popFromFront(LinkedListNode** head, LinkedListNode** tail);
+int popFromBack(LinkedListNode** head, LinkedListNode** tail);
+int peekFront(LinkedListNode* head);
+int peekBack(LinkedListNode* tail);
+bool deleteNode(LinkedListNode** head, LinkedListNode** tail, int withValue);
+void printLinkedListNode(LinkedListNode* head);
 
 int testLinkedList();
 
