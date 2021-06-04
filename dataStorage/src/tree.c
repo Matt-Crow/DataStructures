@@ -1,7 +1,8 @@
+#include "tree.h"
+#include "core.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "tree.h"
 
 BinaryTree* newBinaryTree(int val){
     BinaryTree* ret = (BinaryTree*)malloc(sizeof(BinaryTree));
@@ -11,16 +12,12 @@ BinaryTree* newBinaryTree(int val){
     return ret;
 }
 void deleteBinaryTree(BinaryTree** root){
-    if(root){
+    if(root && *root){
         BinaryTree* ptr = *root;
-        if(ptr->left){
-            deleteBinaryTree(&(ptr->left));
-        }
-        if(ptr->right){
-            deleteBinaryTree(&(ptr->right));
-        }
+        deleteBinaryTree(&(ptr->left));
+        deleteBinaryTree(&(ptr->right));
         printf("deleted %i\n", ptr->value);
-        free(*root);
+        free(ptr);
         *root = 0;
     }
 }
@@ -102,13 +99,9 @@ bool deleteFromTree(BinaryTree** root, int val){
     if(root && *root){
         BinaryTree* curr = *root;
         if(curr->value > val){
-            if(curr->left){
-                deleted = deleteFromTree(&(curr->left), val);
-            }
+            deleted = deleteFromTree(&(curr->left), val);
         } else if(curr->value < val){
-            if(curr->right){
-                deleted = deleteFromTree(&(curr->right), val);
-            }
+            deleted = deleteFromTree(&(curr->right), val);
         } else {
             deleted = true;
             BinaryTree* deleteMe = curr;
@@ -255,120 +248,127 @@ void postOrder(BinaryTree* root){
     }
 }
 
+BinaryTree* asTreePtr(void** dataStructure){
+    BinaryTree** ptrPtr = (BinaryTree**)dataStructure;
+    return *ptrPtr;
+}
+
+void doPrintInOrder(void** dataStructure){
+    inOrder(asTreePtr(dataStructure));
+    printf("%c", '\n');
+}
+
+void doPrintPreOrder(void** dataStructure){
+    preOrder(asTreePtr(dataStructure));
+    printf("%c", '\n');
+}
+
+void doPrintPostOrder(void** dataStructure){
+    postOrder(asTreePtr(dataStructure));
+    printf("%c", '\n');
+}
+
+void doInsertBinaryTree(void** dataStructure){
+    printf("%s", "enter a value to insert: ");
+    int ip;
+    scanf("%d", &ip);
+    bool success = insertIntoTree((BinaryTree**)dataStructure, ip);
+    if(success){
+        printf("%i %s", ip, "was inserted\n");
+    } else {
+        printf("%i %s", ip, "is already in the tree\n");
+    }
+}
+
+void doSearchBinaryTree(void** dataStructure){
+    printf("%s", "enter a value to search for: ");
+    int ip;
+    scanf("%d", &ip);
+    bool success = isInTree(asTreePtr(dataStructure), ip);
+    if(success){
+        printf("%i is in the tree.\n", ip);
+    } else {
+        printf("%i is not in the tree.\n", ip);
+    }
+}
+
+void doDeleteFromBinaryTree(void** dataStructure){
+    printf("%s", "enter a value to delete: ");
+    int ip;
+    scanf("%d", &ip);
+    bool success = deleteFromTree((BinaryTree**)dataStructure, ip);
+    if(success){
+        printf("%i was deleted from the tree.\n", ip);
+    } else {
+        printf("%i is not in the tree.\n", ip);
+    }
+}
+
+void doDeleteBinaryTree(void** dataStructure){
+    deleteBinaryTree((BinaryTree**)dataStructure);
+}
+
+void doConvertBinaryTreeToArray(void** dataStructure){
+    BinaryTree* root = asTreePtr(dataStructure);
+    int* a = toArray(root);
+    int size = getArraySize(root);
+    printf("%s", "[");
+    for(int i = 0; i < size - 1; i++){
+        printf("%d, ", a[i]);
+    }
+    if(size > 0){
+        printf("%d", a[size - 1]);
+    }
+    printf("%s", "]\n");
+    if(a){
+        free(a);
+    }
+}
+
+void doConvertSortedArrayToBinaryTree(void** dataStructure){
+    int arr[] = {1, 2, 3, 4, 5, 6, 7};
+    BinaryTree* temp = fromSortedArray(arr, 7);
+    inOrder(temp);
+    printf("%s", "\n");
+    deleteBinaryTree(&temp);
+}
+
+void doConvertUnsortedArrayToBinaryTree(void** dataStructure){
+    int arr[] = {5, 1, 3, 2, 4};
+    BinaryTree* temp = fromUnsoredArray(arr, 5);
+    inOrder(temp);
+    printf("%s", "\n");
+    deleteBinaryTree(&temp);
+}
+
+
+
 int testBinaryTree(){
     BinaryTree* root = 0;
-    BinaryTree* temp = 0;
-    int ip = 0;
-    bool success;
-    int* a = 0;
-    do {
-        printf("%s", "Choose an option:\n");
-        printf("%s", "0: Print the binary tree in order\n");
-        printf("%s", "1: Print the binary tree pre-order\n");
-        printf("%s", "2: Print the binary tree post-order\n");
-        printf("%s", "3: Insert into the binary tree\n");
-        printf("%s", "4: Delete the binary tree\n");
-        printf("%s", "5: Convert the binary tree to an array\n");
-        printf("%s", "6: Convert [1, 2, 3, 4, 5, 6, 7] to a binary tree\n");
-        printf("%s", "7: Convert [5, 1, 3, 2, 4] to a binary tree\n");
-        printf("%s", "8: Delete from the binary tree\n");
-        printf("%s", "9: Search the binary tree\n");
-        printf("%s", "-1: Quit\n");
-        scanf("%d", &ip);
 
-        switch(ip){
-            case 0:
-                inOrder(root);
-                printf("%s", "\n");
-                break;
-            case 1:
-                preOrder(root);
-                printf("%s", "\n");
-                break;
-            case 2:
-                postOrder(root);
-                printf("%s", "\n");
-                break;
-            case 3:
-                printf("%s", "enter a value to insert: ");
-                scanf("%d", &ip);
-                success = insertIntoTree(&root, ip);
-                if(success){
-                    printf("%i %s", ip, "was inserted\n");
-                } else {
-                    printf("%i %s", ip, "is already in the tree\n");
-                }
-                ip = 1;
-                break;
-            case 4:
-                deleteBinaryTree(&root);
-                root = 0;
-                break;
-            case 5:
-                a = toArray(root);
-                ip = getArraySize(root);
-                printf("%s", "[");
-                for(int i = 0; i < ip - 1; i++){
-                    printf("%i, ", a[i]);
-                }
-                if(ip >= 0){
-                    printf("%i", a[ip - 1]);
-                }
-                printf("%s", "]\n");
-                if(a){
-                    free(a);
-                    a = 0;
-                }
-                ip = 3;
-                break;
-            case 6: {
-                int arr[] = {1, 2, 3, 4, 5, 6, 7};
-                temp = fromSortedArray(arr, 7);
-                inOrder(temp);
-                printf("%s", "\n");
-                deleteBinaryTree(&temp);
-                temp = 0;
-                break;
-            }
-            case 7: {
-                int arr[] = {5, 1, 3, 2, 4};
-                temp = fromUnsoredArray(arr, 5);
-                inOrder(temp);
-                printf("%s", "\n");
-                deleteBinaryTree(&temp);
-                temp = 0;
-                break;
-            }
-            case 8:
-                printf("%s", "enter a value to delete: ");
-                scanf("%d", &ip);
-                success = deleteFromTree(&root, ip);
-                if(success){
-                    printf("%i was deleted from the tree.\n", ip);
-                } else {
-                    printf("%i is not in the tree.\n", ip);
-                }
-                ip = 8;
-                break;
-            case 9: {
-                printf("%s", "enter a value to search for: ");
-                scanf("%d", &ip);
-                success = isInTree(root, ip);
-                if(success){
-                    printf("%i is in the tree.\n", ip);
-                } else {
-                    printf("%i is not in the tree.\n", ip);
-                }
-                ip = 9;
-                break;
-            }
-        }
-    } while(ip != -1);
+    printf("%s\n", "Binary Search Tree");
 
-    if(root){
-        deleteBinaryTree(&root);
-        root = 0;
+    ConsumerMenuOption* options[] = {
+        newConsumerMenuOption("Print the binary tree in order", &doPrintInOrder),
+        newConsumerMenuOption("Print the binary tree pre-order", &doPrintPreOrder),
+        newConsumerMenuOption("Print the binary tree post-order", &doPrintPostOrder),
+        newConsumerMenuOption("Insert into the binary tree", &doInsertBinaryTree),
+        newConsumerMenuOption("Search the binary tree", &doSearchBinaryTree),
+        newConsumerMenuOption("Delete from the binary tree", &doDeleteFromBinaryTree),
+        newConsumerMenuOption("Delete the binary tree", &doDeleteBinaryTree),
+        newConsumerMenuOption("Convert the binary tree to an array", &doConvertBinaryTreeToArray),
+        newConsumerMenuOption("Convert [1, 2, 3, 4, 5, 6, 7] to a binary tree", &doConvertSortedArrayToBinaryTree),
+        newConsumerMenuOption("Convert [5, 1, 3, 2, 4] to a binary tree", &doConvertUnsortedArrayToBinaryTree)
+    };
+    int numOptions = sizeof(options) / sizeof(options[0]);
+
+    doConsumerMenu(options, numOptions, (void**)&root);
+
+    for(int i = 0; i < numOptions; ++i){
+        freeConsumerMenuOption(&options[i]);
     }
+
+    deleteBinaryTree(&root);
 
     return 0;
 }
