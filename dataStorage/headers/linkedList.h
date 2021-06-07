@@ -14,17 +14,17 @@ typedef struct LinkedList {
     LinkedListNode* tail;
 } LinkedList;
 
+LinkedList* newLinkedList();
 void deleteLinkedList(LinkedList** list);
-LinkedListNode* newLinkedListNode(int val);
-void deleteLinkedListNode(LinkedListNode** head, LinkedListNode** tail);
-void pushToFront(LinkedListNode** head, LinkedListNode** tail, int val);
-void pushToBack(LinkedListNode** head, LinkedListNode** tail, int val);
-int popFromFront(LinkedListNode** head, LinkedListNode** tail);
-int popFromBack(LinkedListNode** head, LinkedListNode** tail);
-int peekFront(LinkedListNode* head);
-int peekBack(LinkedListNode* tail);
-bool deleteNode(LinkedListNode** head, LinkedListNode** tail, int withValue);
-void printLinkedListNode(LinkedListNode* head);
+
+void pushToFront(LinkedList* list, int val);
+void pushToBack(LinkedList* list, int val);
+int popFromFront(LinkedList* list);
+int popFromBack(LinkedList* list);
+int peekFront(LinkedList* list);
+int peekBack(LinkedList* list);
+bool deleteNode(LinkedList* list, int withValue);
+void printLinkedList(LinkedList* list);
 
 int testLinkedList();
 

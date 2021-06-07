@@ -3,16 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void deleteLinkedList(LinkedList** list){
-    if(list && *list){
-        LinkedListNode* curr = list->head;
-        while(curr){
-            popFromFront(*list);
-        }
-        free(*list);
-        *list = 0;
-    }
-}
+
+
+/*
+Private functions
+*/
 
 LinkedListNode* newLinkedListNode(int val){
     LinkedListNode* ret = (LinkedListNode*)malloc(sizeof(LinkedListNode));
@@ -22,115 +17,137 @@ LinkedListNode* newLinkedListNode(int val){
     return ret;
 }
 
-void deleteLinkedListNode(LinkedListNode** head, LinkedListNode** tail){
-     while(*head){
-         printf("Delete %i\n", popFromFront(head, tail));
+/*
+Does not cascade delete
+*/
+void deleteLinkedListNode(LinkedListNode** node){
+     if(node && *node){
+         free(*node);
+         *node = 0;
      }
 }
 
-void pushToFront(LinkedListNode** head, LinkedListNode** tail, int val){
-    if(head && tail){
-        LinkedListNode* newHead = newLinkedListNode(val);
-        newHead->next = *head;
-        if(*head){
-            //has at least one node
-            (*head)->prev = newHead;
-            (*head) = newHead;
-        } else {
-            //new node is only node
-            (*head) = newHead;
-            (*tail) = newHead;
+
+/*
+Public functions
+*/
+
+LinkedList* newLinkedList(){
+    LinkedList* ll = (LinkedList*)malloc(sizeof(LinkedList));
+    ll->head = 0;
+    ll->tail = 0;
+    return ll;
+}
+
+/*
+Deletes the LinkedList and all of it's nodes
+*/
+void deleteLinkedList(LinkedList** list){
+    if(list && *list){
+        while((*list)->head){
+            popFromFront(*list);
         }
-    } //can't do anything if they are null pointers
-};
+        free(*list);
+        *list = 0;
+    }
+}
 
-void pushToBack(LinkedListNode** head, LinkedListNode** tail, int val){
-     if(head && tail){
+void pushToFront(LinkedList* list, int val){
+    if(list){ // mustn't be a null pointer
+        LinkedListNode* newHead = newLinkedListNode(val);
+        newHead->next = list->head;
+        if(list->head){ //has at least one node
+            list->head->prev = newHead;
+        } else { //new node is only node
+            list->tail = newHead;
+        }
+        list->head = newHead;
+    }
+}
+
+void pushToBack(LinkedList* list, int val){
+     if(list){
          LinkedListNode* newTail = newLinkedListNode(val);
-         newTail->prev = *tail;
-         if(*tail){
-             (*tail)->next = newTail;
-             (*tail) = newTail;
+         newTail->prev = list->tail;
+         if(list->tail){
+             list->tail->next = newTail;
          } else {
-             (*head) = newTail;
-             (*tail) = newTail;
+             list->head = newTail;
          }
+         list->tail = newTail;
      }
 }
 
-int popFromFront(LinkedListNode** head, LinkedListNode** tail){
+int popFromFront(LinkedList* list){
     int ret = 0;
-    if(head && tail && *head){
-        ret = peekFront(*head);
-        LinkedListNode* oldHead = *head;
+    if(list && list->head){
+        ret = peekFront(list);
+        LinkedListNode* oldHead = list->head;
         LinkedListNode* newHead = oldHead->next;
         oldHead->next = 0;
-        free(oldHead);
-
+        deleteLinkedListNode(&oldHead);
         if(newHead){
-            *head = newHead;
             newHead->prev = 0;
         } else {
-            *head = 0;
-            *tail = 0;
+            list->tail = 0;
         }
+        list->head = newHead;
     }
     return ret;
 }
 
-int popFromBack(LinkedListNode** head, LinkedListNode** tail){
+int popFromBack(LinkedList* list){
     int ret = 0;
-    if(head && tail){
-        ret = peekBack(*tail);
-        LinkedListNode* oldTail = *tail;
+    if(list && list->tail){
+        ret = peekBack(list);
+        LinkedListNode* oldTail = list->tail;
         LinkedListNode* newTail = oldTail->prev;
         oldTail->prev = 0;
-        free(oldTail);
-
+        deleteLinkedListNode(&oldTail);
         if(newTail){
-            *tail = newTail;
             newTail->next = 0;
         } else {
-            *head = 0;
-            *tail = 0;
+            list->head = 0;
         }
+        list->tail = newTail;
     }
     return ret;
 }
 
-int peekFront(LinkedListNode* head){
+int peekFront(LinkedList* list){
     int ret = 0;
-    if(head){
-        ret = head->value;
-    }
-    return ret;
-}
-int peekBack(LinkedListNode* tail){
-    int ret = 0;
-    if(tail){
-        ret = tail->value;
+    if(list && list->head){
+        ret = list->head->value;
     }
     return ret;
 }
 
-bool deleteNode(LinkedListNode** head, LinkedListNode** tail, int withValue){
+int peekBack(LinkedList* list){
+    int ret = 0;
+    if(list && list->tail){
+        ret = list->tail->value;
+    }
+    return ret;
+}
+
+bool deleteNode(LinkedList* list, int withValue){
     bool found = false;
-    if(head && tail){
-        LinkedListNode* curr = *head;
+    if(list){
+        LinkedListNode* curr = list->head;
         while(curr && !found){
             if(curr->value == withValue){
                 found = true;
-                if(curr == *head){
-                    popFromFront(head, tail);
-                } else if(curr == *tail){
-                    popFromBack(head, tail);
+                if(curr == list->head){
+                    popFromFront(list);
+                } else if(curr == list->tail){
+                    popFromBack(list);
                 } else {
                     //in the middle
                     curr->prev->next = curr->next;
                     curr->next->prev = curr->prev;
                     curr->prev = 0;
                     curr->next = 0;
-                    free(curr);
+                    deleteLinkedListNode(&curr);
                 }
                 curr = 0;
             } else {
@@ -141,83 +158,97 @@ bool deleteNode(LinkedListNode** head, LinkedListNode** tail, int withValue){
     return found;
 }
 
-void printLinkedListNode(LinkedListNode* head){
-    printf("%s", "Head of linked list:\n");
-    LinkedListNode* curr = head;
+void printLinkedList(LinkedList* list){
+    printf("%s\n", "Head of linked list:");
+    LinkedListNode* curr = list->head;
     while(curr){
-        printf("%i\n", curr->value);
+        printf("%d ", curr->value);
         curr = curr->next;
     }
-    printf("%s", "Tail of linked list.\n");
+    printf("\n%s\n", "Tail of linked list.");
+}
+
+/*
+Menu options
+*/
+
+LinkedList* asLinkedList(void** dataStructure){
+    LinkedList** ptrPtr = (LinkedList**)dataStructure;
+    return *ptrPtr;
+}
+
+void doPrintLinkedList(void** dataStructure){
+    printLinkedList(asLinkedList(dataStructure));
+}
+
+void doPushStartLinkedList(void** dataStructure){
+    int ip;
+    printf("%s", "Enter value to push to the front of the linked list: ");
+    scanf("%d", &ip);
+    pushToFront(asLinkedList(dataStructure), ip);
+}
+
+void doPushEndLinkedList(void** dataStructure){
+    int ip;
+    printf("%s", "Enter value to push to the back of the linked list: ");
+    scanf("%d", &ip);
+    pushToBack(asLinkedList(dataStructure), ip);
+}
+
+void doPopFirstLinkedList(void** dataStructure){
+    LinkedList* list = asLinkedList(dataStructure);
+    if(list->head){
+        int val = popFromFront(list);
+        printf("Popped %d\n", val);
+    } else {
+        printf("%s", "Nothing to pop\n");
+    }
+}
+
+void doPopLastLinkedList(void** dataStructure){
+    LinkedList* list = asLinkedList(dataStructure);
+    if(list->tail){
+        int val = popFromBack(list);
+        printf("Popped %d\n", val);
+    } else {
+        printf("%s", "Nothing to pop\n");
+    }
+}
+
+void doDeleteFromLinkedList(void** dataStructure){
+    printf("%s", "Enter number to delete: ");
+    int ip;
+    scanf("%d", &ip);
+    bool success = deleteNode(asLinkedList(dataStructure), ip);
+    if(success){
+        printf("Deleted %d\n", ip);
+    } else {
+        printf("%d is not in the linked list\n", ip);
+    }
 }
 
 int testLinkedList(){
-    LinkedListNode* head = 0;
-    LinkedListNode* tail = 0;
-    int ip = 0;
-    printf("%s", "===LINKED LIST===\n");
-    do {
-        printf("%s", "~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-        printf("%s", "0: print the linked list\n");
-        printf("%s", "1: push to the start of the linked list\n");
-        printf("%s", "2: push to the end of the linked list\n");
-        printf("%s", "3: pop the first element of the linked list\n");
-        printf("%s", "4: pop the last element of the linked list\n");
-        printf("%s", "5: delete a node with a given value\n");
-        printf("%s", "-1: quit\n");
-        printf("%s", "Choose an option: ");
-        scanf("%d", &ip);
-        switch(ip){
-            case 0:
-                printLinkedListNode(head);
-                break;
-            case 1:
-                printf("%s", "Enter value to push to the front of the linked list: ");
-                scanf("%d", &ip);
-                pushToFront(&head, &tail, ip);
-                ip = 1;
-                break;
-            case 2:
-                printf("%s", "Enter value to push to the back of the linked list: ");
-                scanf("%d", &ip);
-                pushToBack(&head, &tail, ip);
-                ip = 2;
-                break;
-            case 3:
-                if(head){
-                    ip = popFromFront(&head, &tail);
-                    printf("Popped %i\n", ip);
-                    ip = 3;
-                } else {
-                    printf("%s", "Nothing to pop\n");
-                }
-                break;
-            case 4:
-                if(head){
-                    ip = popFromBack(&head, &tail);
-                    printf("Popped %i\n", ip);
-                    ip = 4;
-                } else {
-                    printf("%s", "Nothing to pop\n");
-                }
-                break;
-            case 5:
-                printf("%s", "Enter number to delete: ");
-                scanf("%d", &ip);
-                bool success = deleteNode(&head, &tail, ip);
-                if(success){
-                    printf("Deleted %i\n", ip);
-                } else {
-                    printf("%i is not in the linked list\n", ip);
-                }
-                ip = 5;
-                break;
-        }
-    } while(ip != -1);
+    LinkedList* list = newLinkedList();
 
-    deleteLinkedListNode(&head, &tail);
-    head = 0;
-    tail = 0;
+    printf("%s\n", "Linked List");
+
+    ConsumerMenuOption* options[] = {
+        newConsumerMenuOption("print the linked list", &doPrintLinkedList),
+        newConsumerMenuOption("push to the start of the linked list", &doPushStartLinkedList),
+        newConsumerMenuOption("push to the end of the linked list", &doPushEndLinkedList),
+        newConsumerMenuOption("pop the first element of the linked list", &doPopFirstLinkedList),
+        newConsumerMenuOption("pop the last element of the linked list", &doPopLastLinkedList),
+        newConsumerMenuOption("delete a node with a chosen value", &doDeleteFromLinkedList)
+    };
+    int numOptions = sizeof(options) / sizeof(options[0]);
+
+    doConsumerMenu(options, numOptions, (void**)&list);
+
+    for(int i = 0; i < numOptions; ++i){
+        freeConsumerMenuOption(&options[i]);
+    }
+
+    deleteLinkedList(&list);
 
     return 0;
 }
