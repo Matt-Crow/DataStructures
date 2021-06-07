@@ -1,112 +1,154 @@
+#include "queue.h"
+#include "core.h"
 #include<stdio.h>
 #include<stdlib.h>
-#include "queue.h"
 
-Queue* newQueue(int val){
-    Queue* ret = (Queue*)malloc(sizeof(Queue));
+
+
+/*
+Private functions
+*/
+
+QueueNode* newQueueNode(int val){
+    QueueNode* ret = (QueueNode*)malloc(sizeof(QueueNode));
     ret->next = 0;
     ret->prev = 0;
     ret->value = val;
     return ret;
 }
-void deleteQueue(Queue** head, Queue** tail){
-    while(*head){
-        printf("Delete %i\n", dequeue(head, tail));
+
+/*
+Does not cascade delete
+*/
+void deleteQueueNode(QueueNode** node){
+    if(node && *node){
+        free(*node);
+        *node = 0;
     }
 }
 
-void enqueue(Queue** head, Queue** tail, int val){
-    if(head && tail){
-        Queue* newNode = newQueue(val);
-        if(*tail){
-            (*tail)->next = newNode;
-            newNode->prev = *tail;
-        } else {
-            //no nodes
-            *head = newNode;
+
+
+/*
+Public functions
+*/
+
+Queue* newQueue(){
+    Queue* q = (Queue*)malloc(sizeof(Queue));
+    q->head = 0;
+    q->tail = 0;
+    return q;
+}
+
+void deleteQueue(Queue** q){
+    if(q && *q){
+        while((*q)->head){
+            printf("Delete %d\n", dequeue(*q));
         }
-        *tail = newNode;
+        free(*q);
+        *q = 0;
     }
 }
-int dequeue(Queue** head, Queue** tail){
+
+void enqueue(Queue* q, int val){
+    if(q){
+        QueueNode* newNode = newQueueNode(val);
+        if(q->tail){ // at least one other node in the queue
+            q->tail->next = newNode;
+            newNode->prev = q->tail;
+        } else { // no nodes currently in the queue
+            q->head = newNode;
+        }
+        q->tail = newNode;
+    }
+}
+int dequeue(Queue* q){
     int ret = 0;
-    if(head && tail){
-        ret = peek(*head);
-        if(*head){
-            Queue* temp = *head;
-            *head = temp->next;
-            temp->next = 0;
-            free(temp);
-            if(*head){
-                (*head)->prev = 0;
-            } else {
-                //just deleted the only node
-                *tail = 0;
-            }
+    if(q && q->head){
+        ret = peek(q);
+        QueueNode* temp = q->head;
+        q->head = temp->next;
+        temp->next = 0;
+        deleteQueueNode(&temp);
+        if(q->head){ // still at least one node
+            q->head->prev = 0;
+        } else { //just deleted the only node
+            q->tail = 0;
         }
     }
     return ret;
 }
-int peek(Queue* head){
+int peek(Queue* q){
     int ret = 0;
-    if(head){
-        ret = head->value;
+    if(q && q->head){
+        ret = q->head->value;
     }
     return ret;
 }
 
-void printQueue(Queue* head){
-    printf("%s", "Queue:\n");
-    Queue* curr = head;
+void printQueue(Queue* q){
+    printf("%s", "Queue: ");
+    QueueNode* curr = q->head;
     while(curr){
-        if(curr->next){
-            printf("%i, ", curr->value);
-        } else {
-            printf("%i", curr->value);
-        }
+        printf("%d ", curr->value);
         curr = curr->next;
     }
     printf("%s", "\n");
 }
 
-int testQueue(){
-    Queue* head = 0;
-    Queue* tail = 0;
 
-    int ip = 0;
-    printf("%s",  "===QUEUE===" );
-    while(ip != -1){
-        printf("%s\n", "~~~~~~~~~~~~~~~~~~~~~~~~~~~" );
-        printf("%s\n", "Choose an option: ");
-        printf("%s\n", "0: print the queue");
-        printf("%s\n", "1: enqueue to the queue");
-        printf("%s\n", "2: dequeue the queue");
-        printf("%s\n", "-1: quit");
-        scanf("%d", &ip);
-        switch(ip){
-        case 0:
-            printQueue(head);
-            break;
-        case 1:
-            printf("%s", "Enter value to enqueue: ");
-            scanf("%d", &ip);
-            enqueue(&head, &tail, ip);
-            ip = 1;
-            break;
-        case 2:
-            if(head && tail){
-                ip = dequeue(&head, &tail);
-                printf("dequeued %i\n", ip);
-                ip = 2;
-            } else {
-                printf("%s\n",  "Nothing to dequeue");
-            }
-            break;
-        }
+
+/*
+Menu options
+*/
+
+Queue* asQueue(void** dataStructure){
+    Queue** ptrPtr = (Queue**)dataStructure;
+    return *ptrPtr;
+}
+
+void doPrintQueue(void** dataStructure){
+    printQueue(asQueue(dataStructure));
+}
+
+void doEnqueQueue(void** dataStructure){
+    int ip;
+    printf("%s", "Enter value to enqueue: ");
+    scanf("%d", &ip);
+    enqueue(asQueue(dataStructure), ip);
+}
+
+void doDequeQueue(void** dataStructure){
+    Queue* q = asQueue(dataStructure);
+    if(q->head){
+        int val = dequeue(q);
+        printf("dequeued %d\n", val);
+    } else {
+        printf("%s\n",  "Nothing to dequeue");
+    }
+}
+
+
+
+int testQueue(){
+    Queue* q = newQueue();
+
+    printf("%s\n",  "Queue");
+
+    ConsumerMenuOption* options[] = {
+            newConsumerMenuOption("print the queue", &doPrintQueue),
+            newConsumerMenuOption("enqueue to the queue", &doEnqueQueue),
+            newConsumerMenuOption("dequeue from the queue", &doDequeQueue)
+    };
+    int numOptions = sizeof(options) / sizeof(options[0]);
+
+    doConsumerMenu(options, numOptions, (void**)&q);
+
+    for(int i = 0; i < numOptions; ++i){
+        freeConsumerMenuOption(&options[i]);
     }
 
-    deleteQueue(&head, &tail);
-    head = 0;
-    tail = 0;
+    deleteQueue(&q);
+
     return 0;
 }
