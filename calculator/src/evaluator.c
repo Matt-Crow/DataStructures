@@ -33,9 +33,8 @@ int evaluatePostfix(char* postfix){
     for(int offset = 0; offset < strlen(postfix); ++offset){
         token = postfix[offset];
         if(isdigit(token)){
-            currNum = currNum * 10 + (int)(token - '0');
-        } else if(token == END_OF_NUMBER && currNum != 0){
-            printf("%s\n", "Change evaluator check for END_OF_NUMBER");
+            currNum = currNum * 10 + charToInt(token);
+        } else if(token == END_OF_NUMBER){
             pushIntStack(&nums, currNum);
             currNum = 0;
         } else {

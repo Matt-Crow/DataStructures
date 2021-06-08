@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
-
+#include<stdbool.h>
 /*
 Private function prototypes
 */
@@ -28,51 +28,59 @@ char* toPostfix(char* infix){
     OperatorStack* ops = 0;
 
     char token;
+    bool inNumber = false;
     for(int offset = 0; offset < strlen(infix); ++offset){
         token = infix[offset];
         if(isdigit(token)){
+            inNumber = true;
             appendStringBuilderChar(sb, token);
-        } else if(token == '('){
-            push(&ops, token);
-        } else if(token == ')'){
-            // pop until it finds the matching '('
-            while(token != '('){
-                token = popOperatorStack(&ops);
-                if(token != '('){
-                    appendStringBuilderChar(sb, END_OF_NUMBER);
-                    appendStringBuilderChar(sb, token);
+        } else {
+            if(inNumber){
+                appendStringBuilderChar(sb, END_OF_NUMBER);
+                // mark end of current number
+                inNumber = false;
+            }
+            if(token == '('){
+                push(&ops, token);
+            } else if(token == ')'){
+                // pop until it finds the matching '('
+                while(token != '('){
+                    token = popOperatorStack(&ops);
+                    if(token != '('){
+                        appendStringBuilderChar(sb, token);
+                    }
                 }
             }
-        }
-        //if the token is an operator, pop until the top is LESS precedence than the token,
-        //then push to token.
-        else if(token == '+' || token == '-'){
-            appendStringBuilderChar(sb, END_OF_NUMBER);
-            // mark end of current number
-
-            while(ops && ops->operator != '('){
-                appendStringBuilderChar(sb, popOperatorStack(&ops));
+            //if the token is an operator, pop until the top is LESS precedence than the token,
+            //then push to token.
+            else if(token == '+' || token == '-'){
+                while(ops && ops->operator != '('){
+                    appendStringBuilderChar(sb, popOperatorStack(&ops));
+                }
+                push(&ops, token);
+            } else if(token == '*' || token == '/'){
+                while(
+                    ops &&
+                    ops->operator != '(' &&
+                    ops->operator != '+' &&
+                    ops->operator != '-'
+                ){
+                    appendStringBuilderChar(sb, popOperatorStack(&ops));
+                }
+                push(&ops, token);
+            } else if(token == ' '){
+                // do nothing
+            } else {
+                printf("Unsupported token: '%c'\n", token);
             }
-            push(&ops, token);
-        } else if(token == '*' || token == '/'){
-            appendStringBuilderChar(sb, END_OF_NUMBER);
-            while(
-                ops &&
-                ops->operator != '(' &&
-                ops->operator != '+' &&
-                ops->operator != '-'
-            ){
-                appendStringBuilderChar(sb, popOperatorStack(&ops));
-            }
-            push(&ops, token);
-        } else if(token == ' '){
-            // do nothing
-        } else {
-            printf("Unsupported token: '%c'\n", token);
         }
     }
 
-    appendStringBuilderChar(sb, END_OF_NUMBER); // where do I need this?
+    if(inNumber){
+        appendStringBuilderChar(sb, END_OF_NUMBER);
+        // mark end of current number
+        inNumber = false;
+    }
     while(ops){
         appendStringBuilderChar(sb, popOperatorStack(&ops));
     }

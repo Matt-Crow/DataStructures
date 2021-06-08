@@ -16,4 +16,6 @@ void appendStringBuilder(StringBuilder* sb, char* value);
 void appendStringBuilderChar(StringBuilder* sb, char value);
 char* build(StringBuilder* sb);
 
+int charToInt(char ch);
+
 #endif

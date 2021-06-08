@@ -52,6 +52,10 @@ char* build(StringBuilder* sb){
     return str;
 }
 
+int charToInt(char ch){
+    return (int)(ch - '0');
+}
+
 /*
 Private definitions
 */
