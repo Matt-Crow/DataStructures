@@ -39,6 +39,12 @@ void appendStringBuilder(StringBuilder* sb, char* value){
     strncpy(endOfString, value, numChars);
     sb->size += numChars;
 }
+
+void appendStringBuilderChar(StringBuilder* sb, char value){
+    char temp[2] = {value, '\0'};
+    appendStringBuilder(sb, temp);
+}
+
 char* build(StringBuilder* sb){
     char* str = (char*)malloc(sizeof(char) * (sb->size + 1));
     strncpy(str, sb->building, sb->size);
