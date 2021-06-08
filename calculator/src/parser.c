@@ -17,7 +17,7 @@ typedef struct OperatorStack {
 OperatorStack* newOperatorStack(char operator);
 void deleteOperatorStack(OperatorStack** stack);
 void push(OperatorStack** stack, char operator);
-char pop(OperatorStack** stack);
+char popOperatorStack(OperatorStack** stack);
 
 
 /*
@@ -37,9 +37,9 @@ char* toPostfix(char* infix){
         } else if(token == ')'){
             // pop until it finds the matching '('
             while(token != '('){
-                token = pop(&ops);
+                token = popOperatorStack(&ops);
                 if(token != '('){
-                    appendStringBuilderChar(sb, POSTFIX_DELIMINATOR);
+                    appendStringBuilderChar(sb, END_OF_NUMBER);
                     appendStringBuilderChar(sb, token);
                 }
             }
@@ -47,22 +47,22 @@ char* toPostfix(char* infix){
         //if the token is an operator, pop until the top is LESS precedence than the token,
         //then push to token.
         else if(token == '+' || token == '-'){
-            appendStringBuilderChar(sb, POSTFIX_DELIMINATOR);
+            appendStringBuilderChar(sb, END_OF_NUMBER);
             // mark end of current number
-            
+
             while(ops && ops->operator != '('){
-                appendStringBuilderChar(sb, pop(&ops));
+                appendStringBuilderChar(sb, popOperatorStack(&ops));
             }
             push(&ops, token);
         } else if(token == '*' || token == '/'){
-            appendStringBuilderChar(sb, POSTFIX_DELIMINATOR);
+            appendStringBuilderChar(sb, END_OF_NUMBER);
             while(
                 ops &&
                 ops->operator != '(' &&
                 ops->operator != '+' &&
                 ops->operator != '-'
             ){
-                appendStringBuilderChar(sb, pop(&ops));
+                appendStringBuilderChar(sb, popOperatorStack(&ops));
             }
             push(&ops, token);
         } else if(token == ' '){
@@ -72,8 +72,9 @@ char* toPostfix(char* infix){
         }
     }
 
+    appendStringBuilderChar(sb, END_OF_NUMBER); // where do I need this?
     while(ops){
-        appendStringBuilderChar(sb, pop(&ops));
+        appendStringBuilderChar(sb, popOperatorStack(&ops));
     }
 
     char* asPostfix = build(sb);
@@ -95,7 +96,7 @@ OperatorStack* newOperatorStack(char operator){
 
 void deleteOperatorStack(OperatorStack** stack){
     while(stack && *stack){
-        pop(stack);
+        popOperatorStack(stack);
     }
 }
 
@@ -107,7 +108,7 @@ void push(OperatorStack** stack, char operator){
     }
 }
 
-char pop(OperatorStack** stack){
+char popOperatorStack(OperatorStack** stack){
     char value = ERROR;
     if(stack && *stack){
         OperatorStack* oldTop = *stack;

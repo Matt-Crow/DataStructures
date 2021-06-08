@@ -2,6 +2,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include "parser.h"
+#include "evaluator.h"
 
 int main(){
     int maxIp = 50;
@@ -18,6 +19,8 @@ int main(){
 
     char* postfix = toPostfix(ip);
     printf("As postfix: \"%s\"\n", postfix);
+
+    printf("%s = %d\n", ip, evaluatePostfix(postfix));
 
     free(postfix);
     postfix = 0;

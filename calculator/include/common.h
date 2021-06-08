@@ -1,7 +1,8 @@
 #ifndef COMMON
 #define COMMON
 
-#define POSTFIX_DELIMINATOR '|'
+#define ERROR '#'
+#define END_OF_NUMBER '|'
 
 typedef struct StringBuilder {
     char* building;
