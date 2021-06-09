@@ -7,6 +7,7 @@ typedef struct PostfixTree {
     struct PostfixTree* right;
 } PostfixTree;
 
+void printPostfixTree(PostfixTree* root);
 void deletePostfixTree(PostfixTree** root);
 
 #endif

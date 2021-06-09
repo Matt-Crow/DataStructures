@@ -34,6 +34,11 @@ PostfixTree* toPostfixTree(char* infix){
 
     char token;
     bool inNumber = false;
+
+    PostfixTree* left = 0;
+    PostfixTree* right = 0;
+    PostfixTree* curr = 0;
+    char tokenTemp[2] = {' ', '\0'};
     for(int offset = 0; offset < strlen(infix); ++offset){
         token = infix[offset];
         if(isdigit(token)){
@@ -45,54 +50,19 @@ PostfixTree* toPostfixTree(char* infix){
                 clearStringBuilder(sb);
                 inNumber = false;
             } else {
-
-            }
-            if(token == '('){
-                push(&ops, token);
-            } else if(token == ')'){
-                // pop until it finds the matching '('
-                while(token != '('){
-                    token = popOperatorStack(&ops);
-                    if(token != '('){
-                        appendStringBuilderChar(sb, token);
-                    }
-                }
-            }
-            //if the token is an operator, pop until the top is LESS precedence than the token,
-            //then push to token.
-            else if(token == '+' || token == '-'){
-                while(ops && ops->operator != '('){
-                    appendStringBuilderChar(sb, popOperatorStack(&ops));
-                }
-                push(&ops, token);
-            } else if(token == '*' || token == '/'){
-                while(
-                    ops &&
-                    ops->operator != '(' &&
-                    ops->operator != '+' &&
-                    ops->operator != '-'
-                ){
-                    appendStringBuilderChar(sb, popOperatorStack(&ops));
-                }
-                push(&ops, token);
-            } else if(token == ' '){
-                // do nothing
-            } else {
-                printf("Unsupported token: '%c'\n", token);
+                tokenTemp[0] = token;
+                right = popTreeStack(&stack);
+                left = popTreeStack(&stack);
+                curr = newPostfixTree(tokenTemp);
+                curr->left = left;
+                curr->right = right;
+                pushTreeStack(&stack, curr);
             }
         }
     }
 
-    if(inNumber){
-        appendStringBuilderChar(sb, END_OF_NUMBER);
-        // mark end of current number
-        inNumber = false;
-    }
-    while(ops){
-        appendStringBuilderChar(sb, popOperatorStack(&ops));
-    }
+    root = popTreeStack(&stack);
 
-    // keep this
     deleteStringBuilder(&sb);
 
     return root;
