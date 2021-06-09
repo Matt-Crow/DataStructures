@@ -5,7 +5,7 @@ OBJ = ./obj
 INC = ./include
 SRC = ./src
 
-calculator : main.o parser.o treeParser.o evaluator.o common.o treeCommon.o | $(BIN)
+calculator : main.o parser.o treeParser.o evaluator.o treeEvaluator.o common.o treeCommon.o | $(BIN)
 	gcc $(OBJ)/* -o $(BIN)/calculator
 
 main.o : $(SRC)/main.c | $(OBJ)
@@ -19,6 +19,9 @@ treeParser.o : $(SRC)/treeParser.c | $(OBJ)
 
 evaluator.o : $(SRC)/evaluator.c | $(OBJ)
 	gcc -c $(SRC)/evaluator.c -I $(INC) -o $(OBJ)/evaluator.o
+
+treeEvaluator.o : $(SRC)/treeEvaluator.c | $(OBJ)
+	gcc -c $(SRC)/treeEvaluator.c -I $(INC) -o $(OBJ)/treeEvaluator.o
 
 common.o : $(SRC)/common.c | $(OBJ)
 	gcc -c $(SRC)/common.c -I $(INC) -o $(OBJ)/common.o

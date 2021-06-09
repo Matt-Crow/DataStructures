@@ -27,7 +27,7 @@ PostfixTree* popTreeStack(TreeStack** top);
 /*
 Public functions
 */
-PostfixTree* toPostfixTree(char* infix){
+PostfixTree* toPostfixTree(char* postfix){
     PostfixTree* root = 0;
     TreeStack* stack = 0;
     StringBuilder* sb = newStringBuilder(16);
@@ -39,8 +39,8 @@ PostfixTree* toPostfixTree(char* infix){
     PostfixTree* right = 0;
     PostfixTree* curr = 0;
     char tokenTemp[2] = {' ', '\0'};
-    for(int offset = 0; offset < strlen(infix); ++offset){
-        token = infix[offset];
+    for(int offset = 0; offset < strlen(postfix); ++offset){
+        token = postfix[offset];
         if(isdigit(token)){
             inNumber = true;
             appendStringBuilderChar(sb, token);

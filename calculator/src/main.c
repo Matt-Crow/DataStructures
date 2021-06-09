@@ -5,6 +5,7 @@
 #include "treeParser.h"
 #include "treeCommon.h"
 #include "evaluator.h"
+#include "treeEvaluator.h"
 
 void nextExpression(char ip[], int maxIp);
 void evaluateInfix(char ip[]);
@@ -39,11 +40,11 @@ void evaluateInfix(char ip[]){
     char* postfix = toPostfix(ip);
     printf("As postfix: \"%s\"\n", postfix);
 
-    printf("%s = %d\n\n", ip, evaluatePostfix(postfix));
+    printf("%s = %d\n", ip, evaluatePostfix(postfix));
 
     PostfixTree* tree = toPostfixTree(postfix);
     printPostfixTree(tree);
-    printf("%c", '\n');
+    printf(" = %d\n\n", evaluatePostfixTree(tree));
     deletePostfixTree(&tree);
 
     free(postfix);

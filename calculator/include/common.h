@@ -18,5 +18,6 @@ char* build(StringBuilder* sb);
 void clearStringBuilder(StringBuilder* sb);
 
 int charToInt(char ch);
+int strToInt(char* str);
 
 #endif

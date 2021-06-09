@@ -1,6 +1,7 @@
 #include "common.h"
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 
 /*
 Private prototypes
@@ -59,6 +60,19 @@ void clearStringBuilder(StringBuilder* sb){
 
 int charToInt(char ch){
     return (int)(ch - '0');
+}
+
+int strToInt(char* str){
+    int value = 0;
+    int n = strlen(str);
+    char ch;
+    for(int i = 0; i < n; ++i){
+        ch = str[i];
+        if(isdigit(ch)){
+            value = value * 10 + charToInt(ch);
+        }
+    }
+    return value;
 }
 
 /*
