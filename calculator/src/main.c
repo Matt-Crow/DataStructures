@@ -4,11 +4,26 @@
 #include "parser.h"
 #include "evaluator.h"
 
+void nextExpression(char ip[], int maxIp);
+void evaluateInfix(char ip[]);
+
 int main(){
     int maxIp = 50;
     char ip[maxIp];
+    ip[0] = '\0';
 
-    printf("%s", "Enter a math expression: ");
+    while(ip[0] != 'q'){
+        nextExpression(ip, maxIp);
+        if(ip[0] != 'q'){
+            evaluateInfix(ip);
+        }
+    }
+
+    return 0;
+}
+
+void nextExpression(char ip[], int maxIp){
+    printf("%s", "Enter a math expression, or 'q' to quit: ");
     fgets(ip, maxIp, stdin);
     char* nl = strchr(ip, '\n');
     if(nl){
@@ -16,14 +31,14 @@ int main(){
     }
 
     printf("You entered \"%s\"\n", ip);
+}
 
+void evaluateInfix(char ip[]){
     char* postfix = toPostfix(ip);
     printf("As postfix: \"%s\"\n", postfix);
 
-    printf("%s = %d\n", ip, evaluatePostfix(postfix));
+    printf("%s = %d\n\n", ip, evaluatePostfix(postfix));
 
     free(postfix);
     postfix = 0;
-
-    return 0;
 }

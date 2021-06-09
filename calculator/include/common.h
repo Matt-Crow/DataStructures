@@ -2,7 +2,7 @@
 #define COMMON
 
 #define ERROR '#'
-#define END_OF_NUMBER '|'
+#define END_OF_NUMBER ' '
 
 typedef struct StringBuilder {
     char* building;

@@ -19,14 +19,14 @@ void deleteIntStack(IntStack** stack);
 void pushIntStack(IntStack** top, int value);
 int popIntStack(IntStack** top);
 
+void processOperator(char operator, IntStack** operandStack);
+
 /*
 Public
 */
 
 int evaluatePostfix(char* postfix){
     IntStack* nums = 0;
-    int a;
-    int b;
 
     int currNum = 0;
     char token;
@@ -38,34 +38,7 @@ int evaluatePostfix(char* postfix){
             pushIntStack(&nums, currNum);
             currNum = 0;
         } else {
-            a = popIntStack(&nums);
-            b = popIntStack(&nums);
-
-            switch(token){
-                case '+': {
-                    pushIntStack(&nums, b + a);
-                    break;
-                }
-                case '-': {
-                    pushIntStack(&nums, b - a);
-                    break;
-                }
-                case '*': {
-                    pushIntStack(&nums, b * a);
-                    break;
-                }
-                case '/': {
-                    pushIntStack(&nums, b / a);
-                    break;
-                }
-                default: {
-                    printf("Unsupported token: '%c'\n", token);
-                    // push back operands
-                    pushIntStack(&nums, b);
-                    pushIntStack(&nums, a);
-                    break;
-                }
-            }
+            processOperator(token, &nums);
         }
     }
 
@@ -110,4 +83,34 @@ int popIntStack(IntStack** top){
         printf("%s\n", "No values in int stack");
     }
     return value;
+}
+
+void processOperator(char operator, IntStack** operandStack){
+    int a = popIntStack(operandStack);
+    int b = popIntStack(operandStack);
+    switch(operator){
+        case '+': {
+            pushIntStack(operandStack, b + a);
+            break;
+        }
+        case '-': {
+            pushIntStack(operandStack, b - a);
+            break;
+        }
+        case '*': {
+            pushIntStack(operandStack, b * a);
+            break;
+        }
+        case '/': {
+            pushIntStack(operandStack, b / a);
+            break;
+        }
+        default: {
+            printf("Unsupported token: '%c'\n", operator);
+            // push back operands
+            pushIntStack(operandStack, b);
+            pushIntStack(operandStack, a);
+            break;
+        }
+    }
 }
