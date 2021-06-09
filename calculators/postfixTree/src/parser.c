@@ -39,8 +39,8 @@ Public functions
 */
 PostfixTree* toPostfixTree(char* infix){
     PostfixTree* root = 0;
-    // todo all this
-    OperatorStack* ops = 0;
+    TreeStack* stack = 0;
+    StringBuilder* sb = newStringBuilder(16);
 
     char token;
     bool inNumber = false;
@@ -51,9 +51,11 @@ PostfixTree* toPostfixTree(char* infix){
             appendStringBuilderChar(sb, token);
         } else {
             if(inNumber){
-                appendStringBuilderChar(sb, END_OF_NUMBER);
-                // mark end of current number
+                pushTreeStack(&stack, newPostfixTree(build(sb)));
+                clearStringBuilder(sb);
                 inNumber = false;
+            } else {
+                
             }
             if(token == '('){
                 push(&ops, token);
@@ -99,6 +101,9 @@ PostfixTree* toPostfixTree(char* infix){
     while(ops){
         appendStringBuilderChar(sb, popOperatorStack(&ops));
     }
+
+    // keep this
+    deleteStringBuilder(&sb);
 
     return root;
 }
