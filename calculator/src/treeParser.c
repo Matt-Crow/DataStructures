@@ -1,10 +1,12 @@
-#include "parser.h"
+#include "treeParser.h"
 #include "common.h"
+#include "treeCommon.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
 #include<stdbool.h>
+
 /*
 Private function prototypes
 */
@@ -14,24 +16,12 @@ typedef struct TreeStack {
     struct TreeStack* next;
 } TreeStack;
 
-PostFixTree* newPostfixTree(char* token);
+PostfixTree* newPostfixTree(char* token);
 
 TreeStack* newTreeStack(PostfixTree* value);
 void deleteTreeStack(TreeStack** top);
 void pushTreeStack(TreeStack** top, PostfixTree* tree);
 PostfixTree* popTreeStack(TreeStack** top);
-
-
-// need these?
-typedef struct OperatorStack {
-    struct OperatorStack* next;
-    char operator;
-} OperatorStack;
-
-OperatorStack* newOperatorStack(char operator);
-void deleteOperatorStack(OperatorStack** stack);
-void push(OperatorStack** stack, char operator);
-char popOperatorStack(OperatorStack** stack);
 
 
 /*
@@ -55,7 +45,7 @@ PostfixTree* toPostfixTree(char* infix){
                 clearStringBuilder(sb);
                 inNumber = false;
             } else {
-                
+
             }
             if(token == '('){
                 push(&ops, token);
@@ -116,7 +106,7 @@ Private function implementations
 
 
 
-PostFixTree* newPostfixTree(char* token){
+PostfixTree* newPostfixTree(char* token){
     PostfixTree* tree = (PostfixTree*)malloc(sizeof(PostfixTree));
     int n = strlen(token);
     tree->token = (char*)malloc(sizeof(char) * (n + 1));
@@ -153,49 +143,12 @@ void pushTreeStack(TreeStack** top, PostfixTree* tree){
 }
 
 PostfixTree* popTreeStack(TreeStack** top){
-    PostFixTree* value = 0;
+    PostfixTree* value = 0;
     if(top && *top){
         TreeStack* oldTop = *top;
         *top = oldTop->next;
         value = oldTop->value;
         free(oldTop);
-    }
-    return value;
-}
-
-
-// need these?
-
-
-OperatorStack* newOperatorStack(char operator){
-    OperatorStack* newFrame = (OperatorStack*)malloc(sizeof(OperatorStack));
-    newFrame->next = 0;
-    newFrame->operator = operator;
-    return newFrame;
-}
-
-void deleteOperatorStack(OperatorStack** stack){
-    while(stack && *stack){
-        popOperatorStack(stack);
-    }
-}
-
-void push(OperatorStack** stack, char operator){
-    if(stack){
-        OperatorStack* newTop = newOperatorStack(operator);
-        newTop->next = *stack;
-        *stack = newTop;
-    }
-}
-
-char popOperatorStack(OperatorStack** stack){
-    char value = ERROR;
-    if(stack && *stack){
-        OperatorStack* oldTop = *stack;
-        value = oldTop->operator;
-        *stack = oldTop->next;
-        free(oldTop);
-        oldTop = 0;
     }
     return value;
 }

@@ -5,6 +5,7 @@
 #include<string.h>
 #include<ctype.h>
 #include<stdbool.h>
+
 /*
 Private function prototypes
 */
@@ -18,7 +19,6 @@ OperatorStack* newOperatorStack(char operator);
 void deleteOperatorStack(OperatorStack** stack);
 void push(OperatorStack** stack, char operator);
 char popOperatorStack(OperatorStack** stack);
-
 
 /*
 Public functions

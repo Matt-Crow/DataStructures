@@ -15,6 +15,7 @@ void deleteStringBuilder(StringBuilder** sb);
 void appendStringBuilder(StringBuilder* sb, char* value);
 void appendStringBuilderChar(StringBuilder* sb, char value);
 char* build(StringBuilder* sb);
+void clearStringBuilder(StringBuilder* sb);
 
 int charToInt(char ch);
 

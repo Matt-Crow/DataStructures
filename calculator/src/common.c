@@ -52,6 +52,11 @@ char* build(StringBuilder* sb){
     return str;
 }
 
+void clearStringBuilder(StringBuilder* sb){
+    sb->building[0] = '\0';
+    sb->size = 0;
+}
+
 int charToInt(char ch){
     return (int)(ch - '0');
 }
