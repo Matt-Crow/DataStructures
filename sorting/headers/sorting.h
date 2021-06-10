@@ -3,7 +3,15 @@
 
 typedef void (*SortingAlgorithm)(int a[], int length);
 
+/*
+Pushes largest ints to the top first,
+then makes its way down.
+Thus, the largest "bubble" to the top.
+
+O(n^2)
+*/
 void bubbleSort(int a[], int length);
+
 //void selectSort(int a[], int length);
 //void insertionSort(int a[], int length);
 //void shellSort(int a[], int length);
