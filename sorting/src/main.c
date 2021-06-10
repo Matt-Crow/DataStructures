@@ -1,7 +1,7 @@
 #include<stdio.h>
-#include "main.h"
 #include "radixPrioritySort.h"
+#include "sorting.h"
 
 int main(){
-    return testRadixPrioritySort();
+    return useSorting();//testRadixPrioritySort();
 }

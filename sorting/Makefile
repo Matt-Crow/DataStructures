@@ -5,7 +5,7 @@ SRC = ./src
 BIN = ./bin
 OBJ = ./obj
 
-$(BIN)/main: main.o radixPrioritySort.o | $(BIN)
+$(BIN)/main: main.o radixPrioritySort.o sorting.o util.o | $(BIN)
 	$(CXX) $(CXXFLAGS) -o $(BIN)/main $(OBJ)/*
 
 main.o: $(SRC)/main.c | $(OBJ)
@@ -13,6 +13,12 @@ main.o: $(SRC)/main.c | $(OBJ)
 
 radixPrioritySort.o: $(SRC)/radixPrioritySort.c | $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $(SRC)/radixPrioritySort.c -o $(OBJ)/radixPrioritySort.o -I $(HEADERS)
+
+sorting.o: $(SRC)/sorting.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/sorting.c -o $(OBJ)/sorting.o -I $(HEADERS)
+
+util.o: $(SRC)/util.c | $(OBJ)
+	$(CXX) $(CXXFLAGS) -c $(SRC)/util.c -o $(OBJ)/util.o -I $(HEADERS)
 
 
 $(BIN):
