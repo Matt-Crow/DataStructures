@@ -12,9 +12,31 @@ O(n^2)
 */
 void bubbleSort(int a[], int length);
 
-//void selectSort(int a[], int length);
-//void insertionSort(int a[], int length);
-//void shellSort(int a[], int length);
+/*
+finds the smallest element in an array, then puts it
+at the beginning.
+
+O(n^2)
+*/
+void selectSort(int a[], int length);
+
+/*
+Goes through each element in the array, and shoves it back
+until the item to its left is less than it
+
+O(n^2)
+*/
+void insertionSort(int a[], int length);
+
+/*
+Same as insertion sort, except is compares elements
+a set distance, or gap, apart.
+This gap keeps shrinking with every pass.
+
+O(n^2)
+*/
+void shellSort(int a[], int length);
+
 //void quickSort(int a[], int length);
 //void mergeSort(int a[], int length);
 //void radixSort(int a[], int length);

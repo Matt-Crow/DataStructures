@@ -44,13 +44,68 @@ void bubbleSort(int a[], int length){
     }
 }
 
+void selectSort(int a[], int length){
+    int smallest = -1;
+    if(DEBUG){
+        printArray(a, length);
+    }
+    for(int i = 0; i < length; ++i){
+        smallest = i;
+        for(int j = i + 1; j < length; ++j){
+            if(a[smallest] > a[j]){
+                smallest = j;
+            }
+        }
+        swap(a, i, smallest);
+        if(DEBUG){
+            printArray(a, length);
+        }
+    }
+}
+
+void insertionSort(int a[], int length){
+    if(DEBUG){
+        printArray(a, length);
+    }
+    for(int i = 1; i < length; ++i){
+        for(int j = i; j > 0 && a[j] < a[j - 1]; --j){
+            swap(a, j, j - 1);
+            if(DEBUG){
+                printArray(a, length);
+            }
+        }
+    }
+}
+
+void shellSort(int a[], int length){
+    if(DEBUG){
+        printArray(a, length);
+    }
+    for(int gap = length / 2; gap >= 1; gap >>= 1){ // cut gap in half each iteration
+        for(int i = gap; i < length; ++i){
+            for(int j = i; j >= gap && a[j - gap] > a[j]; j -= gap){
+                swap(a, j, j - gap);
+                if(DEBUG){
+                    printArray(a, length);
+                }
+            }
+        }
+    }
+}
+
 int useSorting(){
     SortingAlgorithm algorithms[] = {
-        &bubbleSort
+        &bubbleSort,
+        &selectSort,
+        &insertionSort,
+        &shellSort
     };
 
     char* algorithmNames[] = {
-        "Bubble sort"
+        "Bubble sort",
+        "Select sort",
+        "Insertion sort",
+        "Shell sort"
     };
     int numOptions = sizeof(algorithms) / sizeof(algorithms[0]);
 
