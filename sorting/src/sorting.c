@@ -2,6 +2,7 @@
 #include "util.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 #include<time.h>
 #include<sys/times.h>
 #include<unistd.h>
@@ -18,7 +19,22 @@ void testAlgorithm(SortingAlgorithm algorithm);
 
 int* createRandomArray(int length);
 
+/*
+Sorts the range [min, max)
+*/
+void doQuickSort(int a[], int min, int max);
 
+/*
+[min, max)
+*/
+int idxOfMedian(int a[], int min, int max);
+
+/*
+Returns true if a <= b <= c or c <= b <= a
+*/
+bool isBetween(int a, int b, int c);
+
+bool betweenRecur(int a, int b, int c);
 
 /*
 Public functions
@@ -93,19 +109,25 @@ void shellSort(int a[], int length){
     }
 }
 
+void quickSort(int a[], int length){
+    doQuickSort(a, 0, length);
+}
+
 int useSorting(){
     SortingAlgorithm algorithms[] = {
         &bubbleSort,
         &selectSort,
         &insertionSort,
-        &shellSort
+        &shellSort,
+        &quickSort
     };
 
     char* algorithmNames[] = {
         "Bubble sort",
         "Select sort",
         "Insertion sort",
-        "Shell sort"
+        "Shell sort",
+        "Quick sort"
     };
     int numOptions = sizeof(algorithms) / sizeof(algorithms[0]);
 
@@ -149,14 +171,14 @@ void testAlgorithm(SortingAlgorithm algorithm){
     struct tms startStruct;
     struct tms endStruct;
     clock_t end;
-    clock_t start = times(&startStruct);
+    clock_t start = clock();//times(&startStruct);
     algorithm(sortMe, length);
-    end = times(&endStruct);
+    end = clock();//times(&endStruct);
 
     printf("%s", "After: ");
     printArray(sortMe, length);
 
-    printf("Took %6.3f seconds to run\n", ((double)(end - start)) / sysconf(_SC_CLK_TCK));
+    printf("Took %6.6f seconds to run\n", ((double)(end - start)) / CLOCKS_PER_SEC);//sysconf(_SC_CLK_TCK));
     free(sortMe);
 }
 
@@ -167,4 +189,64 @@ int* createRandomArray(int length){
         a[i] = rand() % 256;
     }
     return a;
+}
+
+void doQuickSort(int a[], int min, int max){
+    if(max - min <= 1){ // don't sort sub-arrays of 1 element
+        return;
+    }
+
+    // find the ideal pivot value
+    int pivotIdx = idxOfMedian(a, min, max);
+    int pivot = a[pivotIdx];
+
+    swap(a, pivotIdx, max - 1); // move pivot to the end
+    int i = min;
+    int j = max - 2; // left of pivot
+
+    while(i <= j){
+        while(i < max - 1 && a[i] < pivot){
+            ++i;
+        } // i now points to either the pivot or a problematic value
+
+        while(j > min - 1 && a[j] > pivot){
+            --j;
+        } // j has either fallen off the end or points to a problematic value
+
+        if(i <= j){
+            // both point to a problematic value, so swap them
+            swap(a, i++, j--); // post- inc and dec, not pre-
+        } // else, we are done partitioning
+    }
+    // i now points to the pivot's proper place
+    swap(a, i, max - 1);
+
+    if(DEBUG){
+        printArray(a, max);
+    }
+
+    doQuickSort(a, min, i);
+    doQuickSort(a, i + 1, max);
+}
+
+int idxOfMedian(int a[], int min, int max){
+    int mid = (min + max) / 2;
+    --max;
+    int best = mid;
+
+    if(isBetween(a[mid], a[min], a[max])){
+        best = min;
+    } else if(isBetween(a[min], a[max], a[mid])){
+        best = max;
+    } // else best = mid
+
+    return best;
+}
+
+bool isBetween(int a, int b, int c){
+    return betweenRecur(a, b, c) || betweenRecur(c, b, a);
+}
+
+bool betweenRecur(int a, int b, int c){
+    return a <= b && b <= c;
 }

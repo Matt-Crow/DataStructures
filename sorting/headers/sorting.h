@@ -37,7 +37,18 @@ O(n^2)
 */
 void shellSort(int a[], int length);
 
-//void quickSort(int a[], int length);
+/*
+Partitions a pivot to its proper place
+in the array, and sorts it so everything to
+its left is smaller than it, and everything
+to its right is larger, then recurs.
+Very good for large problem sizes, as it only compares a small portion of the
+array in each call.
+
+O(nlogn)
+*/
+void quickSort(int a[], int length);
+
 //void mergeSort(int a[], int length);
 //void radixSort(int a[], int length);
 
