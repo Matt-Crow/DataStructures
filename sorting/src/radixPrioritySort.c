@@ -4,10 +4,7 @@
 
 /*
 So basically, here's my idea:
-1. Radix sort seems useless for sorting numbers and strings, as it is comparitively slow,
-   takes up a lot of space with queues, and its only advantage is it doesn't make any actual comparisons.
-   Furthermore, the queue based version relies on knowing exactly the range of potential values the input
-   it is sorting may have, as it must allocate 1 queue per potential value.
+1. Radix sort's primary advantage is it doesn't make any actual comparisons.
 2. That got me thinking... What is unique about radix sort?
    Well, it sorts each digit of the numbers it's given, in order of least to most importance.
    (sort numbers by ones place, then tens place, then hundreds, etc.).
