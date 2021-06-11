@@ -4,8 +4,6 @@
 #include<stdlib.h>
 #include<stdbool.h>
 #include<time.h>
-#include<sys/times.h>
-#include<unistd.h>
 
 
 
@@ -234,6 +232,24 @@ void unsignedRadixSort(unsigned int a[], int length){
     deleteQueue(&(queues[1]));
 }
 
+int binarySearch(int a[], int length, int searchFor){
+    int min = 0;
+    int max = length - 1;
+    int mid;
+    int foundAt = -1;
+    while(foundAt == -1 && min <= max){
+        mid = (min + max) / 2;
+        if(a[mid] > searchFor){
+            max = mid - 1;
+        } else if(a[mid] < searchFor){
+            min = mid + 1;
+        } else {
+            foundAt = mid;
+        }
+    }
+    return foundAt;
+}
+
 int useSorting(){
     SortingAlgorithm algorithms[] = {
         &bubbleSort,
@@ -293,17 +309,15 @@ void testAlgorithm(SortingAlgorithm algorithm){
     printf("%s", "Before: ");
     printArray(sortMe, length);
 
-    struct tms startStruct;
-    struct tms endStruct;
     clock_t end;
-    clock_t start = clock();//times(&startStruct);
+    clock_t start = clock();
     algorithm(sortMe, length);
-    end = clock();//times(&endStruct);
+    end = clock();
 
     printf("%s", "After: ");
     printArray(sortMe, length);
 
-    printf("Took %6.6f seconds to run\n", ((double)(end - start)) / CLOCKS_PER_SEC);//sysconf(_SC_CLK_TCK));
+    printf("Took %6.6f seconds to run\n", ((double)(end - start)) / CLOCKS_PER_SEC);
     free(sortMe);
 }
 

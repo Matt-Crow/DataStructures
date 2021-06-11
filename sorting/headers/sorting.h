@@ -71,7 +71,12 @@ This one is very very cool!
 */
 void unsignedRadixSort(unsigned int a[], int length);
 
-//int binarySearch(int a[], int length);
+/*
+Starts at the middle, keeps cutting in half and choosing
+which partition to search next based on whether or not
+the middle was less than or greater than searchFor
+*/
+int binarySearch(int a[], int length, int searchFor);
 
 int useSorting();
 
