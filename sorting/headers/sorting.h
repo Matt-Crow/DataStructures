@@ -45,7 +45,7 @@ to its right is larger, then recurs.
 Very good for large problem sizes, as it only compares a small portion of the
 array in each call.
 
-O(nlogn)
+O(n^2), but is more often around O(nlogn)
 */
 void quickSort(int a[], int length);
 
