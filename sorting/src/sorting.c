@@ -25,6 +25,11 @@ Sorts the range [min, max)
 void doQuickSort(int a[], int min, int max);
 
 /*
+Sorts the range [min, max)
+*/
+void doMergeSort(int a[], int min, int max);
+
+/*
 [min, max)
 */
 int idxOfMedian(int a[], int min, int max);
@@ -113,13 +118,18 @@ void quickSort(int a[], int length){
     doQuickSort(a, 0, length);
 }
 
+void mergeSort(int a[], int length){
+    doMergeSort(a, 0, length);
+}
+
 int useSorting(){
     SortingAlgorithm algorithms[] = {
         &bubbleSort,
         &selectSort,
         &insertionSort,
         &shellSort,
-        &quickSort
+        &quickSort,
+        &mergeSort
     };
 
     char* algorithmNames[] = {
@@ -127,7 +137,8 @@ int useSorting(){
         "Select sort",
         "Insertion sort",
         "Shell sort",
-        "Quick sort"
+        "Quick sort",
+        "Merge sort"
     };
     int numOptions = sizeof(algorithms) / sizeof(algorithms[0]);
 
@@ -162,7 +173,7 @@ void swap(int a[], int i, int j){
 }
 
 void testAlgorithm(SortingAlgorithm algorithm){
-    int length = 16;
+    int length = 256;
     int* sortMe = createRandomArray(length);
 
     printf("%s", "Before: ");
@@ -249,4 +260,49 @@ bool isBetween(int a, int b, int c){
 
 bool betweenRecur(int a, int b, int c){
     return a <= b && b <= c;
+}
+
+void doMergeSort(int a[], int min, int max){
+    int size = max - min;
+    if(size <= 1){ // don't bother sorting sub-arrays of 1 element
+        return;
+    }
+
+    int mid = (min + max) / 2;
+    doMergeSort(a, min, mid);
+    doMergeSort(a, mid, max);
+    // [min, mid) and [mid, max) are now both sorted
+
+    // merge them together
+    int graft[size];
+    int i = 0;
+    int queue1 = min;
+    int queue2 = mid;
+    // treat sub-arrays as queues
+    while(queue1 < mid && queue2 < max){
+        if(a[queue1] < a[queue2]){
+            graft[i++] = a[queue1++];
+        } else {
+            graft[i++] = a[queue2++];
+        }
+        // keep dequeueing the smaller value int the graft
+    }
+
+    // by now, exactly one queue is empty. Empty the other one
+    while(queue1 < mid){
+        graft[i++] = a[queue1++];
+    }
+    while(queue2 < max){
+        graft[i++] = a[queue2++];
+    }
+
+    // graft the graft array back into the original array
+    // i already declared
+    for(i = 0; i < size; ++i){
+        a[min + i] = graft[i];
+    }
+
+    if(DEBUG){
+        printArray(a, max);
+    }
 }

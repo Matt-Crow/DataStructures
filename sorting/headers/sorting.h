@@ -49,7 +49,16 @@ O(n^2), but is more often around O(nlogn)
 */
 void quickSort(int a[], int length);
 
-//void mergeSort(int a[], int length);
+/*
+Keep breaking the array in half until we only
+have two items to compare, the sort those two,
+merge that sorted set with the next sorted set of 2,
+creating a set of 4, merge that with the next set of 4, etc.
+
+O(nlogn)
+*/
+void mergeSort(int a[], int length);
+
 //void radixSort(int a[], int length);
 
 //int binarySearch(int a[], int length);
