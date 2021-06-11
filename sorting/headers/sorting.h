@@ -59,7 +59,7 @@ O(nlogn)
 */
 void mergeSort(int a[], int length);
 
-//void radixSort(int a[], int length);
+void radixSort(int a[], int length);
 
 //int binarySearch(int a[], int length);
 

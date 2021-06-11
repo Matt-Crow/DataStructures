@@ -122,6 +122,45 @@ void mergeSort(int a[], int length){
     doMergeSort(a, 0, length);
 }
 
+void radixSort(int a[], int length){
+    // create queues
+    Queue* queues[2] = {
+        newQueue(),
+        newQueue()
+    };
+
+    int numBits = sizeof(int) * 8 - 1; // sizeof is in bytes
+    // ignore the sign bit
+
+    int bit;
+    int i;
+    for(int bitNum = 0; bitNum < numBits; ++bitNum){
+        for(i = 0; i < length; ++i){
+            bit = (a[i] >> bitNum) & 1;
+            enqueue(queues[bit], a[i]);
+        }
+        // by now, queues[0] contains all elements of a[] whose bitNum-th bit is 0,
+        // and queues[1] has all elements whose bitNum-th bit is 1
+        i = 0;
+        while(!isQueueEmpty(queues[0])){
+            a[i++] = dequeue(queues[0]);
+        }
+        while(!isQueueEmpty(queues[1])){
+            a[i++] = dequeue(queues[1]);
+        }
+
+        if(DEBUG){
+            printArray(a, length);
+        }
+    }
+
+    // todo sort by sign
+
+    // free queues
+    deleteQueue(&(queues[0]));
+    deleteQueue(&(queues[1]));
+}
+
 int useSorting(){
     SortingAlgorithm algorithms[] = {
         &bubbleSort,
@@ -129,7 +168,8 @@ int useSorting(){
         &insertionSort,
         &shellSort,
         &quickSort,
-        &mergeSort
+        &mergeSort,
+        &radixSort
     };
 
     char* algorithmNames[] = {
@@ -138,7 +178,8 @@ int useSorting(){
         "Insertion sort",
         "Shell sort",
         "Quick sort",
-        "Merge sort"
+        "Merge sort",
+        "Radix sort"
     };
     int numOptions = sizeof(algorithms) / sizeof(algorithms[0]);
 
