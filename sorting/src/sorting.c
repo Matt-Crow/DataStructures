@@ -9,6 +9,9 @@
 
 
 
+#define ARRAY_SIZE 5000 // choose how many elements it should test with
+
+
 /*
 Private function prototypes
 */
@@ -124,13 +127,83 @@ void mergeSort(int a[], int length){
 
 void radixSort(int a[], int length){
     // create queues
+    unsigned int base = 10; // can use any number here except 0 or 1
+    Queue* queues[base];
+    int i;
+    for(i = 0; i < base; ++i){
+        queues[i] = newQueue();
+    }
+
+    int baseToSomePower = 1;
+    bool biggerFish = true; // not all numbers have been sorted
+    while(biggerFish){
+        biggerFish = false;
+
+        // check the next digit when the numbers are interpreted in the given base
+        for(i = 0; i < length; ++i){
+            if(abs(a[i]) > baseToSomePower * base){
+                biggerFish = true;
+                // will require at least one more iteration to sort
+            }
+            enqueue(
+                queues[
+                    (abs(a[i]) / baseToSomePower) % base
+                ],
+                a[i]
+            );
+        }
+
+        // sort everything according to the current digit
+        i = 0;
+        for(int b = 0; b < base; ++b){
+            while(!isQueueEmpty(queues[b])){
+                a[i++] = dequeue(queues[b]);
+            }
+        }
+
+        if(DEBUG){
+            printArray(a, length);
+        }
+
+        baseToSomePower *= base;
+    }
+
+    // free queues
+    for(i = 0; i < base; ++i){
+        deleteQueue(&(queues[i]));
+    }
+
+    // by now, a[] is sorted by absolute value
+    Stack* negatives = 0;
+    Queue* positives = newQueue();
+    for(i = 0; i < length; ++i){
+        if(a[i] < 0){
+            push(&negatives, a[i]);
+        } else {
+            enqueue(positives, a[i]);
+        }
+    }
+
+    i = 0;
+    while(negatives){
+        a[i++] = pop(&negatives);
+    }
+    while(!isQueueEmpty(positives)){
+        a[i++] = dequeue(positives);
+    }
+
+    // stack is empty, so no need to free it
+    deleteQueue(&positives);
+}
+
+void unsignedRadixSort(unsigned int a[], int length){
+    // create queues
     Queue* queues[2] = {
         newQueue(),
         newQueue()
     };
 
-    int numBits = sizeof(int) * 8 - 1; // sizeof is in bytes
-    // ignore the sign bit
+    int numBits = sizeof(int) * 8;
 
     int bit;
     int i;
@@ -150,7 +223,7 @@ void radixSort(int a[], int length){
         }
 
         if(DEBUG){
-            printArray(a, length);
+            printArray((int*)a, length);
         }
     }
 
@@ -214,7 +287,7 @@ void swap(int a[], int i, int j){
 }
 
 void testAlgorithm(SortingAlgorithm algorithm){
-    int length = 256;
+    int length = ARRAY_SIZE;
     int* sortMe = createRandomArray(length);
 
     printf("%s", "Before: ");
@@ -238,7 +311,7 @@ int* createRandomArray(int length){
     int* a = (int*)malloc(length * sizeof(int));
     srand(time(NULL));
     for(int i = 0; i < length; ++i){
-        a[i] = rand() % 256;
+        a[i] = rand() % 256 - 128; // (-128, 127)
     }
     return a;
 }

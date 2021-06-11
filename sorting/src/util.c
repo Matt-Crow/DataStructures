@@ -9,6 +9,7 @@ Private prototypes
 
 QueueNode* newQueueNode(int value);
 
+Stack* newStack(int value);
 
 
 /*
@@ -57,6 +58,30 @@ bool isQueueEmpty(Queue* q){
     return q->head == 0;
 }
 
+void deleteStack(Stack** top){
+    if(top && *top){
+        while(*top){
+            pop(top);
+        }
+    }
+}
+
+void push(Stack** top, int value){
+    Stack* newTop = newStack(value);
+    newTop->value = value;
+    newTop->next = *top;
+    *top = newTop;
+}
+
+int pop(Stack** top){
+    // purposely crashes if the stack is empty
+    Stack* oldTop = *top;
+    int value = oldTop->value;
+    *top = oldTop->next;
+    free(oldTop);
+    return value;
+}
+
 void printArray(int a[], int length){
     printf("%c", '[');
     for(int i = 0; i < length; ++i){
@@ -85,4 +110,11 @@ QueueNode* newQueueNode(int value){
     nn->prev = 0;
     nn->value = value;
     return nn;
+}
+
+Stack* newStack(int value){
+    Stack* frame = (Stack*)malloc(sizeof(Stack));
+    frame->next = 0;
+    frame->value = value;
+    return frame;
 }

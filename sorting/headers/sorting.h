@@ -59,7 +59,17 @@ O(nlogn)
 */
 void mergeSort(int a[], int length);
 
+/*
+Sorts based on first the digit in the ones place,
+then the tens place, hundreds and so on,
+then sort by positive or negative.
+*/
 void radixSort(int a[], int length);
+
+/*
+This one is very very cool!
+*/
+void unsignedRadixSort(unsigned int a[], int length);
 
 //int binarySearch(int a[], int length);
 

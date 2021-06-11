@@ -4,7 +4,7 @@
 #include<stdbool.h>
 
 #ifndef DEBUG
-#define DEBUG 1
+#define DEBUG 0
 #endif
 
 typedef struct QueueNode {
@@ -23,6 +23,15 @@ void deleteQueue(Queue** q);
 void enqueue(Queue* q, int value);
 int dequeue(Queue* q);
 bool isQueueEmpty(Queue* q);
+
+typedef struct Stack {
+    struct Stack* next;
+    int value;
+} Stack;
+
+void deleteStack(Stack** top);
+void push(Stack** top, int value);
+int pop(Stack** top);
 
 void printArray(int a[], int length);
 
