@@ -14,7 +14,14 @@ import java.util.function.BiFunction;
  * Rehashing: once a hash table is at ~ 80% capacity, insert all values into a
  * new, larger table, then switch to using the new table
  * 
- * @author Matt
+ * The capacity of the hash array MUST BE A PRIME NUMBER for most hashing 
+ * techniques to work. This prevents techniques such as double hashing from 
+ * cycling between a finite series of values when trying to find an open address.
+ * For example, given H(x, i) = (h(x) + i*g(x)) % 10, suppose h(n) = 0 and g(n) = 5.
+ * If the indeces 0 and 5 are already occupied, n cannot be inserted into the table,
+ * as the range for H(n, i) = {0, 5}. Choosing H(x, i) = (h(x) + i*g(x)) % 11 resolves
+ * this issue, as H(n, i) would then output the series (0, 5, 10, 4, 9, 3, ...)
+ * @author Matt Crow
  */
 public class HashTable {
     // must be of constant size
